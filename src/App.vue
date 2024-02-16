@@ -1,20 +1,9 @@
 <script setup>
+import Navbar from './components/Navbar.vue';
 </script>
 
 <template>
-  <nav>
-    <ul>
-      <li>
-        <RouterLink to="/">Home</RouterLink>
-      </li>
-      <li>
-        <RouterLink to="/quiz">Quiz</RouterLink>
-      </li>
-      <li>
-        <RouterLink to="/profile">Profile</RouterLink>
-      </li>
-    </ul>
-  </nav>
+  <Navbar />
   <main>
     <RouterView />
   </main>
