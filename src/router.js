@@ -1,28 +1,23 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 
-import HomeView from './views/HomeView.vue'
-import QuizView from './views/QuizView.vue'
-import SignupView from './views/SignupView.vue'
-import LoginView from './views/LoginView.vue'
+import CategoryLoginView from './views/CategoryLoginView.vue'
+import CategoryQuizView from './views/CategoryQuizView.vue'
+import ProfileView from './views/ProfileView.vue'
 
 export default createRouter({
   history: createWebHashHistory(),
   routes: [
     {
-      component: HomeView,
+      component: CategoryLoginView,
       path: '/'
     },
     {
-      component: QuizView,
+      component: CategoryQuizView,
       path: '/quiz'
     },
     {
-      component: SignupView,
-      path: '/signup'
-    },
-    {
-      component: LoginView,
-      path: '/login'
+      component: ProfileView,
+      path: '/profile'
     }
   ]
 })

@@ -11,10 +11,7 @@
         <RouterLink to="/quiz">Quiz</RouterLink>
       </li>
       <li>
-        <RouterLink to="/signup">Signup</RouterLink>
-      </li>
-      <li>
-        <RouterLink to="/login">Login</RouterLink>
+        <RouterLink to="/profile">Profile</RouterLink>
       </li>
     </ul>
   </nav>
@@ -24,4 +21,10 @@
 </template>
 
 <style scoped>
+main {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr;
+  height: 100vh;
+}
 </style>
