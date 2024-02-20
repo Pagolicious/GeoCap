@@ -1,0 +1,148 @@
+<script setup>
+import { ref } from 'vue';
+
+const loginExpanded = ref(false);
+const signupExpanded = ref(false);
+
+
+function login() {
+  loginExpanded.value = !loginExpanded.value
+  signupExpanded.value = false
+}
+
+function signup() {
+  signupExpanded.value = !signupExpanded.value
+  loginExpanded.value = false
+
+}
+
+</script>
+
+<template>
+  <div class="login-container">
+    <div class="login-card">
+      <div class="login-card-content">
+        <h1>Welcome to GeoCap!</h1>
+        <h2>Choose your path</h2>
+        <h3>Login for benefits or continue as a guest</h3>
+        <button class="btn" @click="login">Login</button>
+        <div v-if="loginExpanded">
+          <input type="text" placeholder="Username" class="input-field">
+          <input type="password" placeholder="Password" class="input-field">
+          <button class="submit-button">Submit</button>
+        </div>
+        <button class="btn" @click="signup">Sign Up</button>
+        <div v-if="signupExpanded">
+          <input type="text" placeholder="Username" class="input-field">
+          <input type="password" placeholder="Password" class="input-field">
+          <input type="password" placeholder="Confirm Password" class="input-field">
+          <button class="submit-button">Submit</button>
+        </div>
+        <button class="btn">Continue as a guest</button>
+      </div>
+    </div>
+  </div>
+</template>
+
+<style scoped>
+.login-container {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  padding-top: 4rem;
+  background-color: rgb(224, 222, 222);
+
+}
+
+.login-card {
+  width: 500px;
+  /* height: 600px; */
+  background-color: whitesmoke;
+  border: 1px solid grey;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 5rem;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+  transition: height;
+  border-radius: 7px;
+  /* position: sticky; */
+
+}
+
+.login-card-content {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+
+}
+
+.btn {
+  align-self: center;
+  width: 280px;
+  height: 50px;
+  padding: 10px 20px;
+  margin-top: 20px;
+  background-color: #64C6F0;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+  font-weight: 500;
+}
+
+.btn:hover {
+  background-color: #60a6f0;
+}
+
+
+.login-card-content h1 {
+  padding: 1rem;
+  color: #64C6F0;
+}
+
+.login-card-content h2 {
+  padding: 0 1rem 1rem 1rem;
+  font-weight: 700;
+}
+
+.login-card-content h3 {
+  font-size: 18px;
+}
+
+.input-field {
+  width: 280px;
+  height: 50px;
+  padding: 10px 20px;
+  margin-top: 20px;
+  /* border: 1px solid #64C6F0; */
+  border-radius: 5px;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+}
+
+.input-field:focus {
+  outline: none;
+  /* border-color: #74b4f9; */
+}
+
+.submit-button {
+  width: 280px;
+  height: 50px;
+  padding: 10px 20px;
+  margin-top: 20px;
+  background-color: white;
+  color: white;
+  border: 2px solid #64C6F0;
+  border-radius: 5px;
+  cursor: pointer;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+  color: black;
+  font-weight: 500;
+}
+
+.submit-button:hover {
+  background-color: #64C6F0;
+  color: white;
+}
+</style>

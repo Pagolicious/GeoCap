@@ -1,8 +1,10 @@
 <script setup>
-import QuizCategory from '../components/QuizCategory.vue';
+import Category from '../components/Category.vue';
+import SignupLogin from '../components/SignupLogin.vue';
 </script>
 
 
 <template>
-  <QuizCategory />
+  <Category />
+  <SignupLogin />
 </template>
