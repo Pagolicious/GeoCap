@@ -20,25 +20,27 @@ function signup() {
 
 <template>
   <div class="login-container">
-    <div class="login-card">
-      <div class="login-card-content">
-        <h1>Welcome to GeoCap!</h1>
-        <h2>Choose your path</h2>
-        <h3>Login for benefits or continue as a guest</h3>
-        <button class="btn" @click="login">Login</button>
-        <div v-if="loginExpanded">
-          <input type="text" placeholder="Username" class="input-field">
-          <input type="password" placeholder="Password" class="input-field">
-          <button class="submit-button">Submit</button>
+    <div class="sticky-card">
+      <div class="login-card">
+        <div class="login-card-content">
+          <h1>Welcome to GeoCap!</h1>
+          <h2>Choose your path</h2>
+          <h3>Login for benefits or continue as a guest</h3>
+          <button class="btn" @click="login">Login</button>
+          <div v-if="loginExpanded">
+            <input type="text" placeholder="Username" class="input-field">
+            <input type="password" placeholder="Password" class="input-field">
+            <button class="submit-button">Submit</button>
+          </div>
+          <button class="btn" @click="signup">Sign Up</button>
+          <div v-if="signupExpanded">
+            <input type="text" placeholder="Username" class="input-field">
+            <input type="password" placeholder="Password" class="input-field">
+            <input type="password" placeholder="Confirm Password" class="input-field">
+            <button class="submit-button">Submit</button>
+          </div>
+          <button class="btn">Continue as a guest</button>
         </div>
-        <button class="btn" @click="signup">Sign Up</button>
-        <div v-if="signupExpanded">
-          <input type="text" placeholder="Username" class="input-field">
-          <input type="password" placeholder="Password" class="input-field">
-          <input type="password" placeholder="Confirm Password" class="input-field">
-          <button class="submit-button">Submit</button>
-        </div>
-        <button class="btn">Continue as a guest</button>
       </div>
     </div>
   </div>
@@ -51,7 +53,11 @@ function signup() {
   flex-direction: column;
   padding-top: 4rem;
   background-color: rgb(224, 222, 222);
+}
 
+.sticky-card {
+  position: sticky;
+  top: 200px;
 }
 
 .login-card {
@@ -66,8 +72,6 @@ function signup() {
   box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
   transition: height;
   border-radius: 7px;
-  /* position: sticky; */
-
 }
 
 .login-card-content {
