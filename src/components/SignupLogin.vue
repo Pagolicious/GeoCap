@@ -57,7 +57,7 @@ function signup() {
 
 .sticky-card {
   position: sticky;
-  top: 200px;
+  top: 20px;
 }
 
 .login-card {
