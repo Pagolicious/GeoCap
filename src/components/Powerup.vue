@@ -1,5 +1,6 @@
 <script setup>
 import { ref } from 'vue'
+import FetchQuestions from './FetchQuestions.vue'
 
 // Track if fiftyfifty is used
 let fiftyFiftyDisabled = ref(false)
@@ -33,12 +34,33 @@ console.log("incorrect array before powerup", incorrect);
 
 <template>
   <div class="powerUps">
-    <button class="powerBtn" :class="{ 'disabled': fiftyFiftyDisabled }" id="fiftyFifty" @click="activateFiftyFifty">50/50</button>
+    <button class="powerBtn" id="pass">50/50</button>
+    <!-- <button class="powerBtn" :class="{ 'disabled': fiftyFiftyDisabled }" id="fiftyFifty" @click="activateFiftyFifty">50/50</button> -->
     <button class="powerBtn" id="shield">SHIELD</button>
     <button class="powerBtn" id="pass">PASS</button>
   </div>
 </template>
 
+<style scoped>
+.powerUps {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 4rem;
+}
+
+.powerBtn {
+  background-color: rgb(0, 146, 37);
+  color: rgb(6, 8, 1);
+  width: 59px;
+  height: 59px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+}
+</style>
 
 <!-- HOW ORIGINAL FILE-SETUP LOOKED LIKE -->
 

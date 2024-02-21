@@ -28,7 +28,7 @@ import Powerup from '../components/Powerup.vue';
 
 #container {
   width: 100%;
-  background-color: F5F5F5;
+  background-color: #F5F5F5;
 }
 
 #stickyQuiz {
@@ -56,7 +56,7 @@ import Powerup from '../components/Powerup.vue';
   border-radius: 0.4375rem;
   border: 1px solid #E0E1E1;
   background: #F5F5F5;
-  box-shadow: 0px 2px 2px 0px #E4E6E7;
+  box-shadow: 0px 1px 4px 0px #36363691;
 }
 .quizButton:hover {
   border-color: #646cff;
@@ -79,6 +79,8 @@ margin-bottom: 0rem;
 h1 {
   font-family: "Fredoka", sans-serif;
   font-size: 2.2em;
+  color: #2C7F49;
+  font-weight: 700;
   line-height: 1.1;
   margin-bottom: 3rem;
 }
