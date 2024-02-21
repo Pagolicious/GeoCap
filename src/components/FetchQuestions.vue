@@ -37,6 +37,16 @@ function fetchData() {
       randomCorrectCapital.value.push(correctCapital)
       randomQuestion.value.push(correctCapital)
 
+      // Get the Index from the correct capital
+      const correctCapitalIndex = keys.findIndex((key) => {
+        const item = result[key]
+        return item.capital[0] === correctCapital
+      })
+
+      // Get the flag from the correct Index
+      const correctFlagItem = fetchedData.value[correctCapitalIndex]
+      const correctFlag = correctFlagItem.flags.svg
+
       // Get three random answers that are NOT correct into the question array
       getRandomCapitals(keys, result, correctCapital, randomQuestion)
 
@@ -44,10 +54,13 @@ function fetchData() {
       // the beginning every time
       randomQuestion.value.sort()
 
+
+
       // 3 lines just to display in console
       console.log(randomQuestion.value)
       console.log(randomCorrectCapital.value)
       fetchSessionStorage()
+      console.log(correctFlag)
     })
 }
 
