@@ -42,7 +42,7 @@ import FetchQuestions from '../components/FetchQuestions.vue'
 
 #stickyQuiz {
   position: sticky;
-  top: 25%;
+  top: 10%;
   display: flex;
   flex-direction: column;
   text-align: center;
@@ -55,7 +55,7 @@ h1 {
   color: #2C7F49;
   font-weight: 700;
   line-height: 1.1;
-  margin-bottom: 3rem;
+  margin-bottom: 1rem;
 }
 
 /* .answer {

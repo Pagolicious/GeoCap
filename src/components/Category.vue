@@ -26,7 +26,7 @@
   padding-top: 4rem;
   padding-bottom: 4rem;
   border-right: 1px solid grey;
-  max-height: 900px;
+  max-height: 100%;
   overflow-y: scroll;
 }
 
