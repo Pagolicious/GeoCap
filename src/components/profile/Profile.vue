@@ -100,7 +100,7 @@ export default {
   background-color: rgb(123, 219, 156);
   background-size: cover;
   align-items: center;
-  padding-top: 4rem;
+  padding-top: 1rem;
   font-family: Fredoka;
   height: 100%;
 }
@@ -152,11 +152,11 @@ export default {
   font-family: Fredoka;
   font-weight: 600;
   font-size: 2.2 rem;
-  margin-top: 40px;
+  margin-top: 30px;
 }
 
 .form-container {
-  margin: 40px;
+  margin: 30px;
   padding: 50px;
   width: 40%;
   border-radius: 7px;
