@@ -25,6 +25,7 @@
   align-items: center;
   text-align: center;
   padding-top: 4rem;
+  padding-bottom: 4rem;
   border-right: 1px solid grey;
 }
 
