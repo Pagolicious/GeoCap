@@ -22,13 +22,15 @@ const fetchedData = ref(null),
   correctEuropeAnswers = ref([]),
   randomQuestion = ref([]),
   fiftyFiftyDisabled = ref(false),
-  passDisabled = ref(false);
+  passDisabled = ref(false),
+  correctFlag = ref(null)
 
 
 
 async function fetchData() {
 
   randomQuestion.value = [];
+  // correctFlag.value = null
 
   fetch('https://restcountries.com/v3.1/region/europe')
     .then((response) => response.json())
@@ -67,7 +69,7 @@ async function fetchData() {
 
       // Get the flag from the correct Index
       const correctFlagItem = fetchedData.value[correctCapitalIndex]
-      const correctFlag = correctFlagItem.flags.svg
+      correctFlag.value = correctFlagItem.flags.svg
 
       // Get three random answers that are NOT correct into the question array
       getRandomCapitals(keys, result, correctCapital, randomQuestion)
@@ -125,16 +127,16 @@ function handlePass() {
 }
 
 function generateNewQuestions() {
-    // Reset the state for new questions
-    randomQuestion.value = [];
+  // Reset the state for new questions
+  randomQuestion.value = [];
 
-    // Check if the fiftyFifty button was not pressed
-    if (!fiftyFiftyDisabled.value && !passDisabled.value) {
-        fiftyFiftyDisabled.value = true; // Disable the fiftyFifty button for the new question
-    }
+  // Check if the fiftyFifty button was not pressed
+  if (!fiftyFiftyDisabled.value && !passDisabled.value) {
+    fiftyFiftyDisabled.value = true; // Disable the fiftyFifty button for the new question
+  }
 
-    // Fetch new data and generate new questions
-    fetchData();
+  // Fetch new data and generate new questions
+  fetchData();
 }
 
 
@@ -205,6 +207,9 @@ function getRandomCapitals(keys, result, correctCapital, randomQuestion) {
 </template> -->
 
 <template>
+  <div class="flag-container">
+    <img class="flag" :src="correctFlag" alt="Flag">
+  </div>
   <div v-if="randomQuestion.length">
     <div v-for="(question, index) in randomQuestion" :key="index" class="answer">
       <button class="quizButton" :class="{ 'disabled': question === '' }" @click="handleAnswer(index)">
@@ -214,8 +219,9 @@ function getRandomCapitals(keys, result, correctCapital, randomQuestion) {
   </div>
 
   <div class="powerUps">
-    <button class="powerBtn" :class="{ 'disabledBtn': fiftyFiftyDisabled }" id="fiftyFifty" @click="activateFiftyFifty"></button>
-    <button class="powerBtn" id="shield"></button>
+    <button class="powerBtn" :class="{ 'disabledBtn': fiftyFiftyDisabled }" id="fiftyFifty"
+      @click="activateFiftyFifty"></button>
+    <button class="powerBtn" id="shield">SHIELD</button>
     <button class="powerBtn" :class="{ 'disabledBtn': passDisabled }" id="pass" @click="handlePass"></button>
   </div>
 
@@ -331,6 +337,20 @@ h1 {
   opacity: 0.5;
   pointer-events: none;
   animation: ease-in-out 1s forwards;
+}
+
+.flag {
+  width: 200px;
+  height: auto;
+  margin: 1rem;
+
+}
+
+.flag-container {
+  border: 1px solid grey;
+  margin: 3rem;
+  border: 2px solid #c3c3c3;
+  box-shadow: 0px 1px 4px 0px #36363691;
 }
 
 @keyframes ease-in-out {

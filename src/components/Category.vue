@@ -27,13 +27,16 @@
   padding-top: 4rem;
   padding-bottom: 4rem;
   border-right: 1px solid grey;
+  max-height: 900px;
+  overflow-y: scroll;
 }
 
 .category-container img {
   width: 500px;
-  margin-top: 20px;
+  margin: 20px 20px 30px;
   border-radius: 7px;
   box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 25%);
+  cursor: pointer;
 }
 
 .category-container h1 {

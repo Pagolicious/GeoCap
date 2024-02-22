@@ -52,7 +52,9 @@ function signup() {
   align-items: center;
   flex-direction: column;
   padding-top: 4rem;
-  background-color: rgb(224, 222, 222);
+  background-color: #a9d7eb;
+  background-image: url(/src/assets/backgrounds/home-texture.svg);
+  background-size: cover;
 }
 
 .sticky-card {
@@ -64,7 +66,7 @@ function signup() {
   width: 500px;
   /* height: 600px; */
   background-color: whitesmoke;
-  border: 1px solid grey;
+  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 50%);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -93,7 +95,8 @@ function signup() {
   border-radius: 5px;
   cursor: pointer;
   box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
-  font-weight: 500;
+  font-weight: 600;
+  font-size: 15px;
 }
 
 .btn:hover {
@@ -104,14 +107,22 @@ function signup() {
 .login-card-content h1 {
   padding: 1rem;
   color: #64C6F0;
+  font-family: Fredoka;
+  font-weight: 600;
+  font-size: 2.2 rem;
 }
 
 .login-card-content h2 {
   padding: 0 1rem 1rem 1rem;
-  font-weight: 700;
+  font-weight: 600;
+  color: #0B0957;
+  font-family: Fredoka;
 }
 
 .login-card-content h3 {
+  font-weight: 400;
+  color: #0B0957;
+  font-family: Fredoka;
   font-size: 18px;
 }
 
