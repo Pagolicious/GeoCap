@@ -18,6 +18,9 @@ export default {
 </script>
 
 <template>
+  <div class="logo">
+    <img src="/src/assets/general/logo.svg">
+  </div>
   <!-- Icon for the menu -->
   <link rel="stylesheet"
     href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
@@ -37,23 +40,20 @@ export default {
       <li>
         <RouterLink to="/profile">Profile</RouterLink>
       </li>
-      <li>
-        <RouterLink to="/signup">Signup</RouterLink>
-      </li>
-      <li>
-        <RouterLink to="/login">Login</RouterLink>
-      </li>
     </ul>
   </nav>
 </template>
 
 
 <style scoped>
+.logo {
+  text-align: center;
+  padding: 20px;
+}
+
 nav {
   background-color: none;
   /* No background color for the navigation container */
-  padding: 10px;
-  /* Padding for the navigation container */
 }
 
 /* Styles for the toggle button */
@@ -70,7 +70,7 @@ button {
   /* Font size of the button text */
   position: absolute;
   /* Absolute positioning for overlay effect */
-  top: 10px;
+  top: 20px;
   /* Distance from the top of the page */
   right: 10px;
   /* Distance from the right of the page */
@@ -90,27 +90,35 @@ ul {
   /* Arrange items in a column for vertical alignment */
   position: absolute;
   /* Absolute positioning for overlay effect */
-  top: 50px;
+  top: 80px;
   /* Distance from the top of the page */
   right: 0;
   /* Align to the right */
-  background-color: black;
+  background-color: rgb(245, 245, 245);
   /* Background color for the list */
   z-index: 1;
   /* Set z-index to ensure it's above other elements */
+  height: 106.4%;
+  width: 20%;
+  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 50%);
 }
 
 /* Styles for each navigation link */
 li {
-  margin: 10px 0;
+  margin: 40px;
   /* Margin between each navigation link */
+  text-align: center;
 }
 
 /* Styles for the navigation links */
 a {
   text-decoration: none;
   /* Remove underline from links */
-  color: white;
+  color: #2C7F49;
   /* Text color of the links */
+  text-align: center;
+  font-weight: 600;
+  font-size: 25px;
+  font-family: Fredoka;
 }
 </style>

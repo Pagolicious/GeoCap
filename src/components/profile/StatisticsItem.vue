@@ -70,7 +70,8 @@ export default {
 
 .selected-category-pic img {
   width: 100%;
-  border-radius: 10px
+  border-radius: 10px;
+  cursor: pointer;
 }
 
 .selected-category-pic img.img-selected {

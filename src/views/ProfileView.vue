@@ -23,5 +23,6 @@ import Statistics from '../components/profile/Statistics.vue'
 
 .profile-section {
   width: 50%;
+  max-height: 900px;
 }
 </style>
