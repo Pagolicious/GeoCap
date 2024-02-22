@@ -19,7 +19,7 @@ export default {
 
 <template>
   <div class="logo">
-    <img src="/src/assets/general/logo.svg">
+    <img id="logotype" src="/src/assets/general/logotypeBlue.svg">
   </div>
   <!-- Icon for the menu -->
   <link rel="stylesheet"
@@ -46,6 +46,11 @@ export default {
 
 
 <style scoped>
+
+#logotype {
+  width: 12rem;
+  filter: drop-shadow(0px 2px 2px rgba(0, 0, 0, 0.25));
+}
 .logo {
   text-align: center;
   padding: 20px;
@@ -114,11 +119,11 @@ li {
 a {
   text-decoration: none;
   /* Remove underline from links */
-  color: #2C7F49;
+  color: #0B0957;
   /* Text color of the links */
   text-align: center;
-  font-weight: 600;
+  font-weight: 700;
   font-size: 25px;
-  font-family: Fredoka;
+  font-family: Montserrat;
 }
 </style>

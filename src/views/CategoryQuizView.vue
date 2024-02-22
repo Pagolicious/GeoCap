@@ -34,16 +34,18 @@ import FetchQuestions from '../components/FetchQuestions.vue'
   <!-- <h1>Quiz</h1> -->
 </template>
 <style scoped>
+
 #container {
   width: 100%;
   background-color: #F5F5F5;
   padding-bottom: 4rem;
+  padding-top: 2rem;
 }
 
 #stickyQuiz {
   position: sticky;
-  top: 10%;
   display: flex;
+  top: 10%;
   flex-direction: column;
   text-align: center;
   align-items: center;
@@ -52,8 +54,8 @@ import FetchQuestions from '../components/FetchQuestions.vue'
 h1 {
   font-family: "Fredoka", sans-serif;
   font-size: 2.2em;
-  color: #2C7F49;
-  font-weight: 700;
+  color: #0B0957;
+  font-weight: 600;
   line-height: 1.1;
   margin-bottom: 1rem;
 }

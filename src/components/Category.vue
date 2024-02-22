@@ -24,7 +24,7 @@
   background-color: whitesmoke;
   align-items: center;
   text-align: center;
-  padding-top: 4rem;
+  padding-top: 2rem;
   padding-bottom: 4rem;
   border-right: 1px solid grey;
   max-height: 100%;
@@ -40,7 +40,7 @@
 }
 
 .category-container h1 {
-  color: #2C7F49;
+  color: #0B0957;
   font-family: Fredoka;
   font-weight: 600;
   font-size: 2.2 em;
@@ -48,5 +48,9 @@
 
 .category-container h2 {
   font-size: 20px;
+}
+
+h1 {
+  font-size: 2.2rem;
 }
 </style>

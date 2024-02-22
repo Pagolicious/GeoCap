@@ -128,6 +128,8 @@ function handleAnswer(index) {
     console.log(randomCorrectCapital.value)
   } else {
     sessionStorage.clear()
+    fiftyFiftyDisabled.value = false
+    passDisabled.value = false
     score.value = 0;
     generateNewQuestions();
     console.log("You're wrong soldier!"); // Om det valda svaret är fel, logga ett annat meddelande
@@ -147,17 +149,17 @@ function handlePass() {
 }
 
 function generateNewQuestions() {
-  // Reset the state for new questions
-  randomQuestion.value = [];
-  randomCorrectCapital.value = [];
-
-  // Check if the fiftyFifty button was not pressed
-  // if (!fiftyFiftyDisabled.value && !passDisabled.value) {
-  //   fiftyFiftyDisabled.value = true; // Disable the fiftyFifty button for the new question
-  // }
-
-  // Fetch new data and generate new questions
-  fetchData();
+  // Add fade-out animation class to fade out old questions
+  const answerElements = document.querySelectorAll('.answer');
+  answerElements.forEach(element => {
+    element.classList.add('fade-out');
+  });
+  // Reset the state for new questions after the fade-out animation completes
+  setTimeout(() => {
+    randomQuestion.value = [];
+    randomCorrectCapital.value = [];
+    fetchData(); // This will trigger the fade-in animation for new questions
+  }, 500); // Assuming the fade-out animation duration is 0.5 seconds (500 milliseconds)
 }
 
 
@@ -231,13 +233,13 @@ function getRandomCapitals(keys, result, correctCapital, randomQuestion) {
   <div class="flag-container">
     <img class="flag" :src="correctFlag" alt="Flag">
   </div>
-  <div v-if="randomQuestion.length">
-    <div v-for="(question, index) in randomQuestion" :key="index" class="answer">
-      <button class="quizButton" :class="{ 'disabled': question === '' }" @click="handleAnswer(index)">
-        <p id="quizP">{{ question }}</p>
-      </button>
-    </div>
+  <div v-if="randomQuestion.length" class="fade-in">
+  <div v-for="(question, index) in randomQuestion" :key="index" class="answer fade-in">
+    <button class="quizButton" :class="{ 'disabled': question === '' }" @click="handleAnswer(index)">
+      <p id="quizP">{{ question }}</p>
+    </button>
   </div>
+</div>
   <div><h3>{{ score }}</h3></div>
   <div class="powerUps">
     <button class="powerBtn" :class="{ 'disabledBtn': fiftyFiftyDisabled }" id="fiftyFifty"
@@ -255,7 +257,7 @@ function getRandomCapitals(keys, result, correctCapital, randomQuestion) {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 4rem;
+  margin-top: 2rem;
   width: 20rem;
 }
 
@@ -344,22 +346,6 @@ function getRandomCapitals(keys, result, correctCapital, randomQuestion) {
   margin-bottom: 0rem;
 }
 
-h1 {
-  font-family: "Fredoka", sans-serif;
-  font-size: 2.2em;
-  color: #2C7F49;
-  font-weight: 700;
-  line-height: 1.1;
-  margin-bottom: 3rem;
-}
-
-
-.disabled {
-  opacity: 0.5;
-  pointer-events: none;
-  animation: ease-in-out 1s forwards;
-}
-
 .flag {
   width: auto;
   height: 120px;
@@ -367,12 +353,20 @@ h1 {
 }
 
 .flag-container {
+  background-color: #f5f5f5;
   border: 1px solid grey;
   margin: 0.2rem 0 1rem 0;
   border: 2px solid #c3c3c3;
   border-radius: 7px;
   box-shadow: 0px 1px 4px 0px #36363691;
 }
+
+.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+  animation: ease-in-out 1s forwards;
+}
+
 
 @keyframes ease-in-out {
   0% {
@@ -396,4 +390,28 @@ h1 {
     opacity: 0;
   }
 }
+
+.fade-in {
+  opacity: 1;
+  animation: ease-in 0.5s;
+}
+@keyframes ease-in {
+  0% {
+    opacity: 0;
+  }
+
+  66% {
+    opacity: 0.66;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+.fade-out {
+  opacity: 0;
+  transition: opacity 0.5s ease-out;
+}
+
 </style>
