@@ -215,12 +215,15 @@ function getRandomCapitals(keys, result, correctCapital, randomQuestion) {
 
   <div class="powerUps">
     <button class="powerBtn" :class="{ 'disabledBtn': fiftyFiftyDisabled }" id="fiftyFifty" @click="activateFiftyFifty"></button>
-    <button class="powerBtn" id="shield">SHIELD</button>
+    <button class="powerBtn" id="shield"></button>
     <button class="powerBtn" :class="{ 'disabledBtn': passDisabled }" id="pass" @click="handlePass"></button>
   </div>
+
 </template>
 
+
 <style scoped>
+
 .powerUps {
   display: flex;
   justify-content: space-between;
@@ -251,6 +254,15 @@ function getRandomCapitals(keys, result, correctCapital, randomQuestion) {
 
 #fiftyFifty.disabledBtn {
   background-color: gray;
+  pointer-events: none;
+}
+
+#shield {
+  background-color: #fffb25;
+  filter: drop-shadow(0px 0px 2px rgba(0, 0, 0, 0.839));
+  background-image: url('../assets/shield.svg');
+  background-repeat: no-repeat;
+  background-position: center center;
   pointer-events: none;
 }
 
