@@ -324,7 +324,7 @@ h1 {
 .disabled {
   opacity: 0.5;
   pointer-events: none;
-  animation: ease 1s forwards;
+  animation: ease-in-out 1s forwards;
 }
 
 .flag {
