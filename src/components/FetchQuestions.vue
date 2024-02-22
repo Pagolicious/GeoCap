@@ -1,32 +1,33 @@
-<script>
+<script setup>
 import { ref, onMounted } from 'vue';
-import { useQuestionStore } from '../store.js';
+// import { useQuestionStore } from '../store.js';
 
-export default {
-  setup() {
-    const questionStore = useQuestionStore();
+// export default {
+//   setup() {
+//     const questionStore = useQuestionStore();
 
-    onMounted(() => {
-      fetchData(); // Assuming fetchData is defined elsewhere to fetch data
-      // After fetching data and setting randomQuestion
-      questionStore.setRandomQuestion(randomQuestion.value);
-    });
+//     onMounted(() => {
+//       fetchData(); // Assuming fetchData is defined elsewhere to fetch data
+//       // After fetching data and setting randomQuestion
+//       questionStore.setRandomQuestion(randomQuestion.value);
+//     });
 
-    // Other logic
+//     // Other logic
 
-    return {};
-  },
-};
+//     return {};
+//   },
+// };
 const fetchedData = ref(null),
   randomCorrectCapital = ref([]),
   correctEuropeAnswers = ref([]),
-  randomQuestion = ref([])
+  randomQuestion = ref([]),
+  fiftyFiftyDisabled = ref(false);
 
 
 
 async function fetchData() {
 
- randomQuestion.value = [];
+  randomQuestion.value = [];
 
   fetch('https://restcountries.com/v3.1/region/europe')
     .then((response) => response.json())
@@ -74,7 +75,7 @@ async function fetchData() {
       // the beginning every time
       randomQuestion.value.sort()
 
-
+      powerup(randomQuestion)
 
       // 3 lines just to display in console
       console.log(randomQuestion.value)
@@ -82,6 +83,36 @@ async function fetchData() {
       fetchSessionStorage()
       console.log(correctFlag)
     })
+}
+
+onMounted(() => {
+  fetchData()
+})
+
+function powerup(randomQuestion) {
+
+
+  const activateFiftyFifty = () => {
+    if (!fiftyFiftyDisabled.value) {
+      let disabledIndexes = [];
+      while (disabledIndexes.length < 2) {
+        const index = Math.floor(Math.random() * randomQuestion.value.length);
+        if (!disabledIndexes.includes(index)) {
+          disabledIndexes.push(index);
+        }
+      }
+      disabledIndexes.forEach(index => {
+        randomQuestion.value[index] = '';
+      });
+      fiftyFiftyDisabled.value = true;
+      console.log("randomQuestion array after powerup", randomQuestion.value);
+    }
+  };
+
+  return {
+    activateFiftyFifty,
+    fiftyFiftyDisabled
+  };
 }
 
 async function fetchSessionStorage() {
@@ -140,15 +171,147 @@ function getRandomCapitals(keys, result, correctCapital, randomQuestion) {
 
 
 
-<template>
-  <!-- <dl v-if="fetchedData !== null">
+<!-- <template>
+  <dl v-if="fetchedData !== null">
     <template :key="fetchedData.id" v-for="capital in fetchedData">
       <dt>{{ fetchedData.name.common }}</dt>
       <dd>{{ fetchedData.capital[0] }}</dd>
     </template>
   </dl>
-  <p v-else>Laddar...</p> -->
+  <p v-else>Laddar...</p>
+</template> -->
+
+<template>
+  <!-- <div v-if="randomQuestion !== null"> -->
+  <div v-if="randomQuestion.length">
+    <div :class="{ 'disabled': question === '' }" v-for="(question, index) in randomQuestion" :key="index" class="answer">
+      <button class="quizButton" :class="{ 'disabled': question === '' }">
+        <p id="quizP">{{ question }}</p>
+      </button>
+    </div>
+  </div>
+  <!-- </div> -->
+  <!-- <p v-else>Laddar...</p> -->
+  <div class="powerUps">
+    <!-- <button class="powerBtn" id="fiftyFifty">50/50</button> -->
+    <button class="powerBtn" :class="{ 'disabled': fiftyFiftyDisabled }" id="fiftyFifty"
+      @click="activateFiftyFifty"></button>
+    <button class="powerBtn" id="shield">SHIELD</button>
+    <button class="powerBtn" id="pass">PASS</button>
+  </div>
 </template>
 
 <style scoped>
+.powerUps {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 4rem;
+  width: 20rem;
+}
+
+.powerBtn {
+  background-color: rgb(0, 146, 37);
+  width: 3.6875rem;
+  height: 3.6875rem;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-width: 0px;
+
+}
+
+#fiftyFifty {
+  background-color: #3AB296;
+  filter: drop-shadow(0px 0px 2px rgba(0, 0, 0, 0.839));
+  background-image: url('../assets/fiftyFifty.svg');
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+#fiftyFifty.disabled {
+  background-color: gray;
+  pointer-events: none;
+}
+
+
+
+
+
+.answer {
+  height: 5rem;
+  width: 20rem;
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  margin: 0.4rem;
+}
+
+.quizButton {
+  width: 100%;
+  height: 100%;
+  border-radius: 0.4375rem;
+  border: 1px solid #E0E1E1;
+  background: #F5F5F5;
+  box-shadow: 0px 1px 4px 0px #36363691;
+}
+
+.quizButton:hover {
+  border-color: #646cff;
+}
+
+.quizButton:focus,
+.quizButton:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+#quizP {
+  color: #0B0957;
+  font-family: Montserrat;
+  font-size: 1.2rem;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  margin-bottom: 0rem;
+}
+
+h1 {
+  font-family: "Fredoka", sans-serif;
+  font-size: 2.2em;
+  color: #2C7F49;
+  font-weight: 700;
+  line-height: 1.1;
+  margin-bottom: 3rem;
+}
+
+.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+  animation: ease 1s forwards;
+}
+
+@keyframes ease {
+  0% {
+    transform: scaleX(1);
+    transform: translateX(0px);
+    filter: blur(0px);
+    opacity: 1;
+  }
+
+  50% {
+    transform: scaleX(0.8);
+    transform: translateX(15px);
+    filter: blur(2px);
+    opacity: 0.5;
+  }
+
+  100% {
+    transform: scaleX(0.5);
+    transform: translateX(30px);
+    filter: blur(4px);
+    opacity: 0;
+  }
+}
 </style>
