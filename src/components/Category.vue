@@ -5,7 +5,7 @@
 </script>
 
 <template>
-  <div class="category-container">
+  <div class="category-container stylish-scrollbar">
     <h1>Ready to Quiz?</h1>
     <h2>Try one of our quizzes</h2>
     <img src="/src/assets/general/northamerica.svg">

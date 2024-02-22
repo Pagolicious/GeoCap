@@ -16,7 +16,7 @@ export default {
 }
 </script>
 <template>
-  <div class="statistics">
+  <div class="statistics stylish-scrollbar">
     <div>
       <h2 class="title">Statistics</h2>
     </div>
