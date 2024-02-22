@@ -23,7 +23,8 @@ const fetchedData = ref(null),
   randomQuestion = ref([]),
   fiftyFiftyDisabled = ref(false),
   passDisabled = ref(false),
-  correctFlag = ref(null)
+  correctFlag = ref(null),
+  score = ref (0);
 
 
 
@@ -115,6 +116,25 @@ function activateFiftyFifty() {
   }
 }
 
+function handleAnswer(index) {
+  const selectedAnswer = randomQuestion.value[index];
+  const correctAnswer = randomCorrectCapital.value[0];// Det korrekta svaret är alltid det första elementet i randomCorrectCapital
+
+  if (selectedAnswer === correctAnswer) {
+    console.log("You're correct soldier!"); // Om det valda svaret är korrekt, logga meddelandet
+    generateNewQuestions();
+    score.value++;
+    console.log(score.value)
+    console.log(randomCorrectCapital.value)
+  } else {
+    sessionStorage.clear()
+    score.value = 0;
+    generateNewQuestions();
+    console.log("You're wrong soldier!"); // Om det valda svaret är fel, logga ett annat meddelande
+    console.log(randomCorrectCapital.value)
+  }
+}
+
 
 function handlePass() {
   if (!passDisabled.value) {
@@ -129,11 +149,12 @@ function handlePass() {
 function generateNewQuestions() {
   // Reset the state for new questions
   randomQuestion.value = [];
+  randomCorrectCapital.value = [];
 
   // Check if the fiftyFifty button was not pressed
-  if (!fiftyFiftyDisabled.value && !passDisabled.value) {
-    fiftyFiftyDisabled.value = true; // Disable the fiftyFifty button for the new question
-  }
+  // if (!fiftyFiftyDisabled.value && !passDisabled.value) {
+  //   fiftyFiftyDisabled.value = true; // Disable the fiftyFifty button for the new question
+  // }
 
   // Fetch new data and generate new questions
   fetchData();
@@ -217,11 +238,11 @@ function getRandomCapitals(keys, result, correctCapital, randomQuestion) {
       </button>
     </div>
   </div>
-
+  <div><h3>{{ score }}</h3></div>
   <div class="powerUps">
     <button class="powerBtn" :class="{ 'disabledBtn': fiftyFiftyDisabled }" id="fiftyFifty"
       @click="activateFiftyFifty"></button>
-    <button class="powerBtn" id="shield">SHIELD</button>
+    <button class="powerBtn" id="shield"></button>
     <button class="powerBtn" :class="{ 'disabledBtn': passDisabled }" id="pass" @click="handlePass"></button>
   </div>
 
@@ -340,16 +361,16 @@ h1 {
 }
 
 .flag {
-  width: 200px;
-  height: auto;
+  width: auto;
+  height: 120px;
   margin: 1rem;
-
 }
 
 .flag-container {
   border: 1px solid grey;
-  margin: 3rem;
+  margin: 0.2rem 0 1rem 0;
   border: 2px solid #c3c3c3;
+  border-radius: 7px;
   box-shadow: 0px 1px 4px 0px #36363691;
 }
 
