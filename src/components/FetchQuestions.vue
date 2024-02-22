@@ -21,7 +21,8 @@ const fetchedData = ref(null),
   randomCorrectCapital = ref([]),
   correctEuropeAnswers = ref([]),
   randomQuestion = ref([]),
-  fiftyFiftyDisabled = ref(false);
+  fiftyFiftyDisabled = ref(false),
+  passDisabled = ref(false);
 
 
 
@@ -112,6 +113,31 @@ function activateFiftyFifty() {
   }
 }
 
+
+function handlePass() {
+  if (!passDisabled.value) {
+    // Disable pass button
+    passDisabled.value = true;
+
+    // Generate new questions
+    generateNewQuestions();
+  }
+}
+
+function generateNewQuestions() {
+    // Reset the state for new questions
+    randomQuestion.value = [];
+
+    // Check if the fiftyFifty button was not pressed
+    if (!fiftyFiftyDisabled.value && !passDisabled.value) {
+        fiftyFiftyDisabled.value = true; // Disable the fiftyFifty button for the new question
+    }
+
+    // Fetch new data and generate new questions
+    fetchData();
+}
+
+
 async function fetchSessionStorage() {
   const storedData = sessionStorage.getItem('correctEuropeAnswers')
   if (storedData) {
@@ -190,7 +216,7 @@ function getRandomCapitals(keys, result, correctCapital, randomQuestion) {
   <div class="powerUps">
     <button class="powerBtn" :class="{ 'disabledBtn': fiftyFiftyDisabled }" id="fiftyFifty" @click="activateFiftyFifty"></button>
     <button class="powerBtn" id="shield">SHIELD</button>
-    <button class="powerBtn" id="pass">PASS</button>
+    <button class="powerBtn" :class="{ 'disabledBtn': passDisabled }" id="pass" @click="handlePass"></button>
   </div>
 </template>
 
@@ -224,6 +250,19 @@ function getRandomCapitals(keys, result, correctCapital, randomQuestion) {
 }
 
 #fiftyFifty.disabledBtn {
+  background-color: gray;
+  pointer-events: none;
+}
+
+#pass {
+  background-color: #f95f5f;
+  filter: drop-shadow(0px 0px 2px rgba(0, 0, 0, 0.839));
+  background-image: url('../assets/skip.svg');
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+#pass.disabledBtn {
   background-color: gray;
   pointer-events: none;
 }
