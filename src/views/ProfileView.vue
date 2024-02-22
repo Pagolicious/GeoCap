@@ -1,12 +1,6 @@
-<script setup>
 
-// import { ref } from 'vue';
-// import { correctEuropeAnswers } from '../components/FetchCapital.vue';
-
-
-
+<script>
+export default {
+ props: ['username']
+}
 </script>
-
-<template>
-  <h1>Login</h1>
-</template>

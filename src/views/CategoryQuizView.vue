@@ -2,26 +2,33 @@
 import Category from '../components/Category.vue'
 import FetchQuestions from '../components/FetchQuestions.vue'
 import Powerup from '../components/Powerup.vue';
+import { useQuestionStore } from '../store.js';
+
+const questionStore = useQuestionStore();
+
+const randomQuestion = questionStore.randomQuestion;
+
 </script>
 
 <template>
   <Category />
   <div id="container">
     <div id="stickyQuiz">
-    <FetchQuestions />
-    <h1>What is the capital<br>of this country?</h1>
-    <!-- flag -->
-    <div class="answer">
-      <button class="quizButton"><p id="quizP">Placeholder</p></button></div>
-    <div class="answer">
-      <button class="quizButton"><p id="quizP">Placeholder</p></button></div>
-    <div class="answer">
-    <button class="quizButton"><p id="quizP">Placeholder</p></button></div>
-    <div class="answer">
-      <button class="quizButton"><p id="quizP">Placeholder</p></button></div>
-   <!-- <Powerup /> -->
+      <FetchQuestions />
+      <h1>What is the capital<br>of this country?</h1>
+      <!-- <div id="flag">
+        <img :src="flagImageUrl" alt="Flag" />
+      </div> -->
+      <div v-if="randomQuestion.length">
+        <div :class="{ 'disabled': question === '' }" v-for="(question, index) in randomQuestion" :key="index" class="answer">
+          <button class="quizButton" :class="{ 'disabled': question === '' }">
+            <p id="quizP">{{ question }}</p>
+          </button>
+        </div>
+      </div>
+      <Powerup :randomQuestion="randomQuestion" />
+    </div>
   </div>
-</div>
   <!-- <h1>Quiz</h1> -->
 </template>
 <style scoped>
@@ -83,5 +90,34 @@ h1 {
   font-weight: 700;
   line-height: 1.1;
   margin-bottom: 3rem;
+}
+
+.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+  animation: ease 1s forwards;
+}
+
+@keyframes ease {
+  0% {
+    transform: scaleX(1);
+    transform: translateX(0px);
+    filter: blur(0px);
+    opacity: 1;
+  }
+
+  50% {
+    transform: scaleX(0.8);
+    transform: translateX(15px);
+    filter: blur(2px);
+    opacity: 0.5;
+  }
+
+  100% {
+    transform: scaleX(0.5);
+    transform: translateX(30px);
+    filter: blur(4px);
+    opacity: 0;
+  }
 }
 </style>

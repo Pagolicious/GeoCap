@@ -1,13 +1,33 @@
-<script setup>
-import { ref } from 'vue'
+<script>
+import { ref, onMounted } from 'vue';
+import { useQuestionStore } from '../store.js';
 
+export default {
+  setup() {
+    const questionStore = useQuestionStore();
+
+    onMounted(() => {
+      fetchData(); // Assuming fetchData is defined elsewhere to fetch data
+      // After fetching data and setting randomQuestion
+      questionStore.setRandomQuestion(randomQuestion.value);
+    });
+
+    // Other logic
+
+    return {};
+  },
+};
 const fetchedData = ref(null),
-  randomQuestion = ref([]),
   randomCorrectCapital = ref([]),
-  correctEuropeAnswers = ref([])
+  correctEuropeAnswers = ref([]),
+  randomQuestion = ref([])
 
 
-function fetchData() {
+
+async function fetchData() {
+
+ randomQuestion.value = [];
+
   fetch('https://restcountries.com/v3.1/region/europe')
     .then((response) => response.json())
     .then((result) => {
@@ -36,11 +56,11 @@ function fetchData() {
       // answer and one array for the 4 different answer options.
       randomCorrectCapital.value.push(correctCapital)
       randomQuestion.value.push(correctCapital)
-
       // Get the Index from the correct capital
       const correctCapitalIndex = keys.findIndex((key) => {
         const item = result[key]
         return item.capital[0] === correctCapital
+
       })
 
       // Get the flag from the correct Index
@@ -64,9 +84,7 @@ function fetchData() {
     })
 }
 
-fetchData()
-
-function fetchSessionStorage() {
+async function fetchSessionStorage() {
   const storedData = sessionStorage.getItem('correctEuropeAnswers')
   if (storedData) {
     const array = JSON.parse(storedData)
@@ -75,12 +93,12 @@ function fetchSessionStorage() {
   }
 }
 
-function saveAnswersToSessionStorage(correctEuropeAnswers) {
+async function saveAnswersToSessionStorage(correctEuropeAnswers) {
   const dataToStore = JSON.stringify(correctEuropeAnswers.value)
   sessionStorage.setItem('correctEuropeAnswers', dataToStore)
 }
 
-function removeAnswerFromSessionStorage(correctCapital) {
+async function removeAnswerFromSessionStorage(correctCapital) {
   const storedData = sessionStorage.getItem('correctEuropeAnswers')
   if (storedData) {
     const capitalArray = JSON.parse(storedData)
@@ -115,12 +133,12 @@ function getRandomCapitals(keys, result, correctCapital, randomQuestion) {
     } while (randomCapital === correctCapital || randomQuestion.value.includes(randomCapital))
     randomQuestion.value.push(randomCapital)
   }
+
 }
-
-
-
-
 </script>
+
+
+
 
 <template>
   <!-- <dl v-if="fetchedData !== null">
