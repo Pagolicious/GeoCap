@@ -1,4 +1,4 @@
-<script>
+<!-- <script>
 import { ref } from 'vue'
 import { useQuestionStore } from '../store.js'; // Import the Pinia store
 
@@ -41,18 +41,18 @@ export default {
   },
 };
 
-</script>
+</script> -->
 
 
-<template>
+<!-- <template>
   <div class="powerUps">
-    <!-- <button class="powerBtn" id="fiftyFifty">50/50</button> -->
+    <button class="powerBtn" id="fiftyFifty">50/50</button>
     <button class="powerBtn" :class="{ 'disabled': fiftyFiftyDisabled }" id="fiftyFifty" @click="activateFiftyFifty"></button>
     <button class="powerBtn" id="shield">SHIELD</button>
     <button class="powerBtn" id="pass">PASS</button>
   </div>
-</template>
-
+</template> -->
+<!--
 <style scoped>
 .powerUps {
   display: flex;
@@ -85,5 +85,5 @@ export default {
 #fiftyFifty.disabled {
   background-color: gray;
   pointer-events: none;
-}
+} -->
 </style>

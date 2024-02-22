@@ -1,32 +1,34 @@
-<script>
+<script setup>
 import { ref, onMounted } from 'vue';
-import { useQuestionStore } from '../store.js';
+// import { useQuestionStore } from '../store.js';
 
-export default {
-  setup() {
-    const questionStore = useQuestionStore();
+// export default {
+//   setup() {
+//     const questionStore = useQuestionStore();
 
-    onMounted(() => {
-      fetchData(); // Assuming fetchData is defined elsewhere to fetch data
-      // After fetching data and setting randomQuestion
-      questionStore.setRandomQuestion(randomQuestion.value);
-    });
+//     onMounted(() => {
+//       fetchData(); // Assuming fetchData is defined elsewhere to fetch data
+//       // After fetching data and setting randomQuestion
+//       questionStore.setRandomQuestion(randomQuestion.value);
+//     });
 
-    // Other logic
+//     // Other logic
 
-    return {};
-  },
-};
+//     return {};
+//   },
+// };
 const fetchedData = ref(null),
   randomCorrectCapital = ref([]),
   correctEuropeAnswers = ref([]),
-  randomQuestion = ref([])
+  randomQuestion = ref([]),
+  fiftyFiftyDisabled = ref(false),
+  passDisabled = ref(false);
 
 
 
 async function fetchData() {
 
- randomQuestion.value = [];
+  randomQuestion.value = [];
 
   fetch('https://restcountries.com/v3.1/region/europe')
     .then((response) => response.json())
@@ -75,7 +77,6 @@ async function fetchData() {
       randomQuestion.value.sort()
 
 
-
       // 3 lines just to display in console
       console.log(randomQuestion.value)
       console.log(randomCorrectCapital.value)
@@ -83,6 +84,59 @@ async function fetchData() {
       console.log(correctFlag)
     })
 }
+
+onMounted(() => {
+  fetchData()
+})
+
+function activateFiftyFifty() {
+  if (!fiftyFiftyDisabled.value) {
+    let wrongIndexes = [];
+    // Find the indexes of wrong questions
+    for (let i = 0; i < randomQuestion.value.length; i++) {
+      if (randomQuestion.value[i] !== randomCorrectCapital.value[0]) {
+        wrongIndexes.push(i);
+      }
+    }
+
+    // Shuffle the wrong indexes array
+    wrongIndexes.sort(() => Math.random() - 0.5);
+
+    // Disable the first two wrong answers
+    for (let i = 0; i < Math.min(2, wrongIndexes.length); i++) {
+      const index = wrongIndexes[i];
+      randomQuestion.value[index] = '';
+    }
+
+    fiftyFiftyDisabled.value = true;
+    console.log("randomQuestion array after powerup", randomQuestion.value);
+  }
+}
+
+
+function handlePass() {
+  if (!passDisabled.value) {
+    // Disable pass button
+    passDisabled.value = true;
+
+    // Generate new questions
+    generateNewQuestions();
+  }
+}
+
+function generateNewQuestions() {
+    // Reset the state for new questions
+    randomQuestion.value = [];
+
+    // Check if the fiftyFifty button was not pressed
+    if (!fiftyFiftyDisabled.value && !passDisabled.value) {
+        fiftyFiftyDisabled.value = true; // Disable the fiftyFifty button for the new question
+    }
+
+    // Fetch new data and generate new questions
+    fetchData();
+}
+
 
 async function fetchSessionStorage() {
   const storedData = sessionStorage.getItem('correctEuropeAnswers')
@@ -140,15 +194,153 @@ function getRandomCapitals(keys, result, correctCapital, randomQuestion) {
 
 
 
-<template>
-  <!-- <dl v-if="fetchedData !== null">
+<!-- <template>
+  <dl v-if="fetchedData !== null">
     <template :key="fetchedData.id" v-for="capital in fetchedData">
       <dt>{{ fetchedData.name.common }}</dt>
       <dd>{{ fetchedData.capital[0] }}</dd>
     </template>
   </dl>
-  <p v-else>Laddar...</p> -->
+  <p v-else>Laddar...</p>
+</template> -->
+
+<template>
+  <div v-if="randomQuestion.length">
+    <div v-for="(question, index) in randomQuestion" :key="index" class="answer">
+      <button class="quizButton" :class="{ 'disabled': question === '' }" @click="handleAnswer(index)">
+        <p id="quizP">{{ question }}</p>
+      </button>
+    </div>
+  </div>
+
+  <div class="powerUps">
+    <button class="powerBtn" :class="{ 'disabledBtn': fiftyFiftyDisabled }" id="fiftyFifty" @click="activateFiftyFifty"></button>
+    <button class="powerBtn" id="shield">SHIELD</button>
+    <button class="powerBtn" :class="{ 'disabledBtn': passDisabled }" id="pass" @click="handlePass"></button>
+  </div>
 </template>
 
 <style scoped>
+.powerUps {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 4rem;
+  width: 20rem;
+}
+
+.powerBtn {
+  background-color: rgb(0, 146, 37);
+  width: 3.6875rem;
+  height: 3.6875rem;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-width: 0px;
+
+}
+
+#fiftyFifty {
+  background-color: #3AB296;
+  filter: drop-shadow(0px 0px 2px rgba(0, 0, 0, 0.839));
+  background-image: url('../assets/fiftyFifty.svg');
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+#fiftyFifty.disabledBtn {
+  background-color: gray;
+  pointer-events: none;
+}
+
+#pass {
+  background-color: #f95f5f;
+  filter: drop-shadow(0px 0px 2px rgba(0, 0, 0, 0.839));
+  background-image: url('../assets/skip.svg');
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+#pass.disabledBtn {
+  background-color: gray;
+  pointer-events: none;
+}
+
+.answer {
+  height: 5rem;
+  width: 20rem;
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  margin: 0.4rem;
+}
+
+.quizButton {
+  width: 100%;
+  height: 100%;
+  border-radius: 0.4375rem;
+  border: 1px solid #E0E1E1;
+  background: #F5F5F5;
+  box-shadow: 0px 1px 4px 0px #36363691;
+}
+
+.quizButton:hover {
+  border-color: #646cff;
+}
+
+.quizButton:focus,
+.quizButton:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+#quizP {
+  color: #0B0957;
+  font-family: Montserrat;
+  font-size: 1.2rem;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  margin-bottom: 0rem;
+}
+
+h1 {
+  font-family: "Fredoka", sans-serif;
+  font-size: 2.2em;
+  color: #2C7F49;
+  font-weight: 700;
+  line-height: 1.1;
+  margin-bottom: 3rem;
+}
+
+
+.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+  animation: ease-in-out 1s forwards;
+}
+
+@keyframes ease-in-out {
+  0% {
+    transform: scaleX(1);
+    transform: translateX(0px);
+    filter: blur(0px);
+    opacity: 1;
+  }
+
+  66% {
+    transform: scaleX(0.75);
+    transform: translateX(20px);
+    filter: blur(2.6px);
+    opacity: 0.33;
+  }
+
+  100% {
+    transform: scaleX(0.5);
+    transform: translateX(30px);
+    filter: blur(4px);
+    opacity: 0;
+  }
+}
 </style>

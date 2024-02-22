@@ -1,12 +1,12 @@
 <script setup>
 import Category from '../components/Category.vue'
 import FetchQuestions from '../components/FetchQuestions.vue'
-import Powerup from '../components/Powerup.vue';
-import { useQuestionStore } from '../store.js';
+// import Powerup from '../components/Powerup.vue';
+// import { useQuestionStore } from '../store.js';
 
-const questionStore = useQuestionStore();
+// const questionStore = useQuestionStore();
 
-const randomQuestion = questionStore.randomQuestion;
+// const randomQuestion = questionStore.randomQuestion;
 
 </script>
 
@@ -14,28 +14,30 @@ const randomQuestion = questionStore.randomQuestion;
   <Category />
   <div id="container">
     <div id="stickyQuiz">
-      <FetchQuestions />
       <h1>What is the capital<br>of this country?</h1>
+      <FetchQuestions />
+
       <!-- <div id="flag">
         <img :src="flagImageUrl" alt="Flag" />
       </div> -->
-      <div v-if="randomQuestion.length">
-        <div :class="{ 'disabled': question === '' }" v-for="(question, index) in randomQuestion" :key="index" class="answer">
+      <!-- <div v-if="randomQuestion.length">
+        <div :class="{ 'disabled': question === '' }" v-for="(question, index) in randomQuestion" :key="index"
+          class="answer">
           <button class="quizButton" :class="{ 'disabled': question === '' }">
             <p id="quizP">{{ question }}</p>
           </button>
         </div>
-      </div>
-      <Powerup :randomQuestion="randomQuestion" />
+      </div> -->
+      <!-- <Powerup :randomQuestion="randomQuestion" /> -->
     </div>
   </div>
   <!-- <h1>Quiz</h1> -->
 </template>
 <style scoped>
-
 #container {
   width: 100%;
   background-color: #F5F5F5;
+  padding-bottom: 4rem;
 }
 
 #stickyQuiz {
@@ -47,7 +49,16 @@ const randomQuestion = questionStore.randomQuestion;
   align-items: center;
 }
 
-.answer {
+h1 {
+  font-family: "Fredoka", sans-serif;
+  font-size: 2.2em;
+  color: #2C7F49;
+  font-weight: 700;
+  line-height: 1.1;
+  margin-bottom: 3rem;
+}
+
+/* .answer {
   height: 5rem;
   width: 20rem;
   display: flex;
@@ -85,15 +96,6 @@ const randomQuestion = questionStore.randomQuestion;
   margin-bottom: 0rem;
 }
 
-h1 {
-  font-family: "Fredoka", sans-serif;
-  font-size: 2.2em;
-  color: #2C7F49;
-  font-weight: 700;
-  line-height: 1.1;
-  margin-bottom: 3rem;
-}
-
 .disabled {
   opacity: 0.5;
   pointer-events: none;
@@ -121,5 +123,5 @@ h1 {
     filter: blur(4px);
     opacity: 0;
   }
-}
+} */
 </style>
