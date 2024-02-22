@@ -26,7 +26,7 @@ import FooterComp from './components/FooterComp.vue';
 header {
   background-color: whitesmoke;
   border-bottom: 1px solid grey;
-  height: 120px;
+  height: 80px;
 }
 
 main {

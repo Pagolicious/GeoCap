@@ -26,13 +26,16 @@
   text-align: center;
   padding-top: 4rem;
   border-right: 1px solid grey;
+  max-height: 900px;
+  overflow-y: scroll;
 }
 
 .category-container img {
   width: 500px;
-  margin-top: 20px;
+  margin: 20px 20px 30px;
   border-radius: 7px;
   box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px;
+  cursor: pointer;
 }
 
 .category-container h1 {

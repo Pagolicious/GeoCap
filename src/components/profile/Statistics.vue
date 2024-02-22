@@ -55,9 +55,9 @@ export default {
 
 .title {
   font-family: Fredoka;
-  font-size: 30px;
+  font-size: 2.5rem;
   font-weight: 700;
-  color: rgb(65, 186, 108);
+  color: #2C7F49;
   text-align: center;
   margin: 20px;
 }

@@ -7,24 +7,29 @@ export default {
       currentPassword: '',
       newPassword: '',
       confirmPassword: '',
-      error: ''
+      error: '',
+      update: '',
+      showError: false,
+      showUpdate: false
     }
   },
   methods: {
+    logout() {
+      this.$router.push('/');
+    },
     // Method to update the profile based on form validation
     updateProfile() {
       // Check if the form data is valid
       if (this.isValidData()) {
-        this.error = '';
-        this.username = '';
-        this.email = '';
-        this.currentPassword = '';
-        this.newPassword = '';
-        this.currentPassword = '';
-        this.confirmPassword = ''
+        this.update = "You're all updated!";
+        this.clearForm();
+        this.showError = false;
+        this.showUpdate = true;
       }
       else {
         this.error = 'Invalid data. Please check your inputs.'
+        this.showUpdate = false;
+        this.showError = true;
       }
     },
     isValidData() {
@@ -41,6 +46,17 @@ export default {
         isNewPasswordValid &&
         isConfirmPasswordValid
       );
+    },
+    clearForm() {
+      this.username = '';
+      this.email = '';
+      this.currentPassword = '';
+      this.newPassword = '';
+      this.confirmPassword = '';
+    },
+    clearError() {
+      this.error = '';
+      this.showError = false;
     }
   },
 }
@@ -58,17 +74,21 @@ export default {
     <h3 class="profile-welcome">Hi User!</h3>
     <div class="form-container">
       <div class="error-message" v-if="error">{{ error }}</div>
-      <b-form-input v-model="username" class="form-input" placeholder="Username"></b-form-input>
-      <b-form-input v-model="email" class="form-input" placeholder="Email"></b-form-input>
-      <b-form-input v-model="currentPassword" class="form-input" placeholder="Current password"></b-form-input>
-      <b-form-input v-model="newPassword" class="form-input" placeholder="New password"></b-form-input>
-      <b-form-input v-model="confirmPassword" class="form-input" placeholder="Confirm password"></b-form-input>
+      <div class="update-message" v-if="update">{{ update }}</div>
+      <b-form-input v-model="username" @input="clearError" class="form-input" placeholder="Username"></b-form-input>
+      <b-form-input v-model="email" @input="clearError" class="form-input" placeholder="Email"></b-form-input>
+      <b-form-input v-model="currentPassword" @input="clearError" class="form-input"
+        placeholder="Current password"></b-form-input>
+      <b-form-input v-model="newPassword" @input="clearError" class="form-input"
+        placeholder="New password"></b-form-input>
+      <b-form-input v-model="confirmPassword" @input="clearError" class="form-input"
+        placeholder="Confirm password"></b-form-input>
       <div class="action-section">
         <p class="help">Need help?</p>
         <b-button @click="updateProfile" class="update-button" variant="success">Update</b-button>
       </div>
     </div>
-    <b-button class="logout-button" variant="success">Logout</b-button>
+    <b-button @click="logout" class="logout-button" variant="success">Logout</b-button>
   </div>
 </template>
 
@@ -76,8 +96,8 @@ export default {
 .profile-container {
   display: flex;
   flex-direction: column;
-  background-image: url(/src/assets/backgrounds/texture.svg);
-  background-color: rgb(65, 186, 108);
+  background-image: url(/src/assets/backgrounds/home-texture.svg);
+  background-color: rgb(123, 219, 156);
   background-size: cover;
   align-items: center;
   padding-top: 4rem;
@@ -87,6 +107,11 @@ export default {
 
 .error-message {
   color: rgb(200, 88, 88);
+  margin-bottom: 10px;
+}
+
+.update-message {
+  color: rgb(65, 186, 108);
   margin-bottom: 10px;
 }
 
@@ -126,7 +151,7 @@ export default {
 .profile-welcome {
   font-family: Fredoka;
   font-weight: 600;
-  font-size: 20px;
+  font-size: 2.2 rem;
   margin-top: 40px;
 }
 
@@ -168,6 +193,9 @@ export default {
 .help {
   font-size: 12px;
   font-weight: 500;
+  text-decoration: none;
+  color: rgb(0, 0, 0, 100%);
+  cursor: pointer;
 }
 
 .logout-button {
