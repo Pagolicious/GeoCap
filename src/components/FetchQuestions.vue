@@ -75,7 +75,6 @@ async function fetchData() {
       // the beginning every time
       randomQuestion.value.sort()
 
-      powerup(randomQuestion)
 
       // 3 lines just to display in console
       console.log(randomQuestion.value)
@@ -89,30 +88,28 @@ onMounted(() => {
   fetchData()
 })
 
-function powerup(randomQuestion) {
-
-
-  const activateFiftyFifty = () => {
-    if (!fiftyFiftyDisabled.value) {
-      let disabledIndexes = [];
-      while (disabledIndexes.length < 2) {
-        const index = Math.floor(Math.random() * randomQuestion.value.length);
-        if (!disabledIndexes.includes(index)) {
-          disabledIndexes.push(index);
-        }
+function activateFiftyFifty() {
+  if (!fiftyFiftyDisabled.value) {
+    let wrongIndexes = [];
+    // Find the indexes of wrong questions
+    for (let i = 0; i < randomQuestion.value.length; i++) {
+      if (randomQuestion.value[i] !== randomCorrectCapital.value[0]) {
+        wrongIndexes.push(i);
       }
-      disabledIndexes.forEach(index => {
-        randomQuestion.value[index] = '';
-      });
-      fiftyFiftyDisabled.value = true;
-      console.log("randomQuestion array after powerup", randomQuestion.value);
     }
-  };
 
-  return {
-    activateFiftyFifty,
-    fiftyFiftyDisabled
-  };
+    // Shuffle the wrong indexes array
+    wrongIndexes.sort(() => Math.random() - 0.5);
+
+    // Disable the first two wrong answers
+    for (let i = 0; i < Math.min(2, wrongIndexes.length); i++) {
+      const index = wrongIndexes[i];
+      randomQuestion.value[index] = '';
+    }
+
+    fiftyFiftyDisabled.value = true;
+    console.log("randomQuestion array after powerup", randomQuestion.value);
+  }
 }
 
 async function fetchSessionStorage() {
@@ -182,20 +179,16 @@ function getRandomCapitals(keys, result, correctCapital, randomQuestion) {
 </template> -->
 
 <template>
-  <!-- <div v-if="randomQuestion !== null"> -->
   <div v-if="randomQuestion.length">
-    <div :class="{ 'disabled': question === '' }" v-for="(question, index) in randomQuestion" :key="index" class="answer">
-      <button class="quizButton" :class="{ 'disabled': question === '' }">
+    <div v-for="(question, index) in randomQuestion" :key="index" class="answer">
+      <button class="quizButton" :class="{ 'disabled': question === '' }" @click="handleAnswer(index)">
         <p id="quizP">{{ question }}</p>
       </button>
     </div>
   </div>
-  <!-- </div> -->
-  <!-- <p v-else>Laddar...</p> -->
+
   <div class="powerUps">
-    <!-- <button class="powerBtn" id="fiftyFifty">50/50</button> -->
-    <button class="powerBtn" :class="{ 'disabled': fiftyFiftyDisabled }" id="fiftyFifty"
-      @click="activateFiftyFifty"></button>
+    <button class="powerBtn" :class="{ 'disabledBtn': fiftyFiftyDisabled }" id="fiftyFifty" @click="activateFiftyFifty"></button>
     <button class="powerBtn" id="shield">SHIELD</button>
     <button class="powerBtn" id="pass">PASS</button>
   </div>
@@ -230,14 +223,10 @@ function getRandomCapitals(keys, result, correctCapital, randomQuestion) {
   background-position: center center;
 }
 
-#fiftyFifty.disabled {
+#fiftyFifty.disabledBtn {
   background-color: gray;
   pointer-events: none;
 }
-
-
-
-
 
 .answer {
   height: 5rem;
@@ -285,6 +274,7 @@ h1 {
   line-height: 1.1;
   margin-bottom: 3rem;
 }
+
 
 .disabled {
   opacity: 0.5;

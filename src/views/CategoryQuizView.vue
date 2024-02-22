@@ -37,6 +37,7 @@ import FetchQuestions from '../components/FetchQuestions.vue'
 #container {
   width: 100%;
   background-color: #F5F5F5;
+  padding-bottom: 4rem;
 }
 
 #stickyQuiz {
@@ -46,6 +47,15 @@ import FetchQuestions from '../components/FetchQuestions.vue'
   flex-direction: column;
   text-align: center;
   align-items: center;
+}
+
+h1 {
+  font-family: "Fredoka", sans-serif;
+  font-size: 2.2em;
+  color: #2C7F49;
+  font-weight: 700;
+  line-height: 1.1;
+  margin-bottom: 3rem;
 }
 
 /* .answer {
@@ -84,15 +94,6 @@ import FetchQuestions from '../components/FetchQuestions.vue'
   font-weight: 700;
   line-height: normal;
   margin-bottom: 0rem;
-}
-
-h1 {
-  font-family: "Fredoka", sans-serif;
-  font-size: 2.2em;
-  color: #2C7F49;
-  font-weight: 700;
-  line-height: 1.1;
-  margin-bottom: 3rem;
 }
 
 .disabled {
