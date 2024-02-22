@@ -341,7 +341,7 @@ h1 {
   box-shadow: 0px 1px 4px 0px #36363691;
 }
 
-@keyframes ease {
+@keyframes ease-in-out {
   0% {
     transform: scaleX(1);
     transform: translateX(0px);
@@ -349,11 +349,11 @@ h1 {
     opacity: 1;
   }
 
-  50% {
-    transform: scaleX(0.8);
-    transform: translateX(15px);
-    filter: blur(2px);
-    opacity: 0.5;
+  66% {
+    transform: scaleX(0.75);
+    transform: translateX(20px);
+    filter: blur(2.6px);
+    opacity: 0.33;
   }
 
   100% {
