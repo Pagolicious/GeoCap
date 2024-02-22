@@ -5,6 +5,17 @@
   font-family: Montserrat, Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
 }
 
+.stylish-scrollbar::-webkit-scrollbar {
+  width: 10px;
+}
+
+.stylish-scrollbar::-webkit-scrollbar-thumb {
+  border-radius: 2px;
+  /* background-color: rgba(0,0,0,.5); */
+  background-color: #bbbbbb66;
+  -webkit-box-shadow: 0 0 1px rgba(255, 255, 255, .5);
+}
+
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
