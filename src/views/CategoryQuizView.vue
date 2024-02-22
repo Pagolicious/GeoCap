@@ -65,22 +65,24 @@ const randomQuestion = questionStore.randomQuestion;
   background: #F5F5F5;
   box-shadow: 0px 1px 4px 0px #36363691;
 }
+
 .quizButton:hover {
   border-color: #646cff;
 }
+
 .quizButton:focus,
 .quizButton:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
 #quizP {
-color: #0B0957;
-font-family: Montserrat;
-font-size: 1.2rem;
-font-style: normal;
-font-weight: 700;
-line-height: normal;
-margin-bottom: 0rem;
+  color: #0B0957;
+  font-family: Montserrat;
+  font-size: 1.2rem;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  margin-bottom: 0rem;
 }
 
 h1 {
