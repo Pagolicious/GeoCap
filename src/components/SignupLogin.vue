@@ -30,6 +30,10 @@ const submitLogin = () => {
   }
 };
 
+const continueAsGuest = () => {
+  router.push('/quiz')
+}
+
 const submitSignup = () => {
   alert('Signup functionality does not work yet.');
 };
@@ -57,7 +61,7 @@ const submitSignup = () => {
               <input v-model="confirmPassword" type="password" placeholder="Confirm Password" class="input-field">
               <button class="submit-button" @click="submitSignup">Submit</button>
             </div>
-            <button class="btn">Continue as a guest</button>
+            <button class="btn" @click="continueAsGuest">Continue as a guest</button>
           </div>
         </div>
       </div>
