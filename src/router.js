@@ -1,23 +1,37 @@
-import { createRouter, createWebHashHistory } from 'vue-router'
+// router.js
 
-import CategoryLoginView from './views/CategoryLoginView.vue'
-import CategoryQuizView from './views/CategoryQuizView.vue'
-import ProfileView from './views/ProfileView.vue'
+import { createRouter, createWebHashHistory } from 'vue-router';
+import CategoryLoginView from './views/CategoryLoginView.vue';
+import CategoryQuizView from './views/CategoryQuizView.vue';
+import ProfileView from './views/ProfileView.vue';
 
-export default createRouter({
+const router = createRouter({
   history: createWebHashHistory(),
   routes: [
     {
       component: CategoryLoginView,
-      path: '/'
+      path: '/',
     },
     {
       component: CategoryQuizView,
-      path: '/quiz'
+      path: '/quiz',
     },
     {
       component: ProfileView,
-      path: '/profile'
-    }
-  ]
-})
+      path: '/profile',
+      meta: { requiresAuth: true }, // Add this line for authentication check
+    },
+  ],
+});
+
+// Navigation guard to check authentication before entering the route
+router.beforeEach((to, from, next) => {
+  const isAuthenticated = localStorage.getItem('currentUser');
+  if (to.meta.requiresAuth && !isAuthenticated) {
+    next('/'); // Redirect to login if not authenticated and trying to access a protected route
+  } else {
+    next();
+  }
+});
+
+export default router;

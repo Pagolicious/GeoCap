@@ -1,45 +1,64 @@
 <script setup>
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 
+const username = ref('');
+const password = ref('');
+const newUsername = ref('');
+const newPassword = ref('');
+const confirmPassword = ref('');
 const loginExpanded = ref(false);
 const signupExpanded = ref(false);
+const router = useRouter();
 
+const login = () => {
+  loginExpanded.value = !loginExpanded.value;
+  signupExpanded.value = false;
+};
 
-function login() {
-  loginExpanded.value = !loginExpanded.value
-  signupExpanded.value = false
-}
+const signup = () => {
+  signupExpanded.value = !signupExpanded.value;
+  loginExpanded.value = false;
+};
 
-function signup() {
-  signupExpanded.value = !signupExpanded.value
-  loginExpanded.value = false
+const submitLogin = () => {
+  if (username.value === 'grupp13' && password.value === 'grupp13') {
+    localStorage.setItem('currentUser', username.value);
+    router.push('/profile');
+  } else {
+    alert('Invalid login credentials. Try again.');
+  }
+};
 
-}
-
+const submitSignup = () => {
+  alert('Signup functionality to be implemented.');
+};
 </script>
 
 <template>
-  <div class="login-container">
-    <div class="sticky-card">
-      <div class="login-card">
-        <div class="login-card-content">
-          <h1>Welcome to GeoCap!</h1>
-          <h2>Choose your path</h2>
-          <h3>Login for benefits or continue as a guest</h3>
-          <button class="btn" @click="login">Login</button>
-          <div v-if="loginExpanded">
-            <input type="text" placeholder="Username" class="input-field">
-            <input type="password" placeholder="Password" class="input-field">
-            <button class="submit-button">Submit</button>
+  <div>
+    <div class="login-container">
+      <div class="sticky-card">
+        <div class="login-card">
+          <div class="login-card-content">
+            <h1>Welcome to GeoCap!</h1>
+            <h2>Choose your path</h2>
+            <h3>Login for benefits or continue as a guest</h3>
+            <button class="btn" @click="login">Login</button>
+            <div v-if="loginExpanded">
+              <input v-model="username" type="text" placeholder="Username" class="input-field">
+              <input v-model="password" type="password" placeholder="Password" class="input-field">
+              <button class="submit-button" @click="submitLogin">Submit</button>
+            </div>
+            <button class="btn" @click="signup">Sign Up</button>
+            <div v-if="signupExpanded">
+              <input v-model="newUsername" type="text" placeholder="New Username" class="input-field">
+              <input v-model="newPassword" type="password" placeholder="New Password" class="input-field">
+              <input v-model="confirmPassword" type="password" placeholder="Confirm Password" class="input-field">
+              <button class="submit-button" @click="submitSignup">Submit</button>
+            </div>
+            <button class="btn">Continue as a guest</button>
           </div>
-          <button class="btn" @click="signup">Sign Up</button>
-          <div v-if="signupExpanded">
-            <input type="text" placeholder="Username" class="input-field">
-            <input type="password" placeholder="Password" class="input-field">
-            <input type="password" placeholder="Confirm Password" class="input-field">
-            <button class="submit-button">Submit</button>
-          </div>
-          <button class="btn">Continue as a guest</button>
         </div>
       </div>
     </div>

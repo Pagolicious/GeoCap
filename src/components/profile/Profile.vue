@@ -1,78 +1,65 @@
-<script>
-export default {
-  data() {
-    return {
-      username: '',
-      email: '',
-      currentPassword: '',
-      newPassword: '',
-      confirmPassword: '',
-      error: '',
-      update: '',
-      showError: false,
-      showUpdate: false
-    }
-  },
-  methods: {
-    logout() {
-      this.$router.push('/');
-    },
-    // Method to update the profile based on form validation
-    updateProfile() {
-      // Check if the form data is valid
-      if (this.isValidData()) {
-        this.update = "You're all updated!";
-        this.clearForm();
-        this.showError = false;
-        this.showUpdate = true;
-      }
-      else {
-        this.error = 'Invalid data. Please check your inputs.'
-        this.showUpdate = false;
-        this.showError = true;
-      }
-    },
-    isValidData() {
-      const isUsernameValid = this.username !== '';
-      const isEmailValid = this.email !== '';
-      const isCurrentPasswordValid = this.currentPassword !== '';
-      const isNewPasswordValid = this.newPassword !== '';
-      const isConfirmPasswordValid = this.confirmPassword !== '' && this.confirmPassword === this.newPassword;
-      // Return true if all validations pass
-      return (
-        isUsernameValid &&
-        isEmailValid &&
-        isCurrentPasswordValid &&
-        isNewPasswordValid &&
-        isConfirmPasswordValid
-      );
-    },
-    clearForm() {
-      this.username = '';
-      this.email = '';
-      this.currentPassword = '';
-      this.newPassword = '';
-      this.confirmPassword = '';
-    },
-    clearError() {
-      this.error = '';
-      this.showError = false;
-    }
-  },
-}
+<script setup>
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 
+const username = ref('');
+const email = ref('');
+const currentPassword = ref('');
+const newPassword = ref('');
+const confirmPassword = ref('');
+const error = ref('');
+const update = ref('');
+const showError = ref(false);
+const showUpdate = ref(false);
+const currentUser = localStorage.getItem('currentUser');
+const router = useRouter();
+
+const logout = () => {
+  localStorage.removeItem('currentUser');
+  router.push('/login');
+};
+
+const updateProfile = () => {
+  if (isValidData()) {
+    update.value = "You're all updated!";
+    clearForm();
+    showError.value = false;
+    showUpdate.value = true;
+  } else {
+    error.value = 'Invalid data. Please check your inputs.'
+    showUpdate.value = false;
+    showError.value = true;
+  }
+};
+
+const isValidData = () => {
+
+};
+
+const clearForm = () => {
+  username.value = '';
+  email.value = '';
+  currentPassword.value = '';
+  newPassword.value = '';
+  confirmPassword.value = '';
+};
+
+const clearError = () => {
+  error.value = '';
+  showError.value = false;
+};
 </script>
 
 <template>
   <div class="profile-container">
-    <div class="profile-wrapper"><img class="profile-image" src="/src/assets/profile/profileimage.png"
-        alt="Profile Image">
+    <div class="profile-wrapper">
+      <img class="profile-image" src="/src/assets/profile/profileimage.png" alt="Profile Image">
       <div class="change-profile">
         <img class="camera-icon" src="/src/assets/profile/camera-icon.svg" alt="camera icon">
       </div>
     </div>
-    <h3 class="profile-welcome">Hi User!</h3>
-    <div class="form-container">
+    <h3 class="profile-welcome" v-if="currentUser">Hi {{ currentUser }}!</h3>
+    <div class="form-container" v-if="currentUser">
       <div class="error-message" v-if="error">{{ error }}</div>
       <div class="update-message" v-if="update">{{ update }}</div>
       <b-form-input v-model="username" @input="clearError" class="form-input" placeholder="Username"></b-form-input>
@@ -88,7 +75,8 @@ export default {
         <b-button @click="updateProfile" class="update-button" variant="success">Update</b-button>
       </div>
     </div>
-    <b-button @click="logout" class="logout-button" variant="success">Logout</b-button>
+    <b-button @click="logout" class="logout-button" variant="success" v-if="currentUser">Logout</b-button>
+    <p v-else>Please log in to view your profile.</p>
   </div>
 </template>
 
