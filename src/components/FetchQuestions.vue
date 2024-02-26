@@ -24,7 +24,7 @@ const fetchedData = ref(null),
   fiftyFiftyDisabled = ref(false),
   passDisabled = ref(false),
   correctFlag = ref(null),
-  score = ref (0);
+  score = ref(0);
 
 
 
@@ -42,20 +42,19 @@ async function fetchData() {
       const keys = Object.keys(result)
 
       // Adds all the different capitals in Europe to session storage
-      if (sessionStorage.length === 0) {
+      if (correctEuropeAnswers.value.length === 0) {
         for (let i = 0; i < keys.length; i++) {
           const item = result[keys[i]]
           const capital = item.capital[0]
           correctEuropeAnswers.value.push(capital)
         }
-        saveAnswersToSessionStorage(correctEuropeAnswers)
       }
 
-      // Get a random capital for an correct answer from the session storage
-      const correctCapital = getRandomCorrectCapital()
+      // Get a random capital for an correct answer from the correct array
+      const correctCapital = getRandomCorrectCapital(correctEuropeAnswers)
 
-      // Removes that capital from the session storage
-      removeAnswerFromSessionStorage(correctCapital)
+      // Removes that capital from the correct answers array
+      removeAnswerFromSessionStorage(correctCapital, correctEuropeAnswers)
 
       // Add the capital to two different arrays, one array for only the correct
       // answer and one array for the 4 different answer options.
@@ -84,7 +83,11 @@ async function fetchData() {
       console.log(randomQuestion.value)
       console.log(randomCorrectCapital.value)
       fetchSessionStorage()
-      console.log(correctFlag)
+      // console.log(correctFlag)
+      console.log("///")
+      console.log(correctEuropeAnswers.value.length)
+      console.log("///")
+
     })
 }
 
@@ -126,8 +129,14 @@ function handleAnswer(index) {
     score.value++;
     console.log(score.value)
     console.log(randomCorrectCapital.value)
+    // correctEuropeAnswers.value = []
+    // console.log("Denna ska vara full:", correctEuropeAnswers.value)
+
+
   } else {
-    sessionStorage.clear()
+    correctEuropeAnswers.value = []; // Uppdatera den globala variabeln
+    // console.log("Denna ska vara tom:", correctEuropeAnswers.value)
+
     fiftyFiftyDisabled.value = false
     passDisabled.value = false
     score.value = 0;
@@ -172,29 +181,26 @@ async function fetchSessionStorage() {
   }
 }
 
-async function saveAnswersToSessionStorage(correctEuropeAnswers) {
-  const dataToStore = JSON.stringify(correctEuropeAnswers.value)
-  sessionStorage.setItem('correctEuropeAnswers', dataToStore)
-}
+// async function saveAnswersToSessionStorage(correctEuropeAnswers) {
+//   const dataToStore = JSON.stringify(correctEuropeAnswers.value)
+//   sessionStorage.setItem('correctEuropeAnswers', dataToStore)
+// }
 
-async function removeAnswerFromSessionStorage(correctCapital) {
-  const storedData = sessionStorage.getItem('correctEuropeAnswers')
+async function removeAnswerFromSessionStorage(correctCapital, correctEuropeAnswers) {
+  const storedData = correctEuropeAnswers.value
   if (storedData) {
-    const capitalArray = JSON.parse(storedData)
-    const indexToRemove = capitalArray.indexOf(correctCapital)
+    const indexToRemove = storedData.indexOf(correctCapital)
     if (indexToRemove !== -1) {
-      capitalArray.splice(indexToRemove, 1)
-      sessionStorage.setItem('correctEuropeAnswers', JSON.stringify(capitalArray))
+      storedData.splice(indexToRemove, 1)
     }
   }
 }
 
-function getRandomCorrectCapital() {
-  const storedData = sessionStorage.getItem('correctEuropeAnswers')
+function getRandomCorrectCapital(correctEuropeAnswers) {
+  const storedData = correctEuropeAnswers.value
   if (storedData) {
-    const capitalsArray = JSON.parse(storedData)
-    const randomIndex = Math.floor(Math.random() * capitalsArray.length)
-    return capitalsArray[randomIndex]
+    const randomIndex = Math.floor(Math.random() * correctEuropeAnswers.value.length)
+    return correctEuropeAnswers.value[randomIndex]
   } else {
     console.log("Quiz Finished, Well Done!")
     return null
@@ -234,25 +240,25 @@ function getRandomCapitals(keys, result, correctCapital, randomQuestion) {
     <img class="flag" :src="correctFlag" alt="Flag">
   </div>
   <div v-if="randomQuestion.length" class="fade-in">
-  <div v-for="(question, index) in randomQuestion" :key="index" class="answer fade-in">
-    <button class="quizButton" :class="{ 'disabled': question === '' }" @click="handleAnswer(index)">
-      <p id="quizP">{{ question }}</p>
-    </button>
+    <div v-for="(question, index) in randomQuestion" :key="index" class="answer fade-in">
+      <button class="quizButton" :class="{ 'disabled': question === '' }" @click="handleAnswer(index)">
+        <p id="quizP">{{ question }}</p>
+      </button>
+    </div>
   </div>
-</div>
-  <div><h3>{{ score }}</h3></div>
+  <div>
+    <h3>{{ score }}</h3>
+  </div>
   <div class="powerUps">
     <button class="powerBtn" :class="{ 'disabledBtn': fiftyFiftyDisabled }" id="fiftyFifty"
       @click="activateFiftyFifty"></button>
     <button class="powerBtn" id="shield"></button>
     <button class="powerBtn" :class="{ 'disabledBtn': passDisabled }" id="pass" @click="handlePass"></button>
   </div>
-
 </template>
 
 
 <style scoped>
-
 .powerUps {
   display: flex;
   justify-content: space-between;
@@ -395,6 +401,7 @@ function getRandomCapitals(keys, result, correctCapital, randomQuestion) {
   opacity: 1;
   animation: ease-in 0.5s;
 }
+
 @keyframes ease-in {
   0% {
     opacity: 0;
@@ -413,5 +420,4 @@ function getRandomCapitals(keys, result, correctCapital, randomQuestion) {
   opacity: 0;
   transition: opacity 0.5s ease-out;
 }
-
 </style>
