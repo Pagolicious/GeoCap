@@ -26,12 +26,12 @@ const submitLogin = () => {
     localStorage.setItem('currentUser', username.value);
     router.push('/profile');
   } else {
-    alert('Invalid login credentials. Try again.');
+    alert('Invalid Password. Try again.');
   }
 };
 
 const submitSignup = () => {
-  alert('Signup functionality to be implemented.');
+  alert('Signup functionality does not work yet.');
 };
 </script>
 
