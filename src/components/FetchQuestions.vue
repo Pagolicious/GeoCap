@@ -18,6 +18,7 @@ import { ref, onMounted } from 'vue';
 //   },
 // };
 const fetchedData = ref(null),
+  // newResult = ref(null),
   randomCorrectCapital = ref([]),
   correctEuropeAnswers = ref([]),
   randomQuestion = ref([]),
@@ -36,6 +37,13 @@ async function fetchData() {
   fetch('https://restcountries.com/v3.1/region/europe')
     .then((response) => response.json())
     .then((result) => {
+
+      // Removing countries that not really are an official country
+      const notCountries = ["Faroe Islands", "Gibraltar", "Jersey",
+        "Svalbard and Jan Mayen", "Åland Islands", "Guernsey", "Isle of Man"]
+
+      result = result.filter(country => !notCountries.includes(country.name.common));
+
       fetchedData.value = result
       console.log(result)
 
@@ -82,8 +90,8 @@ async function fetchData() {
       // 3 lines just to display in console
       console.log(randomQuestion.value)
       console.log(randomCorrectCapital.value)
-      fetchSessionStorage()
-      // console.log(correctFlag)
+      // fetchSessionStorage()
+      console.log(correctFlag.value)
       console.log("///")
       console.log(correctEuropeAnswers.value.length)
       console.log("///")
@@ -94,6 +102,12 @@ async function fetchData() {
 onMounted(() => {
   fetchData()
 })
+
+// function removeCountries(keys) {
+//   const item = result[keys[i]]
+//   const capital = item.capital[0]
+// }
+
 
 function activateFiftyFifty() {
   if (!fiftyFiftyDisabled.value) {
@@ -172,14 +186,14 @@ function generateNewQuestions() {
 }
 
 
-async function fetchSessionStorage() {
-  const storedData = sessionStorage.getItem('correctEuropeAnswers')
-  if (storedData) {
-    const array = JSON.parse(storedData)
-    correctEuropeAnswers.value = array
-    console.log(array)
-  }
-}
+// async function fetchSessionStorage() {
+//   const storedData = sessionStorage.getItem('correctEuropeAnswers')
+//   if (storedData) {
+//     const array = JSON.parse(storedData)
+//     correctEuropeAnswers.value = array
+//     console.log(array)
+//   }
+// }
 
 // async function saveAnswersToSessionStorage(correctEuropeAnswers) {
 //   const dataToStore = JSON.stringify(correctEuropeAnswers.value)
