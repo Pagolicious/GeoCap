@@ -1,4 +1,13 @@
 <script setup>
+import { defineEmits } from 'vue'
+
+const emits = defineEmits(['regionSelected']);
+
+const sendData = (region) => {
+  // Emit an event with the selected region
+  emits('regionSelected', region)
+
+}
 
 </script>
 
@@ -6,12 +15,12 @@
   <div class="category-container stylish-scrollbar">
     <h1>Ready to Quiz?</h1>
     <h2>Try one of our quizzes</h2>
-    <img src="/src/assets/general/northamerica.svg">
-    <img src="/src/assets/general/southamerica.svg">
-    <img src="/src/assets/general/asia.svg">
-    <img src="/src/assets/general/europe.svg">
-    <img src="/src/assets/general/africa.svg">
-    <img src="/src/assets/general/australia.svg">
+    <img src="/src/assets/general/northamerica.svg" @click="sendData('america')">
+    <img src="/src/assets/general/southamerica.svg" @click="sendData('south%20america')">
+    <img src="/src/assets/general/asia.svg" @click="sendData('asia')">
+    <img src="/src/assets/general/europe.svg" @click="sendData('europe')">
+    <img src="/src/assets/general/africa.svg" @click="sendData('africa')">
+    <img src="/src/assets/general/australia.svg" @click="sendData('oceania')">
   </div>
 </template>
 

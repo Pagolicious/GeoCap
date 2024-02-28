@@ -1,40 +1,50 @@
 <script setup>
 import Category from '../components/Category.vue'
 import FetchQuestions from '../components/FetchQuestions.vue'
-// import Powerup from '../components/Powerup.vue';
-// import { useQuestionStore } from '../store.js';
 
-// const questionStore = useQuestionStore();
+import { ref } from 'vue'
 
-// const randomQuestion = questionStore.randomQuestion;
+// Define a variable to store the selected region
+const selectedRegion = ref('')
+
+// Define a method to receive the selected region from FirstComponent
+const receiveData = (region) => {
+  selectedRegion.value = region
+}
 
 </script>
 
 <template>
-  <Category />
+  <Category @regionSelected="receiveData" />
   <div id="container">
     <div id="stickyQuiz">
       <h1>What is the capital<br>of this country?</h1>
-      <FetchQuestions />
-
-      <!-- <div id="flag">
-        <img :src="flagImageUrl" alt="Flag" />
-      </div> -->
-      <!-- <div v-if="randomQuestion.length">
-        <div :class="{ 'disabled': question === '' }" v-for="(question, index) in randomQuestion" :key="index"
-          class="answer">
-          <button class="quizButton" :class="{ 'disabled': question === '' }">
-            <p id="quizP">{{ question }}</p>
-          </button>
-        </div>
-      </div> -->
-      <!-- <Powerup :randomQuestion="randomQuestion" /> -->
+      <template v-if="selectedRegion == 'europe'">
+        <FetchQuestions :selectedRegion="selectedRegion" />
+      </template>
+      <template v-if="selectedRegion == 'asia'">
+        <FetchQuestions :selectedRegion="selectedRegion" />
+      </template>
+      <template v-if="selectedRegion == 'oceania'">
+        <FetchQuestions :selectedRegion="selectedRegion" />
+      </template>
+      <template v-if="selectedRegion == 'africa'">
+        <FetchQuestions :selectedRegion="selectedRegion" />
+      </template>
+      <template v-if="selectedRegion == 'america'">
+        <FetchQuestions :selectedRegion="selectedRegion" />
+      </template>
+      <template v-if="selectedRegion == 'south%20america'">
+        <FetchQuestions :selectedRegion="selectedRegion" />
+      </template>
+      <!-- <template v-else>
+        <p>Loading...</p>
+      </template> -->
     </div>
   </div>
   <!-- <h1>Quiz</h1> -->
 </template>
 <style scoped>
-
 #container {
   width: 100%;
   background-color: #F5F5F5;

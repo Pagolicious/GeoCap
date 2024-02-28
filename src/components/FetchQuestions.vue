@@ -1,24 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
-// import { useQuestionStore } from '../store.js';
 
-// export default {
-//   setup() {
-//     const questionStore = useQuestionStore();
-
-//     onMounted(() => {
-//       fetchData(); // Assuming fetchData is defined elsewhere to fetch data
-//       // After fetching data and setting randomQuestion
-//       questionStore.setRandomQuestion(randomQuestion.value);
-//     });
-
-//     // Other logic
-
-//     return {};
-//   },
-// };
 const fetchedData = ref(null),
-  // newResult = ref(null),
   randomCorrectCapital = ref([]),
   correctEuropeAnswers = ref([]),
   randomQuestion = ref([]),
@@ -27,24 +10,44 @@ const fetchedData = ref(null),
   correctFlag = ref(null),
   score = ref(0);
 
+let currentRegion = ref("")
 
+const props = defineProps({
+  selectedRegion: String
+})
+
+// const props = defineProps(['selectedRegion'])
+
+console.log(props.selectedRegion)
+console.log(`https://restcountries.com/v3.1/region/${props.selectedRegion}`)
+
+// if (props.selectedRegion !== "north%20america" && props.selectedRegion !== "south%20america") {
+//   currentRegion.value = "region"
+//   console.log(currentRegion.value)
+// } else {
+//   currentRegion.value = "subregion"
+//   console.log(currentRegion.value)
+
+// }
+
+// console.log(`https://restcountries.com/v3.1/${currentRegion.value}/${props.selectedRegion}`)
 
 async function fetchData() {
 
-  randomQuestion.value = [];
+  randomQuestion.value = []
   // correctFlag.value = null
 
-  fetch('https://restcountries.com/v3.1/region/europe')
+  // fetch(`https://restcountries.com/v3.1/${currentRegion.value}/${props.selectedRegion}`)
+  fetch(`https://restcountries.com/v3.1/region/${props.selectedRegion}`)
     .then((response) => response.json())
     .then((result) => {
 
+      console.log(result)
+
       // Removing countries that not really are an official country
-      const notCountries = ["Faroe Islands", "Gibraltar", "Jersey",
-        "Svalbard and Jan Mayen", "Åland Islands", "Guernsey", "Isle of Man"]
-
-      result = result.filter(country => !notCountries.includes(country.name.common));
-
+      result = removeNoneCountries(result)
       fetchedData.value = result
+
       console.log(result)
 
       const keys = Object.keys(result)
@@ -53,6 +56,7 @@ async function fetchData() {
       if (correctEuropeAnswers.value.length === 0) {
         for (let i = 0; i < keys.length; i++) {
           const item = result[keys[i]]
+          // console.log()
           const capital = item.capital[0]
           correctEuropeAnswers.value.push(capital)
         }
@@ -91,10 +95,15 @@ async function fetchData() {
       console.log(randomQuestion.value)
       console.log(randomCorrectCapital.value)
       // fetchSessionStorage()
-      console.log(correctFlag.value)
+      // console.log(correctFlag.value)
       console.log("///")
       console.log(correctEuropeAnswers.value.length)
       console.log("///")
+      console.log(correctFlagItem.name.common)
+
+      // for (let i = 0; i < correctEuropeAnswers.value.length; i++) {
+      //   console.log(result[i].name.common)
+      // }
 
     })
 }
@@ -103,11 +112,57 @@ onMounted(() => {
   fetchData()
 })
 
-// function removeCountries(keys) {
-//   const item = result[keys[i]]
-//   const capital = item.capital[0]
-// }
+function removeNoneCountries(result) {
+  const notCountriesInEurope = ["Faroe Islands", "Gibraltar", "Jersey",
+    "Svalbard and Jan Mayen", "Åland Islands", "Guernsey", "Isle of Man"]
 
+  const notCountriesInAsia = ["Macau", "Palestine", "Hong Kong"]
+
+  const notCountriesInAfrica = ["Mayotte", "British Indian Ocean Territory",
+    "Saint Helena, Ascension and Tristan da Cunha", "Western Sahara", "Réunion"]
+
+  const notCountriesInSouthAmerica = ["Falkland Islands"]
+
+  const notCountriesInNorthAmerica = ["Turks and Caicos Islands", "Bermuda",
+    "Colombia", "British Virgin Islands", "Suriname", "Ecuador", "Venezuela",
+    "Paraguay", "Uruguay", "United States Virgin Islands", "Chile", "Brazil",
+    "Saint Martin", "Montserrat", "Caribbean Netherlands", "Aruba", "Guadeloupe",
+    "Guyana", "Sint Maarten", "Puerto Rico", "Falkland Islands", "Bolivia",
+    "French Guiana", "Anguilla", "Curaçao", "Saint Barthélemy", "Argentina",
+    "United States Minor Outlying Islands", "Martinique", "Peru", "Greenland",
+    "Saint Pierre and Miquelon", "Cayman Islands"]
+
+  const notCountriesInOceania = ["Tokelau", "Christmas Island",
+    "Cook Islands", "Niue", "American Samoa", "Wallis and Futuna",
+    "Norfolk Island", "French Polynesia", "Pitcairn Islands", "Guam",
+    "Cocos (Keeling) Islands", "Northern Mariana Islands", "New Caledonia"]
+
+  if (props.selectedRegion === "europe") {
+    result = result.filter(country => !notCountriesInEurope.includes(country.name.common))
+  }
+
+  if (props.selectedRegion === "asia") {
+    result = result.filter(country => !notCountriesInAsia.includes(country.name.common))
+  }
+
+  if (props.selectedRegion === "africa") {
+    result = result.filter(country => !notCountriesInAfrica.includes(country.name.common))
+  }
+
+  if (props.selectedRegion === "south%20america") {
+    result = result.filter(country => !notCountriesInSouthAmerica.includes(country.name.common))
+  }
+
+  if (props.selectedRegion === "america") {
+    result = result.filter(country => !notCountriesInNorthAmerica.includes(country.name.common))
+  }
+
+  if (props.selectedRegion === "oceania") {
+    result = result.filter(country => !notCountriesInOceania.includes(country.name.common))
+  }
+
+  return result
+}
 
 function activateFiftyFifty() {
   if (!fiftyFiftyDisabled.value) {
@@ -185,21 +240,6 @@ function generateNewQuestions() {
   }, 500); // Assuming the fade-out animation duration is 0.5 seconds (500 milliseconds)
 }
 
-
-// async function fetchSessionStorage() {
-//   const storedData = sessionStorage.getItem('correctEuropeAnswers')
-//   if (storedData) {
-//     const array = JSON.parse(storedData)
-//     correctEuropeAnswers.value = array
-//     console.log(array)
-//   }
-// }
-
-// async function saveAnswersToSessionStorage(correctEuropeAnswers) {
-//   const dataToStore = JSON.stringify(correctEuropeAnswers.value)
-//   sessionStorage.setItem('correctEuropeAnswers', dataToStore)
-// }
-
 async function removeAnswerFromSessionStorage(correctCapital, correctEuropeAnswers) {
   const storedData = correctEuropeAnswers.value
   if (storedData) {
@@ -235,19 +275,6 @@ function getRandomCapitals(keys, result, correctCapital, randomQuestion) {
 
 }
 </script>
-
-
-
-
-<!-- <template>
-  <dl v-if="fetchedData !== null">
-    <template :key="fetchedData.id" v-for="capital in fetchedData">
-      <dt>{{ fetchedData.name.common }}</dt>
-      <dd>{{ fetchedData.capital[0] }}</dd>
-    </template>
-  </dl>
-  <p v-else>Laddar...</p>
-</template> -->
 
 <template>
   <div class="flag-container">
