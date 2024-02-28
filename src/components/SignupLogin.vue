@@ -11,29 +11,35 @@ const loginExpanded = ref(false);
 const signupExpanded = ref(false);
 const router = useRouter();
 
+// Function to toggle visibility of login inputs
 const login = () => {
   loginExpanded.value = !loginExpanded.value;
   signupExpanded.value = false;
 };
 
+// Function to toggle visibility of signup inputs
 const signup = () => {
   signupExpanded.value = !signupExpanded.value;
   loginExpanded.value = false;
 };
 
+// Function to submit login
 const submitLogin = () => {
   if (username.value === 'grupp13' && password.value === 'grupp13') {
-    localStorage.setItem('currentUser', username.value);
+      // If login is successful, store current user and redirect to the profile page
+    localStorage.setItem('currentUser', username.value); 
     router.push('/profile');
   } else {
-    alert('Invalid Password. Try again.');
+    alert('Invalid Password. Try again.'); // Show alert for invalid password
   }
 };
 
+// Function to continue as a guest and redirect to the quiz page
 const continueAsGuest = () => {
   router.push('/quiz')
 }
 
+// Placeholder function for signup functionality
 const submitSignup = () => {
   alert('Signup functionality does not work yet.');
 };

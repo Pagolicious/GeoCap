@@ -11,17 +11,19 @@ const error = ref('');
 const update = ref('');
 const showError = ref(false);
 const showUpdate = ref(false);
-const currentUser = localStorage.getItem('currentUser');
+const currentUser = localStorage.getItem('currentUser'); // Retrieve current user from local storage
 const router = useRouter();
 
+// Function to log out the user
 const logout = () => {
-  localStorage.removeItem('currentUser');
-  router.push('/');
+  localStorage.removeItem('currentUser'); // Remove current user from local storage
+  router.push('/'); // Redirect to the home page
 };
 
+// Function to update the user profile
 const updateProfile = () => {
   if (isValidData()) {
-    update.value = "You're all updated!";
+    update.value = "You're all updated!"; 
     clearForm();
     showError.value = false;
     showUpdate.value = true;
@@ -58,7 +60,7 @@ const clearError = () => {
         <img class="camera-icon" src="/src/assets/profile/camera-icon.svg" alt="camera icon">
       </div>
     </div>
-    <h3 class="profile-welcome" v-if="currentUser">Hi {{ currentUser }}!</h3>
+    <h3 class="profile-welcome" v-if="currentUser">Hi {{ currentUser }}!</h3>  <!-- Greeting message if a current user is available -->
     <div class="form-container" v-if="currentUser">
       <div class="error-message" v-if="error">{{ error }}</div>
       <div class="update-message" v-if="update">{{ update }}</div>
@@ -75,6 +77,7 @@ const clearError = () => {
         <b-button @click="updateProfile" class="update-button" variant="success">Update</b-button>
       </div>
     </div>
+    <!-- Logout button and removal of the current user from local storage and redirection to the home page. -->
     <b-button @click="logout" class="logout-button" variant="success" v-if="currentUser">Logout</b-button>
     <p v-else>Please log in to view your profile.</p>
   </div>
