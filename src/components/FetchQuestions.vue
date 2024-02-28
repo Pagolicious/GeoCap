@@ -8,9 +8,12 @@ const fetchedData = ref(null),
   fiftyFiftyDisabled = ref(false),
   passDisabled = ref(false),
   correctFlag = ref(null),
-  score = ref(0);
+  score = ref(0),
+  timer = ref(10),
+  timeRunning = ref(false),
+  testArray = ref([])
 
-let currentRegion = ref("")
+let countdown
 
 const props = defineProps({
   selectedRegion: String
@@ -24,13 +27,15 @@ async function fetchData() {
     .then((response) => response.json())
     .then((result) => {
 
-      console.log(result)
+      // console.log(result)
 
       // Removing countries that not really are an official country
       result = removeNoneCountries(result)
       fetchedData.value = result
 
       console.log(result)
+
+      result.sort((a, b) => b.population - a.population)
 
       const keys = Object.keys(result)
 
@@ -43,6 +48,15 @@ async function fetchData() {
           correctEuropeAnswers.value.push(capital)
         }
       }
+
+      // if (testArray.value.length === 0) {
+      //   for (let i = 0; i < keys.length; i++) {
+      //     const testItem = result[keys[i]]
+      //     // console.log()
+      //     const testCapital = testItem.capital[0]
+      //     testArray.value.push(capital)
+      //   }
+      // }
 
       // Get a random capital for an correct answer from the correct array
       const correctCapital = getRandomCorrectCapital(correctEuropeAnswers)
@@ -71,6 +85,8 @@ async function fetchData() {
       // Sort the answer to alphabetical order so the correct answer is not in
       // the beginning every time
       randomQuestion.value.sort()
+
+      startTimer()
 
 
       // 3 lines just to display in console
@@ -148,6 +164,7 @@ function removeNoneCountries(result) {
 
 function activateFiftyFifty() {
   if (!fiftyFiftyDisabled.value) {
+    stopTimer()
     let wrongIndexes = [];
     // Find the indexes of wrong questions
     for (let i = 0; i < randomQuestion.value.length; i++) {
@@ -166,6 +183,7 @@ function activateFiftyFifty() {
     }
 
     fiftyFiftyDisabled.value = true;
+
     console.log("randomQuestion array after powerup", randomQuestion.value);
   }
 }
@@ -180,6 +198,7 @@ function handleAnswer(index) {
     score.value++;
     console.log(score.value)
     console.log(randomCorrectCapital.value)
+    resetTimer()
     // correctEuropeAnswers.value = []
     // console.log("Denna ska vara full:", correctEuropeAnswers.value)
 
@@ -191,6 +210,7 @@ function handleAnswer(index) {
     fiftyFiftyDisabled.value = false
     passDisabled.value = false
     score.value = 0;
+    resetTimer()
     generateNewQuestions();
     console.log("You're wrong soldier!"); // Om det valda svaret är fel, logga ett annat meddelande
     console.log(randomCorrectCapital.value)
@@ -202,7 +222,7 @@ function handlePass() {
   if (!passDisabled.value) {
     // Disable pass button
     passDisabled.value = true;
-
+    resetTimer()
     // Generate new questions
     generateNewQuestions();
   }
@@ -233,15 +253,26 @@ async function removeAnswerFromSessionStorage(correctCapital, correctEuropeAnswe
 }
 
 function getRandomCorrectCapital(correctEuropeAnswers) {
-  const storedData = correctEuropeAnswers.value
-  if (storedData) {
-    const randomIndex = Math.floor(Math.random() * correctEuropeAnswers.value.length)
+  let randomIndex
+  if (correctEuropeAnswers.value.length > 7) {
+    randomIndex = Math.floor(Math.random() * 7)
     return correctEuropeAnswers.value[randomIndex]
   } else {
-    console.log("Quiz Finished, Well Done!")
-    return null
+    randomIndex = Math.floor(Math.random() * correctEuropeAnswers.value.length)
+    return correctEuropeAnswers.value[randomIndex]
   }
 }
+
+// function getRandomCorrectCapital(correctEuropeAnswers) {
+//   const storedData = correctEuropeAnswers.value
+//   if (storedData) {
+//     const randomIndex = Math.floor(Math.random() * correctEuropeAnswers.value.length)
+//     return correctEuropeAnswers.value[randomIndex]
+//   } else {
+//     console.log("Quiz Finished, Well Done!")
+//     return null
+//   }
+// }
 
 function getRandomCapitals(keys, result, correctCapital, randomQuestion) {
   for (let i = 0; i < 3; i++) {
@@ -254,8 +285,29 @@ function getRandomCapitals(keys, result, correctCapital, randomQuestion) {
     } while (randomCapital === correctCapital || randomQuestion.value.includes(randomCapital))
     randomQuestion.value.push(randomCapital)
   }
-
 }
+
+function startTimer() {
+  timeRunning.value = true
+  countdown = setInterval(() => {
+    if (timer.value > 0) {
+      timer.value--
+    } else {
+      stopTimer()
+    }
+  }, 1000)
+}
+
+function stopTimer() {
+  clearInterval(countdown)
+  timeRunning.value = false
+}
+
+function resetTimer() {
+  stopTimer()
+  timer.value = 10
+}
+
 </script>
 
 <template>
@@ -271,6 +323,7 @@ function getRandomCapitals(keys, result, correctCapital, randomQuestion) {
   </div>
   <div>
     <h3>{{ score }}</h3>
+    <h3>{{ timer }}</h3>
   </div>
   <div class="powerUps">
     <button class="powerBtn" :class="{ 'disabledBtn': fiftyFiftyDisabled }" id="fiftyFifty"
