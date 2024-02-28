@@ -16,28 +16,10 @@ const props = defineProps({
   selectedRegion: String
 })
 
-// const props = defineProps(['selectedRegion'])
-
-console.log(props.selectedRegion)
-console.log(`https://restcountries.com/v3.1/region/${props.selectedRegion}`)
-
-// if (props.selectedRegion !== "north%20america" && props.selectedRegion !== "south%20america") {
-//   currentRegion.value = "region"
-//   console.log(currentRegion.value)
-// } else {
-//   currentRegion.value = "subregion"
-//   console.log(currentRegion.value)
-
-// }
-
-// console.log(`https://restcountries.com/v3.1/${currentRegion.value}/${props.selectedRegion}`)
-
 async function fetchData() {
 
   randomQuestion.value = []
-  // correctFlag.value = null
 
-  // fetch(`https://restcountries.com/v3.1/${currentRegion.value}/${props.selectedRegion}`)
   fetch(`https://restcountries.com/v3.1/region/${props.selectedRegion}`)
     .then((response) => response.json())
     .then((result) => {
