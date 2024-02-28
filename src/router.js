@@ -1,7 +1,7 @@
 // router.js
 
 import { createRouter, createWebHashHistory } from 'vue-router';
-import CategoryLoginView from './views/CategoryLoginView.vue';
+import LandingView from './views/LandingView.vue';
 import CategoryQuizView from './views/CategoryQuizView.vue';
 import ProfileView from './views/ProfileView.vue';
 
@@ -9,7 +9,7 @@ const router = createRouter({
   history: createWebHashHistory(),
   routes: [
     {
-      component: CategoryLoginView,
+      component: LandingView,
       path: '/',
     },
     {
