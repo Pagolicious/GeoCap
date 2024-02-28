@@ -84,6 +84,8 @@ const submitSignup = () => {
   background-color: #a9d7eb;
   background-image: url(/src/assets/backgrounds/home-texture.svg);
   background-size: cover;
+  width: 100vw;
+  height: 100vh;
 }
 
 .sticky-card {
