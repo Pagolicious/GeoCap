@@ -23,7 +23,7 @@ const logout = () => {
 // Function to update the user profile
 const updateProfile = () => {
   if (isValidData()) {
-    update.value = "You're all updated!"; 
+    update.value = "You're all updated!";
     clearForm();
     showError.value = false;
     showUpdate.value = true;
