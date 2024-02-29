@@ -22,6 +22,13 @@ ChartJS.register(
 )
 
 export default {
+  mounted() {
+    this.scores = localStorage.getItem("scores")
+    this.bestScores = localStorage.getItem("scores")
+    console.log(this.scores)
+    //this.bestScores.sort()
+    //this.bestScores.reverse()
+  },
   components: {
     Line
   },
@@ -40,7 +47,9 @@ export default {
       options: {
         responsive: true,
         maintainAspectRatio: false
-      }
+      },
+      scores: [],
+      bestScores: []
     }
   },
   // Component props definition to pass data to the parent
@@ -80,10 +89,10 @@ export default {
               <img class="medal" src="/src/assets/profile/medal3.svg">
             </div>
             <div class="vertical-row">
-              <p class="row-title">Region</p>
-              <p class="text">EU</p>
-              <p class="text">NA</p>
-              <p class="text">SA</p>
+              <p class="row-title">Percent</p>
+              <p class="text">10%</p>
+              <p class="text">80%</p>
+              <p class="text">20%</p>
             </div>
             <div class="vertical-row">
               <p class="row-title">Score</p>

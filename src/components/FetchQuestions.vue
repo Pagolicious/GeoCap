@@ -107,9 +107,37 @@ async function fetchData() {
 }
 
 onMounted(() => {
+  initializeStorage()
   fetchData()
-})
 
+})
+function initializeStorage() {
+  let scores = localStorage.getItem("scores")
+  if (!scores) {
+    scores = {
+      "america": [],
+      "south%20america": [],
+      "asia": [],
+      "europe": [],
+      "africa": [],
+      "oceania": []
+    }
+  }
+  else {
+    scores = JSON.parse(scores)
+  }
+
+  console.log(scores)
+  scores[props.selectedRegion].push(0)
+  localStorage.setItem("scores", JSON.stringify(scores))
+}
+function addScore(score) {
+  let scores = JSON.parse(localStorage.getItem("scores"))
+  let currentScoreIndex = scores[props.selectedRegion].length - 1
+  scores[props.selectedRegion][currentScoreIndex] = scores[props.selectedRegion][currentScoreIndex] + score
+  localStorage.setItem("scores", JSON.stringify(scores))
+  return scores[props.selectedRegion][currentScoreIndex]
+}
 function removeNoneCountries(result) {
   const notCountriesInEurope = ["Faroe Islands", "Gibraltar", "Jersey",
     "Svalbard and Jan Mayen", "Åland Islands", "Guernsey", "Isle of Man"]
@@ -195,7 +223,7 @@ function handleAnswer(index) {
   if (selectedAnswer === correctAnswer) {
     console.log("You're correct soldier!"); // Om det valda svaret är korrekt, logga meddelandet
     generateNewQuestions();
-    score.value++;
+    score.value = addScore(timer.value)
     console.log(score.value)
     console.log(randomCorrectCapital.value)
     resetTimer()
@@ -209,7 +237,6 @@ function handleAnswer(index) {
 
     fiftyFiftyDisabled.value = false
     passDisabled.value = false
-    score.value = 0;
     resetTimer()
     generateNewQuestions();
     console.log("You're wrong soldier!"); // Om det valda svaret är fel, logga ett annat meddelande
@@ -336,7 +363,6 @@ function resetTimer() {
 
 
 <style scoped>
-
 h1 {
   font-family: "Fredoka", sans-serif;
   font-size: 2.2em;
@@ -345,6 +371,7 @@ h1 {
   line-height: 1.1;
   margin-bottom: 1rem;
 }
+
 .powerUps {
   display: flex;
   justify-content: space-between;
