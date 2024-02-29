@@ -1,6 +1,7 @@
 <script setup>
 import Category from '../components/Category.vue'
 import FetchQuestions from '../components/FetchQuestions.vue'
+import Instructions from '../components/Instructions.vue'
 
 import { ref } from 'vue'
 
@@ -18,40 +19,6 @@ const receiveData = (region) => {
   <Category @regionSelected="receiveData" />
   <div id="container">
     <div id="stickyQuiz">
-      <template  template v-if="selectedRegion === ''">    <!-- maybe add this to different file? tried to add into fetchQuestions but got error because selectedregion is empty (aka fetchUrl is 404)-->
-        <h1>How to Play GeoCap:</h1>
-          <ol>
-            <div class="instructions">
-              <li><strong>Select Your Region:</strong> Choose your preferred continent from the available options.</li>
-            </div>
-            <div class="instructions">
-              <li><strong>Match the Flag to the Capital:</strong> A flag will be displayed on the screen. Quickly select the capital city that corresponds to the country represented by the flag.</li>
-            </div>
-              <div class="instructions">
-              <li><strong>Time Limit:</strong> You have only 10 seconds to make your choice! Hurry up!</li>
-            </div>
-              <div class="instructions">
-              <li><strong>Be Careful:</strong> Choose the correct capital! If you pick the wrong one, you're out, and the game ends.</li>
-            </div>
-            <div id="lifelineInstructionsContainer">
-              <li><strong>Lifelines:</strong> You have three lifelines to help you out:</li>
-              <div class="lifelineContainer">
-                <div class="lifelineGroup">
-                  <h3 class="lifelineHeader">50/50:</h3>
-                  <li class="lifeline">Removes two wrong answers, leaving one correct and one wrong option. The timer pauses temporarily.</li>
-                </div>
-                <div class="lifelineGroup">
-                  <h3 class="lifelineHeader">Skip:</h3>
-                  <li class="lifeline">Skip the current question and move on to the next one.</li>
-                </div>
-                <div class="lifelineGroup">
-                  <h3 class="lifelineHeader">Name:</h3>
-                  <li class="lifeline">This lifeline will reveal the name of the country corresponding to the flag.</li>
-                </div>
-              </div>
-            </div>
-          </ol>
-      </template>
       <template v-if="selectedRegion == 'europe'">
         <FetchQuestions :selectedRegion="selectedRegion" />
       </template>
@@ -69,6 +36,9 @@ const receiveData = (region) => {
       </template>
       <template v-if="selectedRegion == 'south%20america'">
         <FetchQuestions :selectedRegion="selectedRegion" />
+      </template>
+      <template v-if="selectedRegion == ''">
+        <Instructions />
       </template>
       <!-- <template v-else>
         <p>Loading...</p>
@@ -92,77 +62,6 @@ const receiveData = (region) => {
   flex-direction: column;
   text-align: center;
   align-items: center;
-}
-
-strong {
-  font-family: Montserrat, sans-serif;
-  font-size: 1.2em;
-  color: #0B0957;
-  font-weight: 600;
-  line-height: 1.1;
-  margin-bottom: 1rem;
-}
-
-ol {
-  text-align: left;
-  width: 90%;
-  list-style: none;
-}
-
-li {
-  margin-top: 1rem;
-  padding: 1rem;
-
-}
-.instructions {
-  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 40%);
-  border-radius: 7px;
-}
-
-#lifelineInstructionsContainer {
-  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 40%);
-  border-radius: 7px;
-  height: 21rem;
-}
-
-.lifelineContainer {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-}
-
-.lifeline {
-  padding-top: 0;
-  margin-top: 0;
-}
-
-.lifelineGroup {
-  flex: 1;
-  width: auto;
-  margin-top: 1rem;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  height: 240px;
-  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 40%);
-  margin-left: 2rem;
-  margin-right: 2rem;
-  border-radius: 7px;
-}
-
-.lifelineHeader {
-  font-weight: bold;
-  padding: 0.1rem 0.5rem 0.5rem 0.5rem;
-  align-self: center;
-}
-
-h1 {
-  font-family: "Fredoka", sans-serif;
-  font-size: 2.2em;
-  color: #0B0957;
-  font-weight: 600;
-  line-height: 1.1;
-  margin-bottom: 1rem;
 }
 
 /* .answer {

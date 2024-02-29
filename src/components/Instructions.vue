@@ -1,11 +1,10 @@
- <!-- maybe use this file instead of CategoryQuizView? -->
 <script>
 export default {
   name: 'Instructions'
 }
 </script>
 
-<template v-if="selectedRegion === ''">    <!-- maybe add this to different file? -->
+<template>
   <h1>How to Play GeoCap:</h1>
     <ol>
       <div class="instructions">
@@ -38,4 +37,76 @@ export default {
         </div>
       </div>
     </ol>
-</template>
+  </template>
+
+<style scoped>
+strong {
+  font-family: Montserrat, sans-serif;
+  font-size: 1.2em;
+  color: #0B0957;
+  font-weight: 600;
+  line-height: 1.1;
+  margin-bottom: 1rem;
+}
+
+ol {
+  text-align: left;
+  width: 90%;
+  list-style: none;
+}
+
+li {
+  margin-top: 1rem;
+  padding: 1rem;
+
+}
+.instructions {
+  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 40%);
+  border-radius: 7px;
+}
+
+#lifelineInstructionsContainer {
+  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 40%);
+  border-radius: 7px;
+  height: 21rem;
+}
+
+.lifelineContainer {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.lifeline {
+  padding-top: 0;
+  margin-top: 0;
+}
+
+.lifelineGroup {
+  flex: 1;
+  width: auto;
+  margin-top: 1rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  height: 240px;
+  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 40%);
+  margin-left: 2rem;
+  margin-right: 2rem;
+  border-radius: 7px;
+}
+
+.lifelineHeader {
+  font-weight: bold;
+  padding: 0.1rem 0.5rem 0.5rem 0.5rem;
+  align-self: center;
+}
+h1 {
+  font-family: "Fredoka", sans-serif;
+  font-size: 2.2em;
+  color: #0B0957;
+  font-weight: 600;
+  line-height: 1.1;
+  margin-bottom: 1rem;
+}
+</style>
