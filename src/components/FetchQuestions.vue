@@ -311,6 +311,7 @@ function resetTimer() {
 </script>
 
 <template>
+  <h1>What is the capital<br>of this country?</h1>
   <div class="flag-container">
     <img class="flag" :src="correctFlag" alt="Flag">
   </div>
@@ -335,6 +336,15 @@ function resetTimer() {
 
 
 <style scoped>
+
+h1 {
+  font-family: "Fredoka", sans-serif;
+  font-size: 2.2em;
+  color: #0B0957;
+  font-weight: 600;
+  line-height: 1.1;
+  margin-bottom: 1rem;
+}
 .powerUps {
   display: flex;
   justify-content: space-between;

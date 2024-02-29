@@ -21,6 +21,7 @@ const sendData = (region) => {
     <img src="/src/assets/general/europe.svg" @click="sendData('europe')">
     <img src="/src/assets/general/africa.svg" @click="sendData('africa')">
     <img src="/src/assets/general/australia.svg" @click="sendData('oceania')">
+    <img src="/src/assets/general/howtoplay.svg" @click="sendData('')">
   </div>
 </template>
 
