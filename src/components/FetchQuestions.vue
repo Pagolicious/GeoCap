@@ -440,7 +440,7 @@ function playAgain() {
         <p>Lifelines used: <b class="quizResultB" style="animation-delay: 1.6s;">3/3</b></p>
       </span>
       <span class="quizResult" style="animation-delay: 0.8s;">
-        <p>Levels completed: <b class="quizResultB" style="animation-delay: 1.8s;">72%</b></p>
+        <p>Levels completed: <b class="quizResultB" style="animation-delay: 1.8s;">{{ percentage }}</b></p>
       </span>
       <span class="quizResult" style="animation-delay: 1.2s;">
         <p>Score: <b class="quizResultB" style="animation-delay: 2s;">{{ score }}</b></p>
