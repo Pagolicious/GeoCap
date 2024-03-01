@@ -109,11 +109,6 @@ async function fetchData() {
     })
 }
 
-
-
-
-
-
 function beginQuiz() {
   if (gameActive.value === false) {
     gameActive.value = true;
