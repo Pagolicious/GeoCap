@@ -426,7 +426,7 @@ function playAgain() {
         <div class="powerUps">
           <button class="powerBtn" :class="{ 'disabledBtn': fiftyFiftyDisabled }" id="fiftyFifty"
             @click="activateFiftyFifty"></button>
-          <button class="powerBtn" id="name" @click="nameLifeline"></button>
+          <button class="powerBtn" :class="{ 'disabledBtn': nameDisabled }" id="name" @click="nameLifeline"></button>
           <button class="powerBtn" :class="{ 'disabledBtn': passDisabled }" id="pass" @click="handlePass"></button>
         </div>
       </div>
