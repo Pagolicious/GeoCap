@@ -7,6 +7,7 @@ export default {
       selectedCategory: ""
     }
   },
+
   methods: {
     // This method is to handle the category selection
     onCategorySelected(categoryId) {
@@ -22,27 +23,27 @@ export default {
     </div>
     <!--Binding (:selected) to see if the category is selected-->
     <div class="category-item">
-      <StatisticsItem id="1" img="/src/assets/general/northamerica.svg" :selected="selectedCategory === '1'"
+      <StatisticsItem id="america" img="/src/assets/general/northamerica.svg" :selected="selectedCategory === 'america'"
         @onSelected="onCategorySelected" />
     </div>
     <div class="category-item">
-      <StatisticsItem id="2" img="/src/assets/general/southamerica.svg" :selected="selectedCategory === '2'"
+      <StatisticsItem id="south%20america" img="/src/assets/general/southamerica.svg"
+        :selected="selectedCategory === 'south%20america'" @onSelected="onCategorySelected" />
+    </div>
+    <div class="category-item">
+      <StatisticsItem id="asia" img="/src/assets/general/asia.svg" :selected="selectedCategory === 'asia'"
         @onSelected="onCategorySelected" />
     </div>
     <div class="category-item">
-      <StatisticsItem id="3" img="/src/assets/general/asia.svg" :selected="selectedCategory === '3'"
+      <StatisticsItem id="europe" img="/src/assets/general/europe.svg" :selected="selectedCategory === 'europe'"
         @onSelected="onCategorySelected" />
     </div>
     <div class="category-item">
-      <StatisticsItem id="4" img="/src/assets/general/europe.svg" :selected="selectedCategory === '4'"
+      <StatisticsItem id="africa" img="/src/assets/general/africa.svg" :selected="selectedCategory === 'africa'"
         @onSelected="onCategorySelected" />
     </div>
     <div class="category-item">
-      <StatisticsItem id="5" img="/src/assets/general/africa.svg" :selected="selectedCategory === '5'"
-        @onSelected="onCategorySelected" />
-    </div>
-    <div class="category-item">
-      <StatisticsItem id="6" img="/src/assets/general/australia.svg" :selected="selectedCategory === '6'"
+      <StatisticsItem id="oceania" img="/src/assets/general/australia.svg" :selected="selectedCategory === 'oceania'"
         @onSelected="onCategorySelected" />
     </div>
   </div>

@@ -202,7 +202,6 @@ function handleAnswer(index) {
   if (selectedAnswer === correctAnswer) {
     console.log("You're correct soldier!"); // Om det valda svaret är korrekt, logga meddelandet
     generateNewQuestions();
-    score.value++;
     console.log(score.value)
     console.log(randomCorrectCapital.value)
     resetTimer()
