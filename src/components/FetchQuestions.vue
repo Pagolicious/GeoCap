@@ -7,11 +7,15 @@ const fetchedData = ref(null),
   randomQuestion = ref([]),
   fiftyFiftyDisabled = ref(false),
   passDisabled = ref(false),
+  nameDisabled = ref(false),
+  buttonsDisabled = ref(false),
   correctFlag = ref(null),
+  correctFlagItem = ref(null),
+  displayName = ref(false),
   score = ref(0),
   timer = ref(10),
   timeRunning = ref(false),
-  testArray = ref([])
+  percentage = ref(null)
 
 let countdown
 
@@ -26,8 +30,6 @@ async function fetchData() {
   fetch(`https://restcountries.com/v3.1/region/${props.selectedRegion}`)
     .then((response) => response.json())
     .then((result) => {
-
-      // console.log(result)
 
       // Removing countries that not really are an official country
       result = removeNoneCountries(result)
@@ -49,15 +51,6 @@ async function fetchData() {
         }
       }
 
-      // if (testArray.value.length === 0) {
-      //   for (let i = 0; i < keys.length; i++) {
-      //     const testItem = result[keys[i]]
-      //     // console.log()
-      //     const testCapital = testItem.capital[0]
-      //     testArray.value.push(capital)
-      //   }
-      // }
-
       // Get a random capital for an correct answer from the correct array
       const correctCapital = getRandomCorrectCapital(correctEuropeAnswers)
 
@@ -76,8 +69,11 @@ async function fetchData() {
       })
 
       // Get the flag from the correct Index
-      const correctFlagItem = fetchedData.value[correctCapitalIndex]
-      correctFlag.value = correctFlagItem.flags.svg
+      correctFlagItem.value = fetchedData.value[correctCapitalIndex]
+      correctFlag.value = correctFlagItem.value.flags.svg
+
+      // Doesn't display the name with the Name lifeline until clicked on
+      displayName.value = false
 
       // Get three random answers that are NOT correct into the question array
       getRandomCapitals(keys, result, correctCapital, randomQuestion)
@@ -88,6 +84,7 @@ async function fetchData() {
 
       startTimer()
 
+      countPercentage(correctEuropeAnswers, result)
 
       // 3 lines just to display in console
       console.log(randomQuestion.value)
@@ -96,8 +93,9 @@ async function fetchData() {
       // console.log(correctFlag.value)
       console.log("///")
       console.log(correctEuropeAnswers.value.length)
+      // console.log(result.length)
       console.log("///")
-      console.log(correctFlagItem.name.common)
+      console.log(correctFlagItem.value.name.common)
 
       // for (let i = 0; i < correctEuropeAnswers.value.length; i++) {
       //   console.log(result[i].name.common)
@@ -162,6 +160,26 @@ function removeNoneCountries(result) {
   return result
 }
 
+function countPercentage(correctEuropeAnswers, result) {
+  percentage.value = Math.ceil(((result.length - correctEuropeAnswers.value.length) / result.length) * 100)
+  updateProgressBar(percentage.value)
+  percentage.value = percentage.value.toFixed() + "%"
+  return percentage.value
+}
+
+function updateProgressBar(percentage) {
+  console.log("percentage", percentage)
+  return `${percentage}%`;
+}
+
+function nameLifeline() {
+  if (!nameDisabled.value) {
+    nameDisabled.value = true
+    displayName.value = true
+    stopTimer()
+  }
+}
+
 function activateFiftyFifty() {
   if (!fiftyFiftyDisabled.value) {
     stopTimer()
@@ -194,42 +212,65 @@ function handleAnswer(index) {
 
   if (selectedAnswer === correctAnswer) {
     console.log("You're correct soldier!"); // Om det valda svaret är korrekt, logga meddelandet
-    generateNewQuestions();
-    score.value++;
-    console.log(score.value)
-    console.log(randomCorrectCapital.value)
-    resetTimer()
-    // correctEuropeAnswers.value = []
-    // console.log("Denna ska vara full:", correctEuropeAnswers.value)
+    stopTimer()
+    document.querySelectorAll('.quizButton')[index].classList.add('correct'); // Add 'correct' class to the clicked button
+    // buttonsDisabled.value = true
 
+    setTimeout(() => {
+      // buttonsDisabled.value = false
+      generateNewQuestions()
+      // if (timer.value > 5) {
+      //   score.value += 10
+      // } else {
+      //   score.value += 5
+      // }
+      console.log(score.value)
+      console.log(randomCorrectCapital.value)
+      resetTimer()
+      // correctEuropeAnswers.value = []
+    }, 2000)
 
   } else {
     correctEuropeAnswers.value = []; // Uppdatera den globala variabeln
-    // console.log("Denna ska vara tom:", correctEuropeAnswers.value)
-
-    fiftyFiftyDisabled.value = false
-    passDisabled.value = false
-    score.value = 0;
-    resetTimer()
-    generateNewQuestions();
-    console.log("You're wrong soldier!"); // Om det valda svaret är fel, logga ett annat meddelande
-    console.log(randomCorrectCapital.value)
+    // buttonsDisabled.value = true
+    stopTimer()
+    document.querySelectorAll('.quizButton')[index].classList.add('wrong'); // Add 'wrong' class to the clicked button
+    document.querySelectorAll('.quizButton')[randomQuestion.value.findIndex(answer => answer === correctAnswer)].classList.add('correct'); // Add 'correct' class to the correct answer button
+    setTimeout(() => {
+      fiftyFiftyDisabled.value = false
+      passDisabled.value = false
+      nameDisabled.value = false
+      // buttonsDisabled.value = false
+      // score.value = 0;
+      resetTimer()
+      generateNewQuestions()
+      console.log("You're wrong soldier!"); // Om det valda svaret är fel, logga ett annat meddelande
+      console.log(randomCorrectCapital.value)
+    }, 2000)
   }
 }
 
 
 function handlePass() {
   if (!passDisabled.value) {
+    const correctAnswer = randomCorrectCapital.value[0]
     // Disable pass button
-    passDisabled.value = true;
-    resetTimer()
-    // Generate new questions
-    generateNewQuestions();
+    passDisabled.value = true
+    buttonsDisabled.value = true
+    document.querySelectorAll('.quizButton')[randomQuestion.value.findIndex(answer => answer === correctAnswer)].classList.add('correct'); // Add 'correct' class to the correct answer button
+    stopTimer()
+    setTimeout(() => {
+      resetTimer()
+      buttonsDisabled.value = false
+      // Generate new questions
+      generateNewQuestions();
+    }, 2000)
   }
 }
 
 function generateNewQuestions() {
   // Add fade-out animation class to fade out old questions
+
   const answerElements = document.querySelectorAll('.answer');
   answerElements.forEach(element => {
     element.classList.add('fade-out');
@@ -262,17 +303,6 @@ function getRandomCorrectCapital(correctEuropeAnswers) {
     return correctEuropeAnswers.value[randomIndex]
   }
 }
-
-// function getRandomCorrectCapital(correctEuropeAnswers) {
-//   const storedData = correctEuropeAnswers.value
-//   if (storedData) {
-//     const randomIndex = Math.floor(Math.random() * correctEuropeAnswers.value.length)
-//     return correctEuropeAnswers.value[randomIndex]
-//   } else {
-//     console.log("Quiz Finished, Well Done!")
-//     return null
-//   }
-// }
 
 function getRandomCapitals(keys, result, correctCapital, randomQuestion) {
   for (let i = 0; i < 3; i++) {
@@ -311,31 +341,95 @@ function resetTimer() {
 </script>
 
 <template>
+  <div class="progress-container">
+    <!-- <div class="score">{{ score }}</div> -->
+    <div class="progressbar">
+      <div class="progress" :style="{ width: percentage }"></div>
+    </div>
+    <div class="timer">{{ timer }}</div>
+
+  </div>
   <h1>What is the capital<br>of this country?</h1>
   <div class="flag-container">
     <img class="flag" :src="correctFlag" alt="Flag">
   </div>
+  <div v-if="displayName" id="display-name" class="fade-in">{{ correctFlagItem.name.common }}
+  </div>
   <div v-if="randomQuestion.length" class="fade-in">
     <div v-for="(question, index) in randomQuestion" :key="index" class="answer fade-in">
-      <button class="quizButton" :class="{ 'disabled': question === '' }" @click="handleAnswer(index)">
+      <button class="quizButton" :class="{ 'disabled': question === '', 'disabledButton': buttonsDisabled }"
+        @click="handleAnswer(index)">
         <p id="quizP">{{ question }}</p>
       </button>
     </div>
   </div>
-  <div>
-    <h3>{{ score }}</h3>
-    <h3>{{ timer }}</h3>
-  </div>
+
+
   <div class="powerUps">
     <button class="powerBtn" :class="{ 'disabledBtn': fiftyFiftyDisabled }" id="fiftyFifty"
       @click="activateFiftyFifty"></button>
-    <button class="powerBtn" id="shield"></button>
+    <button class="powerBtn" :class="{ 'disabledBtn': nameDisabled }" id="name" @click="nameLifeline"></button>
     <button class="powerBtn" :class="{ 'disabledBtn': passDisabled }" id="pass" @click="handlePass"></button>
   </div>
 </template>
 
 
 <style scoped>
+.progress-container {
+  display: flex;
+  padding: 1rem;
+}
+
+.score {
+  font-size: 30px;
+  font-weight: 500;
+  position: relative;
+  right: 8rem;
+
+}
+
+.progressbar {
+  /* font-size: 25px;
+  font-weight: 500; */
+  width: 20rem;
+  border: 2px solid rgb(0, 0, 0);
+  border-radius: 5px;
+  /* width: 0; */
+  height: 2rem;
+  padding: 0;
+  margin: 0;
+  /* border: 0; */
+}
+
+.progress {
+  /* border: 0; */
+  border-radius: 0;
+  /* width: 0; */
+
+  height: 1.75rem;
+  padding: 0;
+  margin: 0;
+  background-color: rgb(27, 108, 230);
+}
+
+.timer {
+  font-size: 30px;
+  font-weight: 500;
+  position: relative;
+  left: 8rem;
+
+}
+
+#display-name {
+  color: #0B0957;
+  font-family: Montserrat;
+  font-size: 1.2rem;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  margin: 0.5rem;
+}
+
 
 h1 {
   font-family: "Fredoka", sans-serif;
@@ -345,6 +439,7 @@ h1 {
   line-height: 1.1;
   margin-bottom: 1rem;
 }
+
 .powerUps {
   display: flex;
   justify-content: space-between;
@@ -378,12 +473,17 @@ h1 {
   pointer-events: none;
 }
 
-#shield {
+#name {
   background-color: #fffb25;
   filter: drop-shadow(0px 0px 2px rgba(0, 0, 0, 0.839));
   background-image: url('../assets/shield.svg');
   background-repeat: no-repeat;
   background-position: center center;
+  /* pointer-events: none; */
+}
+
+#name.disabledBtn {
+  background-color: gray;
   pointer-events: none;
 }
 
@@ -505,5 +605,20 @@ h1 {
 .fade-out {
   opacity: 0;
   transition: opacity 0.5s ease-out;
+}
+
+.correct {
+  background-color: #3AB296;
+}
+
+.wrong {
+  background-color: #f95f5f;
+}
+
+.disabledButton {
+  pointer-events: none;
+  /* Disable pointer events */
+  opacity: 0.5;
+  /* Adjust opacity to indicate disabled state */
 }
 </style>
