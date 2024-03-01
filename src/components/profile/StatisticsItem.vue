@@ -23,11 +23,16 @@ ChartJS.register(
 
 export default {
   mounted() {
-    this.scores = localStorage.getItem("scores")
-    this.bestScores = localStorage.getItem("scores")
-    console.log(this.scores)
-    //this.bestScores.sort()
-    //this.bestScores.reverse()
+    this.scores = JSON.parse(localStorage.getItem("scores"))[this.id]
+    this.bestScores = JSON.parse(localStorage.getItem("scores"))[this.id]
+    this.bestScores.sort()
+    console.log(this.bestScores)
+    this.bestScores = this.bestScores.slice(-3)
+    console.log(this.bestScores)
+    this.bestScores.reverse()
+    this.data.datasets[0].data = this.scores.slice(-10)
+
+
   },
   components: {
     Line
@@ -35,12 +40,12 @@ export default {
   data() {
     return {
       data: {
-        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+        labels: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
         datasets: [
           {
             label: 'Data One',
             backgroundColor: '#41BA6C',
-            data: [1, 2, 3, 4, 3, 8, 4]
+            data: []
           }
         ]
       },
@@ -96,9 +101,10 @@ export default {
             </div>
             <div class="vertical-row">
               <p class="row-title">Score</p>
-              <p class="text">260</p>
-              <p class="text">200</p>
-              <p class="text">110</p>
+              <p class="text">{{ bestScores[0] }}
+              </p>
+              <p class="text">{{ bestScores[1] }}</p>
+              <p class="text">{{ bestScores[2] }}</p>
             </div>
           </div>
         </div>

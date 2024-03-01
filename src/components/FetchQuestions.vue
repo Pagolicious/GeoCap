@@ -109,12 +109,42 @@ async function fetchData() {
 
 function beginQuiz() {
   if (gameActive.value === false) {
-  gameActive.value = true;
-  fetchData();
+    gameActive.value = true;
+    fetchData();
+  }
 }
-}
+onMounted(() => {
+  initializeStorage()
 
 
+})
+function initializeStorage() {
+  let scores = localStorage.getItem("scores")
+  if (!scores) {
+    scores = {
+      "america": [],
+      "south%20america": [],
+      "asia": [],
+      "europe": [],
+      "africa": [],
+      "oceania": []
+    }
+  }
+  else {
+    scores = JSON.parse(scores)
+  }
+
+  console.log(scores)
+  scores[props.selectedRegion].push(0)
+  localStorage.setItem("scores", JSON.stringify(scores))
+}
+function addScore(score) {
+  let scores = JSON.parse(localStorage.getItem("scores"))
+  let currentScoreIndex = scores[props.selectedRegion].length - 1
+  scores[props.selectedRegion][currentScoreIndex] = scores[props.selectedRegion][currentScoreIndex] + score
+  localStorage.setItem("scores", JSON.stringify(scores))
+  return scores[props.selectedRegion][currentScoreIndex]
+}
 function removeNoneCountries(result) {
   const notCountriesInEurope = ["Faroe Islands", "Gibraltar", "Jersey",
     "Svalbard and Jan Mayen", "Åland Islands", "Guernsey", "Isle of Man"]
@@ -219,27 +249,14 @@ function handleAnswer(index) {
 
   if (selectedAnswer === correctAnswer) {
     console.log("You're correct soldier!"); // Om det valda svaret är korrekt, logga meddelandet
-<<<<<<< HEAD
     stopTimer()
     document.querySelectorAll('.quizButton')[index].classList.add('correct'); // Add 'correct' class to the clicked button
     // buttonsDisabled.value = true
-=======
-    generateNewQuestions();
-    console.log(score.value)
-    console.log(randomCorrectCapital.value)
-    resetTimer()
-    // correctEuropeAnswers.value = []
-    // console.log("Denna ska vara full:", correctEuropeAnswers.value)
->>>>>>> d6282d7175edc39d85b949ba95fb949be7db23f2
-
     setTimeout(() => {
       // buttonsDisabled.value = false
       generateNewQuestions()
-      // if (timer.value > 5) {
-      //   score.value += 10
-      // } else {
-      //   score.value += 5
-      // }
+      score.value = addScore(timer.value > 5 ? 10 : 5)
+
       console.log(score.value)
       console.log(randomCorrectCapital.value)
       resetTimer()
@@ -248,7 +265,6 @@ function handleAnswer(index) {
 
   } else {
     correctEuropeAnswers.value = []; // Uppdatera den globala variabeln
-<<<<<<< HEAD
     // buttonsDisabled.value = true
     stopTimer()
     document.querySelectorAll('.quizButton')[index].classList.add('wrong'); // Add 'wrong' class to the clicked button
@@ -257,24 +273,12 @@ function handleAnswer(index) {
       fiftyFiftyDisabled.value = false
       passDisabled.value = false
       nameDisabled.value = false
+      gameOver.value = true;
       // buttonsDisabled.value = false
-      // score.value = 0;
       resetTimer()
-      generateNewQuestions()
       console.log("You're wrong soldier!"); // Om det valda svaret är fel, logga ett annat meddelande
       console.log(randomCorrectCapital.value)
     }, 2000)
-=======
-    // console.log("Denna ska vara tom:", correctEuropeAnswers.value)
-
-    fiftyFiftyDisabled.value = false
-    passDisabled.value = false
-    resetTimer()
-    gameOver.value = true;
-    // generateNewQuestions(); 2024-02-29
-    console.log("You're wrong soldier!"); // Om det valda svaret är fel, logga ett annat meddelande
-    console.log(randomCorrectCapital.value)
->>>>>>> d6282d7175edc39d85b949ba95fb949be7db23f2
   }
 }
 
@@ -284,12 +288,12 @@ function handlePass() {
     const correctAnswer = randomCorrectCapital.value[0]
     // Disable pass button
     passDisabled.value = true
-    buttonsDisabled.value = true
+    // buttonsDisabled.value = true
     document.querySelectorAll('.quizButton')[randomQuestion.value.findIndex(answer => answer === correctAnswer)].classList.add('correct'); // Add 'correct' class to the correct answer button
     stopTimer()
     setTimeout(() => {
       resetTimer()
-      buttonsDisabled.value = false
+      // buttonsDisabled.value = false
       // Generate new questions
       generateNewQuestions();
     }, 2000)
@@ -368,76 +372,79 @@ function resetTimer() {
 }
 
 function playAgain() {
-    fetchedData.value = null;
-    randomCorrectCapital.value = [];
-    correctEuropeAnswers.value = [];
-    randomQuestion.value = [];
-    fiftyFiftyDisabled.value = false;
-    passDisabled.value = false;
-    correctFlag.value = null;
-    score.value = 0;
-    timer.value = 10;
-    timeRunning.value = false;
-    gameActive.value = true; // This begins a new game session directly, should we keep or not?
-    gameOver.value = false;
-    fetchData();
+  fetchedData.value = null;
+  randomCorrectCapital.value = [];
+  correctEuropeAnswers.value = [];
+  randomQuestion.value = [];
+  fiftyFiftyDisabled.value = false;
+  passDisabled.value = false;
+  correctFlag.value = null;
+  score.value = 0;
+  timer.value = 10;
+  timeRunning.value = false;
+  gameActive.value = true; // This begins a new game session directly, should we keep or not?
+  gameOver.value = false;
+  fetchData();
 }
 
 </script>
 
 <template>
-<<<<<<< HEAD
-  <div class="progress-container">
-    <!-- <div class="score">{{ score }}</div> -->
-    <div class="progressbar">
-      <div class="progress" :style="{ width: percentage }"></div>
-    </div>
-    <div class="timer">{{ timer }}</div>
-
-  </div>
-=======
   <div>
     <div v-if="!gameOver">
-    <div v-if="!gameActive" class="readyScreenGameOver"> <!-- Ready screen if game is not active -->
-      <h1 id="pickedContinent">Quiz picked: {{ selectedRegion }}</h1>
-      <h1>Are you ready?</h1>
+      <div v-if="!gameActive" class="readyScreenGameOver"> <!-- Ready screen if game is not active -->
+        <h1 id="pickedContinent">Quiz picked: {{ selectedRegion }}</h1>
+        <h1>Are you ready?</h1>
 
-      <button class="readyBtn" @click="beginQuiz">Ready</button>
-  </div>
-  <div v-if="gameActive" id="centerItems"> <!-- If game is active, starts to render quiz -->
->>>>>>> d6282d7175edc39d85b949ba95fb949be7db23f2
-  <h1>What is the capital<br>of this country?</h1>
-  <div class="flag-container">
-    <img class="flag" :src="correctFlag" alt="Flag">
-  </div>
-  <div v-if="displayName" id="display-name" class="fade-in">{{ correctFlagItem.name.common }}
-  </div>
-  <div v-if="randomQuestion.length" class="fade-in">
-    <div v-for="(question, index) in randomQuestion" :key="index" class="answer fade-in">
-      <button class="quizButton" :class="{ 'disabled': question === '', 'disabledButton': buttonsDisabled }"
-        @click="handleAnswer(index)">
-        <p id="quizP">{{ question }}</p>
-      </button>
+
+        <button class="readyBtn" @click="beginQuiz">Ready</button>
+      </div>
+      <div v-if="gameActive" id="centerItems"> <!-- If game is active, starts to render quiz -->
+        <div class="progress-container">
+          <div class="progressbar">
+            <div class="progress" :style="{ width: percentage }"></div>
+          </div>
+          <div class="timer">{{ timer }}</div>
+        </div>
+        <h1>What is the capital<br>of this country?</h1>
+        <div class="flag-container">
+          <img class="flag" :src="correctFlag" alt="Flag">
+        </div>
+        <div v-if="displayName" id="display-name" class="fade-in">{{ correctFlagItem.name.common }}
+        </div>
+        <div v-if="randomQuestion.length" class="fade-in">
+          <div v-for="(question, index) in randomQuestion" :key="index" class="answer fade-in">
+            <button class="quizButton" :class="{ 'disabled': question === '', 'disabledButton': buttonsDisabled }"
+              @click="handleAnswer(index)">
+              <p id="quizP">{{ question }}</p>
+            </button>
+          </div>
+        </div>
+        <div>
+          <h3>{{ score }}</h3>
+        </div>
+        <div class="powerUps">
+          <button class="powerBtn" :class="{ 'disabledBtn': fiftyFiftyDisabled }" id="fiftyFifty"
+            @click="activateFiftyFifty"></button>
+          <button class="powerBtn" id="name" @click="nameLifeline"></button>
+          <button class="powerBtn" :class="{ 'disabledBtn': passDisabled }" id="pass" @click="handlePass"></button>
+        </div>
+      </div>
     </div>
   </div>
 
-
-  <div class="powerUps">
-    <button class="powerBtn" :class="{ 'disabledBtn': fiftyFiftyDisabled }" id="fiftyFifty"
-      @click="activateFiftyFifty"></button>
-    <button class="powerBtn" :class="{ 'disabledBtn': nameDisabled }" id="name" @click="nameLifeline"></button>
-    <button class="powerBtn" :class="{ 'disabledBtn': passDisabled }" id="pass" @click="handlePass"></button>
-  </div>
-</div>
-</div>
-</div>
-
-<div v-if="gameOver" class="readyScreenGameOver">
-  <div id="gameOverContainer">
+  <div v-if="gameOver" class="readyScreenGameOver">
+    <div id="gameOverContainer">
       <h1>Game Over</h1>
-      <span class="quizResult" style="animation-delay: 0.4s;"><p>Lifelines used: <b class="quizResultB" style="animation-delay: 1.6s;">3/3</b></p></span>
-      <span class="quizResult" style="animation-delay: 0.8s;"><p>Levels completed: <b class="quizResultB" style="animation-delay: 1.8s;">72%</b></p></span>
-      <span class="quizResult" style="animation-delay: 1.2s;"><p>Score: <b class="quizResultB" style="animation-delay: 2s;">{{ score }}</b></p></span>
+      <span class="quizResult" style="animation-delay: 0.4s;">
+        <p>Lifelines used: <b class="quizResultB" style="animation-delay: 1.6s;">3/3</b></p>
+      </span>
+      <span class="quizResult" style="animation-delay: 0.8s;">
+        <p>Levels completed: <b class="quizResultB" style="animation-delay: 1.8s;">72%</b></p>
+      </span>
+      <span class="quizResult" style="animation-delay: 1.2s;">
+        <p>Score: <b class="quizResultB" style="animation-delay: 2s;">{{ score }}</b></p>
+      </span>
       <button class="readyBtn" @click="playAgain">Play Again</button>
     </div>
   </div>
@@ -522,6 +529,7 @@ function playAgain() {
     opacity: 0;
     transform: translateX(100%);
   }
+
   to {
     opacity: 1;
     transform: translateX(0);
@@ -587,7 +595,7 @@ function playAgain() {
   border: 1px solid #E0E1E1;
 }
 
-.readyBtn:hover{
+.readyBtn:hover {
   border-color: #646cff;
 }
 
