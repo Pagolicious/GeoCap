@@ -127,13 +127,18 @@ function initializeStorage() {
     scores = JSON.parse(scores)
   }
 
-  console.log(scores)
-  scores[props.selectedRegion].push(0)
+  let lastIndex = scores[props.selectedRegion].length - 1
+  if (scores[props.selectedRegion].length === 0 ||
+    scores[props.selectedRegion][lastIndex] > 0) {
+    scores[props.selectedRegion].push(0)
+  }
   localStorage.setItem("scores", JSON.stringify(scores))
 }
 function addScore(score) {
   let scores = JSON.parse(localStorage.getItem("scores"))
+  //we get the last index of the array that refers to the current game score
   let currentScoreIndex = scores[props.selectedRegion].length - 1
+  //we add the score from input to the totall score we gained from the current game
   scores[props.selectedRegion][currentScoreIndex] = scores[props.selectedRegion][currentScoreIndex] + score
   localStorage.setItem("scores", JSON.stringify(scores))
   return scores[props.selectedRegion][currentScoreIndex]
@@ -223,7 +228,7 @@ function handleAnswer(index) {
   if (selectedAnswer === correctAnswer) {
     console.log("You're correct soldier!"); // Om det valda svaret är korrekt, logga meddelandet
     generateNewQuestions();
-    score.value = addScore(timer.value)
+    score.value = addScore(timer.value > 5 ? 10 : 5)
     console.log(score.value)
     console.log(randomCorrectCapital.value)
     resetTimer()
