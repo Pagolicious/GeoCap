@@ -15,6 +15,9 @@ const fetchedData = ref(null),
 
 let countdown
 
+const gameActive = ref(false);
+const gameOver = ref(false);
+
 const props = defineProps({
   selectedRegion: String
 })
@@ -106,9 +109,13 @@ async function fetchData() {
     })
 }
 
-onMounted(() => {
-  fetchData()
-})
+function beginQuiz() {
+  if (gameActive.value === false) {
+  gameActive.value = true;
+  fetchData();
+}
+}
+
 
 function removeNoneCountries(result) {
   const notCountriesInEurope = ["Faroe Islands", "Gibraltar", "Jersey",
@@ -209,9 +216,9 @@ function handleAnswer(index) {
 
     fiftyFiftyDisabled.value = false
     passDisabled.value = false
-    score.value = 0;
     resetTimer()
-    generateNewQuestions();
+    gameOver.value = true;
+    // generateNewQuestions(); 2024-02-29
     console.log("You're wrong soldier!"); // Om det valda svaret är fel, logga ett annat meddelande
     console.log(randomCorrectCapital.value)
   }
@@ -294,6 +301,7 @@ function startTimer() {
       timer.value--
     } else {
       stopTimer()
+      gameOver.value = true;
     }
   }, 1000)
 }
@@ -308,9 +316,34 @@ function resetTimer() {
   timer.value = 10
 }
 
+function playAgain() {
+    fetchedData.value = null;
+    randomCorrectCapital.value = [];
+    correctEuropeAnswers.value = [];
+    randomQuestion.value = [];
+    fiftyFiftyDisabled.value = false;
+    passDisabled.value = false;
+    correctFlag.value = null;
+    score.value = 0;
+    timer.value = 10;
+    timeRunning.value = false;
+    gameActive.value = true; // This begins a new game session directly, should we keep or not?
+    gameOver.value = false;
+    fetchData();
+}
+
 </script>
 
 <template>
+  <div>
+    <div v-if="!gameOver">
+    <div v-if="!gameActive" class="readyScreenGameOver"> <!-- Ready screen if game is not active -->
+      <h1 id="pickedContinent">Quiz picked: {{ selectedRegion }}</h1>
+      <h1>Are you ready?</h1>
+
+      <button class="readyBtn" @click="beginQuiz">Ready</button>
+  </div>
+  <div v-if="gameActive" id="centerItems"> <!-- If game is active, starts to render quiz -->
   <h1>What is the capital<br>of this country?</h1>
   <div class="flag-container">
     <img class="flag" :src="correctFlag" alt="Flag">
@@ -332,10 +365,121 @@ function resetTimer() {
     <button class="powerBtn" id="shield"></button>
     <button class="powerBtn" :class="{ 'disabledBtn': passDisabled }" id="pass" @click="handlePass"></button>
   </div>
+</div>
+</div>
+</div>
+
+<div v-if="gameOver" class="readyScreenGameOver">
+  <div id="gameOverContainer">
+      <h1>Game Over</h1>
+      <span class="quizResult" style="animation-delay: 0.4s;"><p>Lifelines used: <b class="quizResultB" style="animation-delay: 1.6s;">3/3</b></p></span>
+      <span class="quizResult" style="animation-delay: 0.8s;"><p>Levels completed: <b class="quizResultB" style="animation-delay: 1.8s;">72%</b></p></span>
+      <span class="quizResult" style="animation-delay: 1.2s;"><p>Score: <b class="quizResultB" style="animation-delay: 2s;">{{ score }}</b></p></span>
+      <button class="readyBtn" @click="playAgain">Play Again</button>
+    </div>
+  </div>
 </template>
 
 
 <style scoped>
+
+#gameOverContainer {
+  font-size: 2rem;
+  display: flex;
+  text-align: center;
+  flex-direction: column;
+  align-items: center;
+}
+
+
+.quizResult {
+  display: flex;
+  text-align: center;
+  opacity: 0;
+  animation: showScoreList 0.5s ease-out forwards;
+}
+
+@keyframes showScoreList {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.quizResultB {
+  opacity: 0;
+  animation: showScore 0.5s ease-out forwards;
+}
+
+@keyframes showScore {
+  0% {
+    font-size: 0;
+    filter: blur(1.2px);
+  }
+
+  66% {
+    font-size: 2.4rem;
+    filter: blur(0.6px);
+    opacity: 0.66;
+  }
+
+  100% {
+    font-size: 2rem;
+    filter: blur(0px);
+    opacity: 1;
+  }
+}
+
+
+#gameOver h1 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+#pickedContinent {
+  text-transform: uppercase;
+}
+
+.readyScreenGameOver {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.readyBtn {
+  border-radius: 7px;
+  height: 3rem;
+  width: 10rem;
+  color: #0B0957;
+  font-family: "Fredoka", sans-serif;
+  font-size: 1.4rem;
+  font-weight: 500;
+  background-color: #F5F5F5;
+  box-shadow: 0px 0px 4px 0px #363636d0;
+  border-radius: 0.4375rem;
+  border: 1px solid #E0E1E1;
+}
+
+.readyBtn:hover{
+  border-color: #646cff;
+}
+
+#centerItems {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  width: 20rem;
+}
 
 h1 {
   font-family: "Fredoka", sans-serif;
