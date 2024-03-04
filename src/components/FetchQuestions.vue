@@ -119,9 +119,10 @@ onMounted(() => {
 
 })
 function initializeStorage() {
-  let scores = localStorage.getItem("scores")
-  if (!scores) {
-    scores = {
+  let games = localStorage.getItem("games")
+  if (!games) {
+    games = {
+      //each category has an array of objects with scores and percentage
       "america": [],
       "south%20america": [],
       "asia": [],
@@ -131,19 +132,29 @@ function initializeStorage() {
     }
   }
   else {
-    scores = JSON.parse(scores)
+    games = JSON.parse(games)
   }
 
-  console.log(scores)
-  scores[props.selectedRegion].push(0)
-  localStorage.setItem("scores", JSON.stringify(scores))
+  console.log(games)
+  games[props.selectedRegion].push({
+    "score": 0,
+    "percentage": 0
+  })
+  localStorage.setItem("games", JSON.stringify(games))
 }
 function addScore(score) {
-  let scores = JSON.parse(localStorage.getItem("scores"))
-  let currentScoreIndex = scores[props.selectedRegion].length - 1
-  scores[props.selectedRegion][currentScoreIndex] = scores[props.selectedRegion][currentScoreIndex] + score
-  localStorage.setItem("scores", JSON.stringify(scores))
-  return scores[props.selectedRegion][currentScoreIndex]
+  let games = JSON.parse(localStorage.getItem("games"))
+  let currentScoreIndex = games[props.selectedRegion].length - 1
+  games[props.selectedRegion][currentScoreIndex].score = games[props.selectedRegion][currentScoreIndex].score + score
+  localStorage.setItem("games", JSON.stringify(games))
+  return games[props.selectedRegion][currentScoreIndex].score
+}
+function updatePercentage(percent) {
+  let games = JSON.parse(localStorage.getItem("games"))
+  let currentIndex = games[props.selectedRegion].length - 1
+  games[props.selectedRegion][currentIndex].percentage = percent
+  localStorage.setItem("games", JSON.stringify(games))
+  return games[props.selectedRegion][currentIndex].percentage
 }
 function removeNoneCountries(result) {
   const notCountriesInEurope = ["Faroe Islands", "Gibraltar", "Jersey",
@@ -200,6 +211,7 @@ function removeNoneCountries(result) {
 function countPercentage(correctEuropeAnswers, result) {
   percentage.value = Math.ceil(((result.length - correctEuropeAnswers.value.length) / result.length) * 100)
   updateProgressBar(percentage.value)
+  updatePercentage(percentage.value)
   percentage.value = percentage.value.toFixed() + "%"
   return percentage.value
 }
@@ -385,6 +397,7 @@ function playAgain() {
   gameActive.value = true; // This begins a new game session directly, should we keep or not?
   gameOver.value = false;
   fetchData();
+  initializeStorage();
 }
 
 </script>
