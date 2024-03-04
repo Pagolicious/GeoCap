@@ -15,7 +15,9 @@ const fetchedData = ref(null),
   score = ref(0),
   timer = ref(10),
   timeRunning = ref(false),
-  percentage = ref(null)
+  percentage = ref(0),
+  correctIndex = ref(null),
+  wrongIndex = ref(null)
 
 let countdown
 
@@ -37,7 +39,7 @@ async function fetchData() {
       // Removing countries that not really are an official country
       result = removeNoneCountries(result)
       fetchedData.value = result
-
+      // console.log(fetchedData.value[0].name.common)
       console.log(result)
 
       result.sort((a, b) => b.population - a.population)
@@ -87,7 +89,9 @@ async function fetchData() {
 
       startTimer()
 
-      countPercentage(correctEuropeAnswers, result)
+      correctIndex.value = null
+      wrongIndex.value = null
+
 
       // 3 lines just to display in console
       console.log(randomQuestion.value)
@@ -197,8 +201,8 @@ function removeNoneCountries(result) {
   return result
 }
 
-function countPercentage(correctEuropeAnswers, result) {
-  percentage.value = Math.ceil(((result.length - correctEuropeAnswers.value.length) / result.length) * 100)
+function countPercentage() {
+  percentage.value = Math.ceil(((fetchedData.value.length - correctEuropeAnswers.value.length) / fetchedData.value.length) * 100)
   updateProgressBar(percentage.value)
   percentage.value = percentage.value.toFixed() + "%"
   return percentage.value
@@ -250,10 +254,12 @@ function handleAnswer(index) {
   if (selectedAnswer === correctAnswer) {
     console.log("You're correct soldier!"); // Om det valda svaret är korrekt, logga meddelandet
     stopTimer()
-    document.querySelectorAll('.quizButton')[index].classList.add('correct'); // Add 'correct' class to the clicked button
-    // buttonsDisabled.value = true
+    correctIndex.value = index
+    buttonsDisabled.value = true
+    countPercentage()
+
     setTimeout(() => {
-      // buttonsDisabled.value = false
+      buttonsDisabled.value = false
       generateNewQuestions()
       score.value = addScore(timer.value > 5 ? 10 : 5)
 
@@ -265,16 +271,17 @@ function handleAnswer(index) {
 
   } else {
     correctEuropeAnswers.value = []; // Uppdatera den globala variabeln
-    // buttonsDisabled.value = true
+    buttonsDisabled.value = true
     stopTimer()
-    document.querySelectorAll('.quizButton')[index].classList.add('wrong'); // Add 'wrong' class to the clicked button
-    document.querySelectorAll('.quizButton')[randomQuestion.value.findIndex(answer => answer === correctAnswer)].classList.add('correct'); // Add 'correct' class to the correct answer button
+    correctIndex.value = randomQuestion.value.findIndex(answer => answer === correctAnswer);
+    wrongIndex.value = index
+
     setTimeout(() => {
       fiftyFiftyDisabled.value = false
       passDisabled.value = false
       nameDisabled.value = false
       gameOver.value = true;
-      // buttonsDisabled.value = false
+      buttonsDisabled.value = false
       resetTimer()
       console.log("You're wrong soldier!"); // Om det valda svaret är fel, logga ett annat meddelande
       console.log(randomCorrectCapital.value)
@@ -285,15 +292,17 @@ function handleAnswer(index) {
 
 function handlePass() {
   if (!passDisabled.value) {
-    const correctAnswer = randomCorrectCapital.value[0]
+    // const correctAnswer = randomCorrectCapital.value[0]
+    correctIndex.value = randomQuestion.value.findIndex(answer => answer === randomCorrectCapital.value[0]);
+
     // Disable pass button
     passDisabled.value = true
-    // buttonsDisabled.value = true
-    document.querySelectorAll('.quizButton')[randomQuestion.value.findIndex(answer => answer === correctAnswer)].classList.add('correct'); // Add 'correct' class to the correct answer button
+    buttonsDisabled.value = true
+
     stopTimer()
     setTimeout(() => {
       resetTimer()
-      // buttonsDisabled.value = false
+      buttonsDisabled.value = false
       // Generate new questions
       generateNewQuestions();
     }, 2000)
@@ -403,8 +412,17 @@ function playAgain() {
         <div class="progress-container">
           <div class="progressbar">
             <div class="progress" :style="{ width: percentage }"></div>
+            <div class="percentage-container">
+              <div class="percentage">{{ percentage }}</div>
+            </div>
           </div>
-          <div class="timer">{{ timer }}</div>
+          <div class="timer-container">
+            <div class="timer">
+              <div class="circle"></div>
+              {{ timer }}
+            </div>
+
+          </div>
         </div>
         <h1>What is the capital<br>of this country?</h1>
         <div class="flag-container">
@@ -414,10 +432,12 @@ function playAgain() {
         </div>
         <div v-if="randomQuestion.length" class="fade-in">
           <div v-for="(question, index) in randomQuestion" :key="index" class="answer fade-in">
-            <button class="quizButton" :class="{ 'disabled': question === '', 'disabledButton': buttonsDisabled }"
+            <button class="quizButton" :class="{ 'disabled': question === '', 'disabledButton': buttonsDisabled, 'correct': index === correctIndex, 'wrong': index === wrongIndex }"
               @click="handleAnswer(index)">
               <p id="quizP">{{ question }}</p>
             </button>
+
+
           </div>
         </div>
         <div>
@@ -452,6 +472,7 @@ function playAgain() {
 
 
 <style scoped>
+
 .progress-container {
   display: flex;
   padding: 1rem;
@@ -468,6 +489,7 @@ function playAgain() {
 .progressbar {
   /* font-size: 25px;
   font-weight: 500; */
+  position: relative;
   width: 20rem;
   border: 2px solid rgb(0, 0, 0);
   border-radius: 5px;
@@ -483,11 +505,38 @@ function playAgain() {
   border-radius: 0;
   /* width: 0; */
 
-  height: 1.75rem;
+  /* height: 1.75rem; */
+  height: 100%;
   padding: 0;
   margin: 0;
-  background-color: rgb(27, 108, 230);
+  background-color: rgb(76, 134, 221);
+  transition: width 0.5s ease; /* Adding transition effect */
+
 }
+
+.percentage-container {
+  color: black;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.percentage {
+  font-size: 25px;
+  font-weight: 600;
+  /* position: relative; */
+  color: black;
+  /* mix-blend-mode: screen; */
+
+
+}
+
+/* .percentage::after {
+  color: rgb(228, 147, 25);
+  mix-blend-mode: difference;
+} */
+
 
 .timer {
   font-size: 30px;
@@ -793,8 +842,5 @@ h1 {
 
 .disabledButton {
   pointer-events: none;
-  /* Disable pointer events */
-  opacity: 0.5;
-  /* Adjust opacity to indicate disabled state */
 }
 </style>
