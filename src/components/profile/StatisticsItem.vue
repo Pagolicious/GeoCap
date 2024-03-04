@@ -112,7 +112,7 @@ export default {
 }
 </script>
 <template>
-  <div class="statistics-section">
+  <div :class="{ 'selected': selected }" class="statistics-section">
     <div class="selected-category-pic">
       <img @click="onSelected" :class="{ 'img-selected': selected }" :src="img">
     </div>
@@ -158,9 +158,17 @@ export default {
   border: 1px solid rgba(217, 217, 217, 66%);
   border-radius: 10px;
   box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 25%);
-  width: 60%;
+  width: 40%;
   margin: 0 auto;
   padding: 0;
+  -webkit-transition: width 0.1s ease-in-out;
+  -moz-transition: width 0.1s ease-in-out;
+  -o-transition: width 0.1s ease-in-out;
+  transition: width 0.1s ease-in-out;
+}
+
+.statistics-section.selected {
+  width: 70%;
 }
 
 .selected-category-pic {
@@ -199,7 +207,7 @@ export default {
 }
 
 .chart {
-  width: 230px;
+  width: 300px;
 }
 
 .score-rows {
