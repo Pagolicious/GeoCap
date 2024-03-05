@@ -126,4 +126,13 @@ a {
   font-size: 25px;
   font-family: Montserrat;
 }
+/* Styles for small screens */
+
+@media only screen and (max-width: 600px) {
+  ul {
+    width: 100%;
+   
+  }
+}
+
 </style>

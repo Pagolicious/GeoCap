@@ -259,4 +259,21 @@ export default {
   font-family: Fredoka;
   font-size: 15px;
 }
+
+@media only screen and (max-width: 768px) {
+  .score-wrapper {
+    width: 30%;
+    flex-direction: column;
+  }
+
+  .data-wrapper{
+    width: 10%;
+    flex-direction: column;
+  }
+
+  .chart-wrapper{
+    width: auto;
+    flex-direction: column;
+  }
+}
 </style>
