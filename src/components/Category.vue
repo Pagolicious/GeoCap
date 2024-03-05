@@ -61,4 +61,25 @@ const sendData = (region) => {
 h1 {
   font-size: 2.2rem;
 }
+
+@media only screen and (max-width: 493px) {
+  .category-container img {
+    width: 50%;
+   
+  }
+}
+
+@media only screen and (max-width: 700px) {
+  .category-container img {
+    width: 50%;
+   
+  }
+}
+
+@media only screen and (max-width: 1200px) {
+  .category-container img {
+    width: 50%;
+   
+  }
+}
 </style>

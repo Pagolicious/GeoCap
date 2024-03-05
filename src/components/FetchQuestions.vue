@@ -412,7 +412,7 @@ function playAgain() {
 </script>
 
 <template>
-  <div>
+  <div class="game">
     <div v-if="!gameOver">
       <div v-if="!gameActive" class="readyScreenGameOver"> <!-- Ready screen if game is not active -->
         <h1 id="pickedContinent">Quiz picked: {{ selectedRegion }}</h1>
@@ -856,4 +856,50 @@ h1 {
 .disabledButton {
   pointer-events: none;
 }
+
+/* Media Query for display 493px */
+@media only screen and (max-width: 493px) {
+
+  #centerItems {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  width: 15%;
+}
+
+
+}
+
+/* Media Query for display 700px */
+@media only screen and (max-width: 700px) {
+
+
+
+}
+
+/* Media Query for display 1200px */
+@media only screen and (max-width: 1200px) {
+
+
+  #centerItems {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  width: 80%;
+}
+
+  .timer {
+  font-size: 30px;
+  font-weight: 500;
+  position: relative;
+  left: 2rem;
+
+}
+
+ 
+
+}
+
 </style>

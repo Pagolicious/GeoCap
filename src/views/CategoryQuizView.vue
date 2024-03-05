@@ -16,51 +16,119 @@ const receiveData = (region) => {
 </script>
 
 <template>
-  <Category @regionSelected="receiveData" />
   <div id="container">
+    <div class="category">
+      <Category @regionSelected="receiveData" />
+    </div>
     <div id="stickyQuiz">
-      <template v-if="selectedRegion == 'europe'">
-        <FetchQuestions :selectedRegion="selectedRegion" />
-      </template>
-      <template v-if="selectedRegion == 'asia'">
-        <FetchQuestions :selectedRegion="selectedRegion" />
-      </template>
-      <template v-if="selectedRegion == 'oceania'">
-        <FetchQuestions :selectedRegion="selectedRegion" />
-      </template>
-      <template v-if="selectedRegion == 'africa'">
-        <FetchQuestions :selectedRegion="selectedRegion" />
-      </template>
-      <template v-if="selectedRegion == 'america'">
-        <FetchQuestions :selectedRegion="selectedRegion" />
-      </template>
-      <template v-if="selectedRegion == 'south%20america'">
-        <FetchQuestions :selectedRegion="selectedRegion" />
-      </template>
-      <template v-if="selectedRegion == ''">
+      <div class="instructions" v-if="!selectedRegion">
         <Instructions />
-      </template>
-      <!-- <template v-else>
+      </div>
+      <div class="quizSection" v-else>
+        <div v-if="selectedRegion == 'europe'">
+          <FetchQuestions :selectedRegion="selectedRegion" />
+        </div>
+        <div v-if="selectedRegion == 'asia'">
+          <FetchQuestions :selectedRegion="selectedRegion" />
+        </div>
+        <div v-if="selectedRegion == 'oceania'">
+          <FetchQuestions :selectedRegion="selectedRegion" />
+        </div>
+        <div v-if="selectedRegion == 'africa'">
+          <FetchQuestions :selectedRegion="selectedRegion" />
+        </div>
+        <div v-if="selectedRegion == 'america'">
+          <FetchQuestions :selectedRegion="selectedRegion" />
+        </div>
+        <div v-if="selectedRegion == 'south%20america'">
+          <FetchQuestions :selectedRegion="selectedRegion" />
+        </div>
+        <div v-if="selectedRegion == ''"></div>
+      </div>
+    </div>
+    <!-- <template v-else>
         <p>Loading...</p>
       </template> -->
-    </div>
+    <!-- <h1>Quiz</h1> -->
   </div>
-  <!-- <h1>Quiz</h1> -->
 </template>
 <style scoped>
 #container {
-  width: 100%;
-  background-color: #F5F5F5;
-  padding-bottom: 4rem;
-  padding-top: 2rem;
+  display: flex;
+  flex-direction: row;
+  width: 100vw;
+  text-align: center;
+  margin: 0 auto;
+  padding: 0 auto;
+}
+
+.category {
+  width: 50%;
+}
+
+.instructions {
+  margin: 40px;
+  max-height: 900px;
 }
 
 #stickyQuiz {
-  position: sticky;
-  display: flex;
-  top: 10%;
-  flex-direction: column;
+  width: 50%;
+  background-color: #F5F5F5;
   text-align: center;
   align-items: center;
 }
+
+.quizSection {
+  width: 50%;
+  background-color: #F5F5F5;
+  padding-bottom: 4rem;
+  padding-top: 2rem;
+  text-align: center;
+  align-items: center;
+  margin: 50px auto;
+}
+
+/* Media Query for display less then or equal to 429px */
+@media only screen and (max-width: 493px) {
+  #container {
+    display: flex;
+    flex-direction: column; /* Ändra riktningen för mindre skärmar till kolumn */
+    width: 175%;
+    font-size: 13px;
+  };
+  #stickyQuiz{
+    width: 80%;
+  }
+  .instructions{ 
+    width: 100%;
+  };
+  .category{
+    width: 80%;
+  }
+
+}
+
+/* Media Query for display less then or equal to 700px */
+@media only screen and (max-width: 700px) {
+  #container {
+    display: flex;
+    flex-direction: column; /* Ändra riktningen för mindre skärmar till kolumn */
+    width: 195%;
+    font-size: 13px;
+  };
+  #stickyQuiz{
+    width: 80%;
+  }
+  .instructions{ 
+    width: 100%;
+  };
+  .category{
+    width: 80%;
+  }
+
+
+
+}
+
+
 </style>
