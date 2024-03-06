@@ -22,6 +22,7 @@ const receiveData = (region) => {
       <Category @regionSelected="receiveData" />
     </div>
     <div id="stickyQuiz">
+      <div id="stickyQuizTest">
       <div v-if="selectedRegion == 'europe'">
         <FetchQuestions :selectedRegion="selectedRegion" />
       </div>
@@ -46,6 +47,7 @@ const receiveData = (region) => {
       <div v-if="selectedRegion == ''">
         <Welcome />
       </div>
+    </div>
   </div>
   </div>
 </template>
@@ -57,6 +59,8 @@ const receiveData = (region) => {
   text-align: center;
   margin: 0 auto;
   padding: 0 auto;
+
+
 }
 
 .category {
@@ -66,23 +70,29 @@ const receiveData = (region) => {
 .instructions {
   margin: 40px;
   max-height: 900px;
+  position: sticky;
+  top: 10%;
 }
 
 #stickyQuiz {
+  position: sticky;
+  top: 10%;
+  display: flex;
+  flex-direction: column;
   width: 50%;
   background-color: #F5F5F5;
   text-align: center;
   align-items: center;
 }
 
-.quizSection {
-  width: 50%;
+#stickyQuizTest {
+  position: sticky;
+  top: 10%;
+  display: flex;
+  flex-direction: column;
   background-color: #F5F5F5;
-  padding-bottom: 4rem;
-  padding-top: 2rem;
   text-align: center;
   align-items: center;
-  margin: 50px auto;
 }
 
 /* Media Query for display less then or equal to 429px */
