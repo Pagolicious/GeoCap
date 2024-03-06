@@ -2,6 +2,7 @@
 import Category from '../components/Category.vue'
 import FetchQuestions from '../components/FetchQuestions.vue'
 import Instructions from '../components/Instructions.vue'
+import Welcome from '../components/Welcome.vue'
 
 import { ref } from 'vue'
 
@@ -21,38 +22,42 @@ const receiveData = (region) => {
       <Category @regionSelected="receiveData" />
     </div>
     <div id="stickyQuiz">
-      <div class="instructions" v-if="!selectedRegion">
+      <div id="stickyQuizTest">
+      <div v-if="selectedRegion == 'europe'">
+        <FetchQuestions :selectedRegion="selectedRegion" />
+      </div>
+      <div v-if="selectedRegion == 'asia'">
+        <FetchQuestions :selectedRegion="selectedRegion" />
+      </div>
+      <div v-if="selectedRegion == 'oceania'">
+        <FetchQuestions :selectedRegion="selectedRegion" />
+      </div>
+      <div v-if="selectedRegion == 'africa'">
+        <FetchQuestions :selectedRegion="selectedRegion" />
+      </div>
+      <div v-if="selectedRegion == 'america'">
+        <FetchQuestions :selectedRegion="selectedRegion" />
+      </div>
+      <div v-if="selectedRegion == 'south%20america'">
+        <FetchQuestions :selectedRegion="selectedRegion" />
+      </div>
+      <div v-if="selectedRegion == 'howtoplay'">
         <Instructions />
       </div>
-      <div class="quizSection" v-else>
-        <div v-if="selectedRegion == 'europe'">
-          <FetchQuestions :selectedRegion="selectedRegion" />
-        </div>
-        <div v-if="selectedRegion == 'asia'">
-          <FetchQuestions :selectedRegion="selectedRegion" />
-        </div>
-        <div v-if="selectedRegion == 'oceania'">
-          <FetchQuestions :selectedRegion="selectedRegion" />
-        </div>
-        <div v-if="selectedRegion == 'africa'">
-          <FetchQuestions :selectedRegion="selectedRegion" />
-        </div>
-        <div v-if="selectedRegion == 'america'">
-          <FetchQuestions :selectedRegion="selectedRegion" />
-        </div>
-        <div v-if="selectedRegion == 'south%20america'">
-          <FetchQuestions :selectedRegion="selectedRegion" />
-        </div>
-        <div v-if="selectedRegion == ''"></div>
+      <div v-if="selectedRegion == ''">
+        <Welcome />
       </div>
     </div>
   </div>
+  </div>
 </template>
 <style scoped>
+
+@media only screen and (min-width: 900px) {
 #container {
   display: flex;
   flex-direction: row;
-  width: 100vw;
+  /* width: 100vw; */
   text-align: center;
   margin: 0 auto;
   padding: 0 auto;
@@ -62,14 +67,18 @@ const receiveData = (region) => {
   width: 50%;
 }
 
-.instructions {
+/* .instructions {
   margin: 40px;
   max-height: 900px;
-  /* position: sticky;
-  top: 10%; */
-}
+  position: sticky;
+  top: 10%;
+} */
 
 #stickyQuiz {
+  position: sticky;
+  top: 10%;
+  display: flex;
+  flex-direction: column;
   width: 50%;
   background-color: #F5F5F5;
   /* display: flex; */
@@ -79,27 +88,64 @@ const receiveData = (region) => {
   top: 10%;
 }
 
-.quizSection {
-  width: 50%;
+#stickyQuizTest {
+  position: sticky;
+  top: 10%;
+  display: flex;
+  flex-direction: column;
   background-color: #F5F5F5;
-  padding-bottom: 4rem;
-  padding-top: 2rem;
   text-align: center;
   align-items: center;
-  margin: 50px auto;
-  /* position: sticky;
-  top: 10%; */
 }
-
+}
 /* Media Query for display less then or equal to 429px */
-@media only screen and (max-width: 493px) {
+@media only screen and (max-width: 900px) {
+
   #container {
     display: flex;
-    flex-direction: column; /* Ändra riktningen för mindre skärmar till kolumn */
-    width: 175%;
-    font-size: 13px;
+    flex-direction: column;
+    width: 100vw;
+    text-align: center;
+    margin: 0;
+    padding: 0;
   };
-  #stickyQuiz{
+
+  .category {
+  width: 100vw;
+}
+
+.instructions {
+  margin: 40px;
+  max-height: 900px;
+  position: sticky;
+  top: 10%;
+  transform: scale(0.50);
+  transform-origin: 0 0;
+}
+
+  #stickyQuiz {
+  position: sticky;
+  top: 10%;
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  background-color: #F5F5F5;
+  text-align: center;
+  align-items: center;
+  position: sticky;
+  top: 10%;
+}
+
+  #stickyQuizTest {
+  position: sticky;
+  top: 10%;
+  display: flex;
+  flex-direction: column;
+  background-color: #F5F5F5;
+  text-align: center;
+  align-items: center;
+}
+  /* #stickyQuiz{
     width: 80%;
   }
   .instructions{
@@ -107,15 +153,28 @@ const receiveData = (region) => {
   };
   .category{
     width: 80%;
+  } */
+
+}
+@media screen and (max-height: 1000px) {
+  #stickyQuizTest {
+    transform: scale(0.90);
+    transform-origin: 0 0;
   }
+
+
+
+
+
 
 }
 
+
 /* Media Query for display less then or equal to 700px */
-@media only screen and (max-width: 700px) {
+/* @media only screen and (max-width: 700px) {
   #container {
     display: flex;
-    flex-direction: column; /* Ändra riktningen för mindre skärmar till kolumn */
+    flex-direction: column;
     width: 195%;
     font-size: 13px;
   };
@@ -131,7 +190,7 @@ const receiveData = (region) => {
 
 
 
-}
+} */
 
 
 </style>

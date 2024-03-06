@@ -5,13 +5,19 @@ export default {
 </script>
 
 <template>
-  <h1>How to Play GeoCap:</h1>
+
+  <div class="container">
+    <h1>How to Play GeoCap:</h1>
+
     <ol>
       <div class="instructions">
         <li><strong>Select Your Region:</strong> Choose your preferred continent from the available options.</li>
       </div>
       <div class="instructions">
         <li><strong>Match the Flag to the Capital:</strong> A flag will be displayed on the screen. Quickly select the capital city that corresponds to the country represented by the flag.</li>
+      </div>
+      <div class="instructions">
+        <li><strong>Progression:</strong> You can track your progress through the quiz by checking the progression bar at the top of the screen.</li>
       </div>
         <div class="instructions">
         <li><strong>Time Limit:</strong> You have only 10 seconds to make your choice! Hurry up!</li>
@@ -27,19 +33,31 @@ export default {
             <li class="lifeline">Removes two wrong answers, leaving one correct and one wrong option. The timer pauses temporarily.</li>
           </div>
           <div class="lifelineGroup">
-            <h3 class="lifelineHeader">Skip:</h3>
-            <li class="lifeline">Skip the current question and move on to the next one.</li>
-          </div>
-          <div class="lifelineGroup">
             <h3 class="lifelineHeader">Name:</h3>
             <li class="lifeline">This lifeline will reveal the name of the country corresponding to the flag.</li>
+          </div>
+          <div class="lifelineGroup">
+            <h3 class="lifelineHeader">Skip:</h3>
+            <li class="lifeline">Skip the current question and move on to the next one.</li>
           </div>
         </div>
       </div>
     </ol>
+  </div>
+
   </template>
 
 <style scoped>
+
+.container {
+  /* display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; */
+  margin-left: 10%;
+  margin-top: 1rem;
+}
+
 strong {
   font-family: Montserrat, sans-serif;
   font-size: 1.2em;
@@ -53,6 +71,7 @@ ol {
   text-align: left;
   width: 90%;
   list-style: none;
+
 }
 
 li {
@@ -63,6 +82,7 @@ li {
 .instructions {
   box-shadow: 0 0 4px 0 rgba(0, 0, 0, 40%);
   border-radius: 7px;
+
 }
 
 #lifelineInstructionsContainer {
@@ -78,8 +98,12 @@ li {
 }
 
 .lifeline {
+  display:flex;
   padding-top: 0;
   margin-top: 0;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
 }
 
 .lifelineGroup {
@@ -121,13 +145,19 @@ h1 {
     flex-direction: column;
     width: 100%;
     height: 80%;
-    
+
     };
 
   .lifelineGroup{
     width: 100%;
-    
-  }  
+
+  }
+
+  ol {
+    transform: scale(0.80);
+    transform-origin: 0 0;
+    width: 100vw;
+  }
 
 }
 
@@ -142,13 +172,13 @@ h1 {
   flex-direction: column;
   width: 100%;
   height: 80%;
-  
+
   };
 
 .lifelineGroup{
   width: 100%;
-  
-}  
+
+}
 
 }
 
@@ -163,13 +193,13 @@ h1 {
   flex-direction: column;
   width: 100%;
   height: 100%;
-  
+
   };
 
 .lifelineGroup{
   width: 100%;
-  
-}  
+
+}
 
 }
 

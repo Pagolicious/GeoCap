@@ -43,7 +43,7 @@ export default {
         @onSelected="onCategorySelected" />
     </div>
     <div class="category-item">
-      <StatisticsItem id="oceania" img="/src/assets/general/australia.svg" :selected="selectedCategory === 'oceania'"
+      <StatisticsItem id="oceania" img="/src/assets/general/oceania.svg" :selected="selectedCategory === 'oceania'"
         @onSelected="onCategorySelected" />
     </div>
   </div>
