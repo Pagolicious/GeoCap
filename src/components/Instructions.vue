@@ -13,6 +13,9 @@ export default {
       <div class="instructions">
         <li><strong>Match the Flag to the Capital:</strong> A flag will be displayed on the screen. Quickly select the capital city that corresponds to the country represented by the flag.</li>
       </div>
+      <div class="instructions">
+        <li><strong>Progression:</strong> You can track your progress through the quiz by checking the progression bar at the top of the screen.</li>
+      </div>
         <div class="instructions">
         <li><strong>Time Limit:</strong> You have only 10 seconds to make your choice! Hurry up!</li>
       </div>
@@ -27,12 +30,12 @@ export default {
             <li class="lifeline">Removes two wrong answers, leaving one correct and one wrong option. The timer pauses temporarily.</li>
           </div>
           <div class="lifelineGroup">
-            <h3 class="lifelineHeader">Skip:</h3>
-            <li class="lifeline">Skip the current question and move on to the next one.</li>
-          </div>
-          <div class="lifelineGroup">
             <h3 class="lifelineHeader">Name:</h3>
             <li class="lifeline">This lifeline will reveal the name of the country corresponding to the flag.</li>
+          </div>
+          <div class="lifelineGroup">
+            <h3 class="lifelineHeader">Skip:</h3>
+            <li class="lifeline">Skip the current question and move on to the next one.</li>
           </div>
         </div>
       </div>
@@ -78,8 +81,12 @@ li {
 }
 
 .lifeline {
+  display:flex;
   padding-top: 0;
   margin-top: 0;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
 }
 
 .lifelineGroup {

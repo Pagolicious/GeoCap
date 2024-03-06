@@ -1,12 +1,17 @@
 <script setup>
-import { defineEmits } from 'vue'
+import { defineEmits, ref } from 'vue'
 
 const emits = defineEmits(['regionSelected']);
+const selectedRegion = ref(null);
 
 const sendData = (region) => {
-  // Emit an event with the selected region
-  emits('regionSelected', region)
-
+  if (selectedRegion.value === region) {
+    selectedRegion.value = null;
+    emits('regionSelected', "");
+  } else {
+    emits('regionSelected', region);
+    selectedRegion.value = region;
+  }
 }
 
 </script>
@@ -15,17 +20,54 @@ const sendData = (region) => {
   <div class="category-container stylish-scrollbar">
     <h1>Ready to Quiz?</h1>
     <h2>Try one of our quizzes</h2>
-    <img src="/src/assets/general/northamerica.svg" @click="sendData('america')">
-    <img src="/src/assets/general/southamerica.svg" @click="sendData('south%20america')">
-    <img src="/src/assets/general/asia.svg" @click="sendData('asia')">
-    <img src="/src/assets/general/europe.svg" @click="sendData('europe')">
-    <img src="/src/assets/general/africa.svg" @click="sendData('africa')">
-    <img src="/src/assets/general/australia.svg" @click="sendData('oceania')">
-    <img src="/src/assets/general/howtoplay.svg" @click="sendData('')">
+    <img src="/src/assets/general/howtoplay.svg" @click="sendData('howtoplay')" :class="{ 'selected': selectedRegion === 'howtoplay', 'notSelected': selectedRegion !== 'howtoplay' && selectedRegion !== null}">
+    <img src="/src/assets/general/africa.svg" @click="sendData('africa')" :class="{ 'selected': selectedRegion === 'africa', 'notSelected': selectedRegion !== 'africa' && selectedRegion !== null }">
+    <img src="/src/assets/general/asia.svg" @click="sendData('asia')" :class="{ 'selected': selectedRegion === 'asia', 'notSelected': selectedRegion !== 'asia' && selectedRegion !== null}">
+    <img src="/src/assets/general/europe.svg" @click="sendData('europe')" :class="{ 'selected': selectedRegion === 'europe', 'notSelected': selectedRegion !== 'europe' && selectedRegion !== null}">
+    <img src="/src/assets/general/northamerica.svg" @click="sendData('america')" :class="{ 'selected': selectedRegion === 'america', 'notSelected': selectedRegion !== 'america' && selectedRegion !== null }">
+    <img src="/src/assets/general/oceania.svg" @click="sendData('oceania')" :class="{ 'selected': selectedRegion === 'oceania', 'notSelected': selectedRegion !== 'oceania' && selectedRegion !== null}">
+    <img src="/src/assets/general/southamerica.svg" @click="sendData('south%20america')" :class="{ 'selected': selectedRegion === 'south%20america', 'notSelected': selectedRegion !== 'south%20america' && selectedRegion !== null}">
   </div>
 </template>
 
 <style scoped>
+
+.selected {
+  border: 20px solid rgb(100, 234, 118);
+  animation: happyCategory 0.3s ease-in-out forwards;
+}
+@keyframes happyCategory {
+  0% {
+    filter: grayscale(60%);
+    -webkit-filter: grayscale(60%);
+    transform: scale(0.88);
+    border: 0px solid rgb(100, 234, 118);
+  }
+  100% {
+    filter: grayscale(0%);
+    -webkit-filter: grayscale(0);
+    transform: scale(1.1);
+    border: 20px solid rgb(100, 234, 118);
+  }
+}
+
+
+.notSelected {
+  /* border: 20px solid yellow; */
+  animation: sadCategory 0.3s ease-in-out forwards;
+}
+@keyframes sadCategory {
+  0% {
+    filter: grayscale(0%);
+    -webkit-filter: grayscale(0);
+  }
+  100% {
+    filter: grayscale(60%);
+    -webkit-filter: grayscale(60%);
+    transform: scale(0.88);
+  }
+}
+
 .category-container {
   display: flex;
   flex-direction: column;

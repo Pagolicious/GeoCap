@@ -1,5 +1,12 @@
 <script setup>
 import { ref, onMounted } from 'vue';
+import jsConfetti from 'js-confetti';
+import { useSound } from '@vueuse/sound'
+import correctSound from '../assets/sfx/correct.wav'
+import incorrectSound from '../assets/sfx/incorrect.wav'
+import lifeline from '../assets/sfx/lifeline.mp3'
+import celebrate from '../assets/sfx/celebrate.mp3'
+import tadaa from '../assets/sfx/tadaa.mp3'
 
 const fetchedData = ref(null),
   randomCorrectCapital = ref([]),
@@ -17,12 +24,19 @@ const fetchedData = ref(null),
   timeRunning = ref(false),
   percentage = ref(0),
   correctIndex = ref(null),
-  wrongIndex = ref(null)
+  wrongIndex = ref(null),
+  confettiContainer = ref(null),
+  correctSfx = useSound(correctSound),
+  incorrectSfx = useSound(incorrectSound),
+  lifelineSfx = useSound(lifeline),
+  celebrateSfx = useSound(celebrate),
+  tadaaSfx = useSound(tadaa);
 
 let countdown
-
+// game states
 const gameActive = ref(false);
 const gameOver = ref(false);
+const quizCompleted = ref(false);
 
 const props = defineProps({
   selectedRegion: String
@@ -156,6 +170,14 @@ function addScore(score) {
 function updatePercentage(percent) {
   let games = JSON.parse(localStorage.getItem("games"))
   let currentIndex = games[props.selectedRegion].length - 1
+
+  if (percent >= 100) {
+    gameOver.value = true;
+    quizCompleted.value = true;
+    quizConfetti()
+    celebrateSfx.play()
+  }
+
   games[props.selectedRegion][currentIndex].percentage = percent
   localStorage.setItem("games", JSON.stringify(games))
   return games[props.selectedRegion][currentIndex].percentage
@@ -228,13 +250,15 @@ function updateProgressBar(percentage) {
 function nameLifeline() {
   if (!nameDisabled.value) {
     nameDisabled.value = true
+    lifelineSfx.play()
     displayName.value = true
     stopTimer()
   }
 }
-
+// 50/50 lifeline
 function activateFiftyFifty() {
   if (!fiftyFiftyDisabled.value) {
+    lifelineSfx.play()
     stopTimer()
     let wrongIndexes = [];
     // Find the indexes of wrong questions
@@ -265,11 +289,11 @@ function handleAnswer(index) {
 
   if (selectedAnswer === correctAnswer) {
     console.log("You're correct soldier!"); // Om det valda svaret är korrekt, logga meddelandet
+    correctSfx.play()
     stopTimer()
     correctIndex.value = index
     buttonsDisabled.value = true
     countPercentage()
-
     setTimeout(() => {
       buttonsDisabled.value = false
       generateNewQuestions()
@@ -279,11 +303,12 @@ function handleAnswer(index) {
       console.log(randomCorrectCapital.value)
       resetTimer()
       // correctEuropeAnswers.value = []
-    }, 2000)
+    }, 400)
 
   } else {
     correctEuropeAnswers.value = []; // Uppdatera den globala variabeln
     buttonsDisabled.value = true
+    incorrectSfx.play()
     stopTimer()
     correctIndex.value = randomQuestion.value.findIndex(answer => answer === correctAnswer);
     wrongIndex.value = index
@@ -293,19 +318,21 @@ function handleAnswer(index) {
       passDisabled.value = false
       nameDisabled.value = false
       gameOver.value = true;
+      setTimeout(gameOverSound, 1600);
       buttonsDisabled.value = false
       resetTimer()
       console.log("You're wrong soldier!"); // Om det valda svaret är fel, logga ett annat meddelande
       console.log(randomCorrectCapital.value)
-    }, 2000)
+    }, 1000)
   }
 }
 
-
+// pass-lifeline
 function handlePass() {
   if (!passDisabled.value) {
     // const correctAnswer = randomCorrectCapital.value[0]
     correctIndex.value = randomQuestion.value.findIndex(answer => answer === randomCorrectCapital.value[0]);
+    lifelineSfx.play()
 
     // Disable pass button
     passDisabled.value = true
@@ -320,7 +347,7 @@ function handlePass() {
     }, 2000)
   }
 }
-
+// generate new questions
 function generateNewQuestions() {
   // Add fade-out animation class to fade out old questions
 
@@ -391,8 +418,9 @@ function resetTimer() {
   stopTimer()
   timer.value = 10
 }
-
+// resets most states when user press the play again button
 function playAgain() {
+  tadaaSfx.stop();
   fetchedData.value = null;
   randomCorrectCapital.value = [];
   correctEuropeAnswers.value = [];
@@ -407,6 +435,32 @@ function playAgain() {
   gameOver.value = false;
   fetchData();
   initializeStorage();
+  quizCompleted.value = false;
+  percentage.value = 0;
+
+} // confetti fun if quiz is completed
+function quizConfetti() {
+  const confetti = new jsConfetti();
+  confetti.addConfetti({
+    confettiElement: confettiContainer.value,
+    confettiRadius: 10,
+    confettiColors: ['#ff0000', '#00ff00', '#0000ff'],
+    confettiNumber: 300,
+    confettiSpeed: 150,
+    confettiAngle: 90,
+    confettiRotation: 90,
+    confettiSpread: 360,
+    confettiScalar: 1
+  });
+}
+// stops stacking tadaa score sound if user spam fail/play again
+function gameOverSound() {
+  if (gameOver.value === true) {
+  tadaaSfx.play();
+  }
+  else {
+    tadaaSfx.stop()
+  }
 }
 
 </script>
@@ -415,10 +469,8 @@ function playAgain() {
   <div>
     <div v-if="!gameOver">
       <div v-if="!gameActive" class="readyScreenGameOver"> <!-- Ready screen if game is not active -->
-        <h1 id="pickedContinent">Quiz picked: {{ selectedRegion }}</h1>
+        <h1 id="pickedContinent">Quiz picked: {{ selectedRegion === 'america' ? 'NORTH AMERICA' : (selectedRegion === 'south%20america' ? 'SOUTH AMERICA' : selectedRegion) }}</h1>
         <h1>Are you ready?</h1>
-
-
         <button class="readyBtn" @click="beginQuiz">Ready</button>
       </div>
       <div v-if="gameActive" id="centerItems"> <!-- If game is active, starts to render quiz -->
@@ -467,17 +519,15 @@ function playAgain() {
   </div>
 
   <div v-if="gameOver" class="readyScreenGameOver">
-    <div id="gameOverContainer">
-      <h1>Game Over</h1>
-      <span class="quizResult" style="animation-delay: 0.4s;">
-        <p>Lifelines used: <b class="quizResultB" style="animation-delay: 1.6s;">3/3</b></p>
-      </span>
+    <div id="gameOverContainer" style="animation-delay: 1.7s;">
+      <div id="confettiContainer"></div>
+      <h1 :class="{ 'congrats': quizCompleted }">{{ quizCompleted ? 'Congratulations, you finished the quiz!' : 'Game Over' }}</h1>
+      <span class="quizResult" style="animation-delay: 0.5s;">
+        <p>Lifelines used: <b class="quizResultB" style="animation-delay: 1s;">3/3</b></p></span>
       <span class="quizResult" style="animation-delay: 0.8s;">
-        <p>Levels completed: <b class="quizResultB" style="animation-delay: 1.8s;">{{ percentage }}</b></p>
-      </span>
+        <p>Levels completed: <b class="quizResultB" style="animation-delay: 1.2s;">{{ percentage }}</b></p></span>
       <span class="quizResult" style="animation-delay: 1.2s;">
-        <p>Score: <b class="quizResultB" style="animation-delay: 2s;">{{ score }}</b></p>
-      </span>
+        <p>Score: <b class="quizResultB" style="animation-delay: 3.4s;">{{ score }}</b></p></span>
       <button class="readyBtn" @click="playAgain">Play Again</button>
     </div>
   </div>
@@ -485,6 +535,10 @@ function playAgain() {
 
 
 <style scoped>
+
+.congrats {
+  font-size: 1.9rem;
+}
 
 .progress-container {
   display: flex;
@@ -576,6 +630,21 @@ function playAgain() {
   text-align: center;
   flex-direction: column;
   align-items: center;
+  animation-duration: 2s;
+  animation-name: funMode;
+}
+
+@keyframes funMode {
+  0% {
+    transform: scale(1) rotate(0deg);
+  }
+
+  80% {
+    transform: scale(1.5) rotate(6deg);
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
 }
 
 
@@ -712,9 +781,9 @@ h1 {
 }
 
 #name {
-  background-color: #fffb25;
+  background-color: #7EA2FF;
   filter: drop-shadow(0px 0px 2px rgba(0, 0, 0, 0.839));
-  background-image: url('../assets/shield.svg');
+  background-image: url('../assets/name.svg');
   background-repeat: no-repeat;
   background-position: center center;
   /* pointer-events: none; */
@@ -761,10 +830,6 @@ h1 {
   border-color: #646cff;
 }
 
-.quizButton:focus,
-.quizButton:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
 
 #quizP {
   color: #0B0957;

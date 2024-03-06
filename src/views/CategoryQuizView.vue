@@ -2,6 +2,7 @@
 import Category from '../components/Category.vue'
 import FetchQuestions from '../components/FetchQuestions.vue'
 import Instructions from '../components/Instructions.vue'
+import Welcome from '../components/Welcome.vue'
 
 import { ref } from 'vue'
 
@@ -37,8 +38,11 @@ const receiveData = (region) => {
       <template v-if="selectedRegion == 'south%20america'">
         <FetchQuestions :selectedRegion="selectedRegion" />
       </template>
-      <template v-if="selectedRegion == ''">
+      <template v-if="selectedRegion == 'howtoplay'">
         <Instructions />
+      </template>
+      <template v-if="selectedRegion == ''">
+        <Welcome />
       </template>
       <!-- <template v-else>
         <p>Loading...</p>
