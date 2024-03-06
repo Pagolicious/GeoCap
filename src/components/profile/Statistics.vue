@@ -4,7 +4,25 @@ import StatisticsItem from '../profile/StatisticsItem.vue'
 export default {
   data() {
     return {
-      selectedCategory: ""
+      selectedCategory: "",
+      categories: [
+        { id: "africa", img: "/src/assets/general/africa.svg" },
+        { id: "asia", img: "/src/assets/general/asia.svg" },
+        { id: "europe", img: "/src/assets/general/europe.svg" },
+        { id: "america", img: "/src/assets/general/northamerica.svg" },
+        { id: "oceania", img: "/src/assets/general/oceania.svg" },
+        { id: "south%20america", img: "/src/assets/general/southamerica.svg" }
+      ]
+    }
+  },
+  mounted() {
+    //getting the last game category id
+    this.selectedCategory = localStorage.getItem("lastGame")
+    let selectedIndex = this.categories.findIndex(item => item.id === this.selectedCategory);
+    if (selectedIndex >= 0 && selectedIndex < this.categories.length) {
+      // Remove the selected item from its current position and put it to selectedItem
+      let selectedItem = this.categories.splice(selectedIndex, 1)[0];
+      this.categories.unshift(selectedItem);
     }
   },
 
@@ -22,28 +40,8 @@ export default {
       <h2 class="title">My History</h2>
     </div>
     <!--Binding (:selected) to see if the category is selected-->
-    <div class="category-item">
-      <StatisticsItem id="america" img="/src/assets/general/northamerica.svg" :selected="selectedCategory === 'america'"
-        @onSelected="onCategorySelected" />
-    </div>
-    <div class="category-item">
-      <StatisticsItem id="south%20america" img="/src/assets/general/southamerica.svg"
-        :selected="selectedCategory === 'south%20america'" @onSelected="onCategorySelected" />
-    </div>
-    <div class="category-item">
-      <StatisticsItem id="asia" img="/src/assets/general/asia.svg" :selected="selectedCategory === 'asia'"
-        @onSelected="onCategorySelected" />
-    </div>
-    <div class="category-item">
-      <StatisticsItem id="europe" img="/src/assets/general/europe.svg" :selected="selectedCategory === 'europe'"
-        @onSelected="onCategorySelected" />
-    </div>
-    <div class="category-item">
-      <StatisticsItem id="africa" img="/src/assets/general/africa.svg" :selected="selectedCategory === 'africa'"
-        @onSelected="onCategorySelected" />
-    </div>
-    <div class="category-item">
-      <StatisticsItem id="oceania" img="/src/assets/general/oceania.svg" :selected="selectedCategory === 'oceania'"
+    <div class="category-item" v-for="category in categories">
+      <StatisticsItem :id="category.id" :img="category.img" :selected="selectedCategory === category.id"
         @onSelected="onCategorySelected" />
     </div>
   </div>
