@@ -586,7 +586,7 @@ function gameOverSound() {
       <div id="confettiContainer"></div>
       <h1 :class="{ 'congrats': quizCompleted }">{{ quizCompleted ? 'Congratulations, you finished the quiz!' : 'Game Over' }}</h1>
       <span class="quizResult" style="animation-delay: 0.5s;">
-        <p>Lifelines used: <b class="quizResultB" style="animation-delay: 1s;">3/3</b></p></span>
+        <p>Lifelines used: <b class="quizResultB" style="animation-delay: 1s;">{{ countLifeline }}/3</b></p></span>
       <span class="quizResult" style="animation-delay: 0.8s;">
         <p>Levels completed: <b class="quizResultB" style="animation-delay: 1.2s;">{{ percentage }}</b></p></span>
       <span class="quizResult" style="animation-delay: 1.2s;">
