@@ -1,4 +1,5 @@
 <script setup>
+
 import { ref, onMounted } from 'vue';
 import jsConfetti from 'js-confetti';
 import { useSound } from '@vueuse/sound'
@@ -30,7 +31,9 @@ const fetchedData = ref(null),
   incorrectSfx = useSound(incorrectSound),
   lifelineSfx = useSound(lifeline),
   celebrateSfx = useSound(celebrate),
-  tadaaSfx = useSound(tadaa);
+  tadaaSfx = useSound(tadaa),
+  countLifeline = ref(0),
+  FULL_DASH_ARRAY = ref(283);
 
 let countdown
 // game states
@@ -43,12 +46,12 @@ const props = defineProps({
 })
 
 async function fetchData() {
-
   randomQuestion.value = []
 
   fetch(`https://restcountries.com/v3.1/region/${props.selectedRegion}`)
     .then((response) => response.json())
     .then((result) => {
+
 
       // Removing countries that not really are an official country
       result = removeNoneCountries(result)
@@ -84,7 +87,6 @@ async function fetchData() {
       const correctCapitalIndex = keys.findIndex((key) => {
         const item = result[key]
         return item.capital[0] === correctCapital
-
       })
 
       // Get the flag from the correct Index
@@ -118,9 +120,12 @@ async function fetchData() {
       console.log("///")
       console.log(correctFlagItem.value.name.common)
 
+      // console.log(gameActive.value)
+
       // for (let i = 0; i < correctEuropeAnswers.value.length; i++) {
       //   console.log(result[i].name.common)
       // }
+      // console.log("props", props.gameNotActive)
 
     })
 }
@@ -128,14 +133,14 @@ async function fetchData() {
 function beginQuiz() {
   if (gameActive.value === false) {
     gameActive.value = true;
+
     fetchData();
   }
 }
 onMounted(() => {
   initializeStorage()
-
-
 })
+
 function initializeStorage() {
   let games = localStorage.getItem("games")
   if (!games) {
@@ -252,6 +257,8 @@ function nameLifeline() {
     nameDisabled.value = true
     lifelineSfx.play()
     displayName.value = true
+    countLifeline.value++
+
     stopTimer()
   }
 }
@@ -261,6 +268,7 @@ function activateFiftyFifty() {
     lifelineSfx.play()
     stopTimer()
     let wrongIndexes = [];
+    countLifeline.value++
     // Find the indexes of wrong questions
     for (let i = 0; i < randomQuestion.value.length; i++) {
       if (randomQuestion.value[i] !== randomCorrectCapital.value[0]) {
@@ -303,7 +311,7 @@ function handleAnswer(index) {
       console.log(randomCorrectCapital.value)
       resetTimer()
       // correctEuropeAnswers.value = []
-    }, 400)
+    }, 500)
 
   } else {
     correctEuropeAnswers.value = []; // Uppdatera den globala variabeln
@@ -337,7 +345,7 @@ function handlePass() {
     // Disable pass button
     passDisabled.value = true
     buttonsDisabled.value = true
-
+    countLifeline.value++
     stopTimer()
     setTimeout(() => {
       resetTimer()
@@ -399,12 +407,20 @@ function getRandomCapitals(keys, result, correctCapital, randomQuestion) {
 
 function startTimer() {
   timeRunning.value = true
+
   countdown = setInterval(() => {
     if (timer.value > 0) {
       timer.value--
+      setCircleDasharray()
+
+      if (timer.value === 4) {
+        play()
+
+      }
     } else {
       stopTimer()
       gameOver.value = true;
+      // countLifeline.value = 0
     }
   }, 1000)
 }
@@ -417,6 +433,33 @@ function stopTimer() {
 function resetTimer() {
   stopTimer()
   timer.value = 10
+  const initialDashArray = FULL_DASH_ARRAY.value;
+  document.getElementById("base-timer-path-remaining").setAttribute("stroke-dasharray", `${initialDashArray} 283`);
+}
+
+// Divides time left by the defined time limit.
+function calculateTimeFraction() {
+  const rawTimeFraction = timer.value / 11;
+  return rawTimeFraction - (1 / 11) * (1 - rawTimeFraction);
+}
+
+// Update the dasharray value as time passes, starting with 283
+function setCircleDasharray() {
+  if (document.getElementById("base-timer-path-remaining")) {
+    const circle = document.getElementById("base-timer-path-remaining")
+    const circleDasharray = `${(
+      calculateTimeFraction() * FULL_DASH_ARRAY.value
+    ).toFixed(0)} 283`
+    document.getElementById("base-timer-path-remaining").setAttribute("stroke-dasharray", circleDasharray)
+
+    if (timer.value <= 5) {
+      circle.setAttribute("stroke", "red")
+    } else {
+      circle.setAttribute("stroke", "rgb(54, 118, 216)")
+    }
+  } else {
+    stopTimer()
+  }
 }
 // resets most states when user press the play again button
 function playAgain() {
@@ -433,6 +476,9 @@ function playAgain() {
   timeRunning.value = false;
   gameActive.value = true; // This begins a new game session directly, should we keep or not?
   gameOver.value = false;
+  percentage.value = 0
+  countLifeline.value = 0
+
   fetchData();
   initializeStorage();
   quizCompleted.value = false;
@@ -463,10 +509,11 @@ function gameOverSound() {
   }
 }
 
+
 </script>
 
 <template>
-  <div>
+  <div class="game">
     <div v-if="!gameOver">
       <div v-if="!gameActive" class="readyScreenGameOver"> <!-- Ready screen if game is not active -->
         <h1 id="pickedContinent">Quiz picked: {{ selectedRegion === 'america' ? 'NORTH AMERICA' : (selectedRegion === 'south%20america' ? 'SOUTH AMERICA' : selectedRegion) }}</h1>
@@ -482,11 +529,26 @@ function gameOverSound() {
             </div>
           </div>
           <div class="timer-container">
-            <div class="timer">
-              <div class="circle"></div>
-              {{ timer }}
-            </div>
 
+            <div class="base-timer">
+              <svg class="base-timer__svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <g class="base-timer__circle">
+                  <circle class="base-timer__path-elapsed" cx="50" cy="50" r="45" />
+
+
+                  <path ref=timerElement id="base-timer-path-remaining" stroke-dasharray="283"
+                    class="base-timer__path-remaining" d="
+                    M 50, 50
+                    m -45, 0
+                    a 45,45 0 1,0 90,0
+                    a 45,45 0 1,0 -90,0
+                  "></path>
+                </g>
+              </svg>
+              <span id="base-timer-label" class="base-timer__label">
+                {{ timer }}
+              </span>
+            </div>
           </div>
         </div>
         <h1>What is the capital<br>of this country?</h1>
@@ -497,7 +559,8 @@ function gameOverSound() {
         </div>
         <div v-if="randomQuestion.length" class="fade-in">
           <div v-for="(question, index) in randomQuestion" :key="index" class="answer fade-in">
-            <button class="quizButton" :class="{ 'disabled': question === '', 'disabledButton': buttonsDisabled, 'correct': index === correctIndex, 'wrong': index === wrongIndex }"
+            <button class="quizButton"
+              :class="{ 'disabled': question === '', 'disabledButton': buttonsDisabled, 'correct': index === correctIndex, 'wrong': index === wrongIndex }"
               @click="handleAnswer(index)">
               <p id="quizP">{{ question }}</p>
             </button>
@@ -529,12 +592,61 @@ function gameOverSound() {
       <span class="quizResult" style="animation-delay: 1.2s;">
         <p>Score: <b class="quizResultB" style="animation-delay: 3.4s;">{{ score }}</b></p></span>
       <button class="readyBtn" @click="playAgain">Play Again</button>
+      <div>
+        <router-link to="/profile">
+          <button class="readyBtn">My History</button>
+        </router-link>
+      </div>
     </div>
   </div>
 </template>
 
 
 <style scoped>
+.base-timer {
+  position: relative;
+  height: 80px;
+  width: 80px;
+}
+
+/* Removes SVG styling that would hide the time label */
+.base-timer__circle {
+  fill: none;
+  stroke: none;
+}
+
+/* The SVG path that displays the timer's progress */
+.base-timer__path-elapsed {
+  stroke-width: 9px;
+  stroke: #bebcbc;
+}
+
+.base-timer__label {
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  top: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 30px;
+  font-weight: 500;
+
+}
+
+.base-timer__path-remaining {
+  stroke-width: 7px;
+  stroke-linecap: round;
+  transform: rotate(90deg);
+  transform-origin: center;
+  transition: 1s linear all;
+}
+
+.base-timer__svg {
+  transform: scaleX(-1);
+}
 
 .congrats {
   font-size: 1.9rem;
@@ -543,6 +655,8 @@ function gameOverSound() {
 .progress-container {
   display: flex;
   padding: 1rem;
+  justify-content: center;
+  align-items: center;
 }
 
 .score {
@@ -554,30 +668,24 @@ function gameOverSound() {
 }
 
 .progressbar {
-  /* font-size: 25px;
-  font-weight: 500; */
   position: relative;
   width: 20rem;
   border: 2px solid rgb(0, 0, 0);
   border-radius: 5px;
-  /* width: 0; */
   height: 2rem;
   padding: 0;
-  margin: 0;
-  /* border: 0; */
+  margin: 0 2rem 0 7rem;
 }
 
 .progress {
-  /* border: 0; */
   border-radius: 0;
-  /* width: 0; */
-
-  /* height: 1.75rem; */
   height: 100%;
   padding: 0;
   margin: 0;
   background-color: rgb(76, 134, 221);
-  transition: width 0.5s ease; /* Adding transition effect */
+  transition: width 0.5s ease;
+  transition: width 0.5s ease;
+  /* Adding transition effect */
 
 }
 
@@ -592,24 +700,8 @@ function gameOverSound() {
 .percentage {
   font-size: 25px;
   font-weight: 600;
-  /* position: relative; */
   color: black;
-  /* mix-blend-mode: screen; */
 
-
-}
-
-/* .percentage::after {
-  color: rgb(228, 147, 25);
-  mix-blend-mode: difference;
-} */
-
-
-.timer {
-  font-size: 30px;
-  font-weight: 500;
-  position: relative;
-  left: 8rem;
 
 }
 
@@ -724,6 +816,7 @@ function gameOverSound() {
   box-shadow: 0px 0px 4px 0px #363636d0;
   border-radius: 0.4375rem;
   border: 1px solid #E0E1E1;
+  margin-bottom: 20px;
 }
 
 .readyBtn:hover {
@@ -921,4 +1014,50 @@ h1 {
 .disabledButton {
   pointer-events: none;
 }
+
+/* Media Query for display 493px */
+@media only screen and (max-width: 493px) {
+
+  #centerItems {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  width: 15%;
+}
+
+
+}
+
+/* Media Query for display 700px */
+@media only screen and (max-width: 700px) {
+
+
+
+}
+
+/* Media Query for display 1200px */
+@media only screen and (max-width: 1200px) {
+
+
+  #centerItems {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  width: 80%;
+}
+
+  .timer {
+  font-size: 30px;
+  font-weight: 500;
+  position: relative;
+  left: 2rem;
+
+}
+
+
+
+}
+
 </style>

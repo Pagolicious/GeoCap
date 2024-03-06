@@ -61,18 +61,23 @@ export default {
       options: {
         responsive: true,
         maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            display: false
+          }
+        },
         scales: {
           x: {
             title: {
               // Label for the X-axis
-              display: false,
+              display: true,
               text: 'Games'
             }
           },
           y: {
             title: {
               // Label for the Y-axis
-              display: false,
+              display: true,
               text: 'Scores'
             }
           }
@@ -258,5 +263,21 @@ export default {
 .data-wrapper div {
   font-family: Fredoka;
   font-size: 15px;
+}
+
+@media only screen and (max-width: 1045px) {
+  .score-wrapper {
+    width: 100%;
+  }
+
+  .data-wrapper {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .chart {
+    width: 100%;
+  }
+
 }
 </style>

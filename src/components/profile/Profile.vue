@@ -200,4 +200,22 @@ const clearError = () => {
   box-shadow: 0 2px 2px 0 rgb(62, 71, 44);
 
 }
+
+
+/* Styles for small screens */
+
+ @media only screen and (max-width: 950px) {
+  .form-container {
+    
+    width: 80%;
+    
+  }
+
+  .profile-container{
+    width: 100%;
+    
+  }
+
+}
+
 </style>

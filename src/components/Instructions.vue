@@ -116,4 +116,69 @@ h1 {
   line-height: 1.1;
   margin-bottom: 1rem;
 }
+
+/* Media Query for display  */
+@media only screen and (max-width: 493px) {
+
+  #lifelineInstructionsContainer {
+
+};
+  .lifelineContainer{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 80%;
+    
+    };
+
+  .lifelineGroup{
+    width: 100%;
+    
+  }  
+
+}
+
+/* Media Query for display  */
+@media only screen and (max-width: 700px) {
+
+#lifelineInstructionsContainer {
+
+};
+.lifelineContainer{
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 80%;
+  
+  };
+
+.lifelineGroup{
+  width: 100%;
+  
+}  
+
+}
+
+/* Media Query for display  */
+@media only screen and (max-width: 1200px) {
+
+#lifelineInstructionsContainer {
+
+};
+.lifelineContainer{
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  
+  };
+
+.lifelineGroup{
+  width: 100%;
+  
+}  
+
+}
+
+
 </style>

@@ -9,129 +9,123 @@ import { ref } from 'vue'
 // Define a variable to store the selected region
 const selectedRegion = ref('')
 
+
 // Define a method to receive the selected region from FirstComponent
 const receiveData = (region) => {
   selectedRegion.value = region
 }
-
 </script>
 
 <template>
-  <Category @regionSelected="receiveData" />
   <div id="container">
-    <div id="stickyQuiz">
-      <template v-if="selectedRegion == 'europe'">
-        <FetchQuestions :selectedRegion="selectedRegion" />
-      </template>
-      <template v-if="selectedRegion == 'asia'">
-        <FetchQuestions :selectedRegion="selectedRegion" />
-      </template>
-      <template v-if="selectedRegion == 'oceania'">
-        <FetchQuestions :selectedRegion="selectedRegion" />
-      </template>
-      <template v-if="selectedRegion == 'africa'">
-        <FetchQuestions :selectedRegion="selectedRegion" />
-      </template>
-      <template v-if="selectedRegion == 'america'">
-        <FetchQuestions :selectedRegion="selectedRegion" />
-      </template>
-      <template v-if="selectedRegion == 'south%20america'">
-        <FetchQuestions :selectedRegion="selectedRegion" />
-      </template>
-      <template v-if="selectedRegion == 'howtoplay'">
-        <Instructions />
-      </template>
-      <template v-if="selectedRegion == ''">
-        <Welcome />
-      </template>
-      <!-- <template v-else>
-        <p>Loading...</p>
-      </template> -->
+    <div class="category">
+      <Category @regionSelected="receiveData" />
     </div>
+    <div id="stickyQuiz">
+      <div v-if="selectedRegion == 'europe'">
+        <FetchQuestions :selectedRegion="selectedRegion" />
+      </div>
+      <div v-if="selectedRegion == 'asia'">
+        <FetchQuestions :selectedRegion="selectedRegion" />
+      </div>
+      <div v-if="selectedRegion == 'oceania'">
+        <FetchQuestions :selectedRegion="selectedRegion" />
+      </div>
+      <div v-if="selectedRegion == 'africa'">
+        <FetchQuestions :selectedRegion="selectedRegion" />
+      </div>
+      <div v-if="selectedRegion == 'america'">
+        <FetchQuestions :selectedRegion="selectedRegion" />
+      </div>
+      <div v-if="selectedRegion == 'south%20america'">
+        <FetchQuestions :selectedRegion="selectedRegion" />
+      </div>
+      <div v-if="selectedRegion == 'howtoplay'">
+        <Instructions />
+      </div>
+      <div v-if="selectedRegion == ''">
+        <Welcome />
+      </div>
   </div>
-  <!-- <h1>Quiz</h1> -->
+  </div>
 </template>
 <style scoped>
 #container {
-  width: 100%;
-  background-color: #F5F5F5;
-  padding-bottom: 4rem;
-  padding-top: 2rem;
+  display: flex;
+  flex-direction: row;
+  width: 100vw;
+  text-align: center;
+  margin: 0 auto;
+  padding: 0 auto;
+}
+
+.category {
+  width: 50%;
+}
+
+.instructions {
+  margin: 40px;
+  max-height: 900px;
 }
 
 #stickyQuiz {
-  position: sticky;
-  display: flex;
-  top: 10%;
-  flex-direction: column;
+  width: 50%;
+  background-color: #F5F5F5;
   text-align: center;
   align-items: center;
 }
 
-/* .answer {
-  height: 5rem;
-  width: 20rem;
-  display: flex;
+.quizSection {
+  width: 50%;
+  background-color: #F5F5F5;
+  padding-bottom: 4rem;
+  padding-top: 2rem;
   text-align: center;
-  justify-content: center;
   align-items: center;
-  margin: 0.4rem;
+  margin: 50px auto;
 }
 
-.quizButton {
-  width: 100%;
-  height: 100%;
-  border-radius: 0.4375rem;
-  border: 1px solid #E0E1E1;
-  background: #F5F5F5;
-  box-shadow: 0px 1px 4px 0px #36363691;
-}
-
-.quizButton:hover {
-  border-color: #646cff;
-}
-
-.quizButton:focus,
-.quizButton:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-
-#quizP {
-  color: #0B0957;
-  font-family: Montserrat;
-  font-size: 1.2rem;
-  font-style: normal;
-  font-weight: 700;
-  line-height: normal;
-  margin-bottom: 0rem;
-}
-
-.disabled {
-  opacity: 0.5;
-  pointer-events: none;
-  animation: ease 1s forwards;
-}
-
-@keyframes ease {
-  0% {
-    transform: scaleX(1);
-    transform: translateX(0px);
-    filter: blur(0px);
-    opacity: 1;
+/* Media Query for display less then or equal to 429px */
+@media only screen and (max-width: 493px) {
+  #container {
+    display: flex;
+    flex-direction: column; /* Ändra riktningen för mindre skärmar till kolumn */
+    width: 175%;
+    font-size: 13px;
+  };
+  #stickyQuiz{
+    width: 80%;
+  }
+  .instructions{
+    width: 100%;
+  };
+  .category{
+    width: 80%;
   }
 
-  50% {
-    transform: scaleX(0.8);
-    transform: translateX(15px);
-    filter: blur(2px);
-    opacity: 0.5;
+}
+
+/* Media Query for display less then or equal to 700px */
+@media only screen and (max-width: 700px) {
+  #container {
+    display: flex;
+    flex-direction: column; /* Ändra riktningen för mindre skärmar till kolumn */
+    width: 195%;
+    font-size: 13px;
+  };
+  #stickyQuiz{
+    width: 80%;
+  }
+  .instructions{
+    width: 100%;
+  };
+  .category{
+    width: 80%;
   }
 
-  100% {
-    transform: scaleX(0.5);
-    transform: translateX(30px);
-    filter: blur(4px);
-    opacity: 0;
-  }
-} */
+
+
+}
+
+
 </style>

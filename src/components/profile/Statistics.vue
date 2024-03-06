@@ -19,7 +19,7 @@ export default {
 <template>
   <div class="statistics stylish-scrollbar">
     <div>
-      <h2 class="title">Statistics</h2>
+      <h2 class="title">My History</h2>
     </div>
     <!--Binding (:selected) to see if the category is selected-->
     <div class="category-item">
