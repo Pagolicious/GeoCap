@@ -26,18 +26,8 @@ import Statistics from '../components/profile/Statistics.vue'
   max-height: 900px;
 }
 
-@media only screen and (max-width: 600px) {
-  .profile-component {
-    width: 55%;
-  
-  }
-  .profile-section {
-    width: 80%; 
-    
-  }
-}
 
-/* Media Query for display less then or equal to 375px */
+/* Media Query for display less then or equal to 493px */
 @media only screen and (max-width: 493px) {
   .profile-component {
     flex-direction: column; /* Ändra riktningen för mindre skärmar till kolumn */

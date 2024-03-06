@@ -265,20 +265,19 @@ export default {
   font-size: 15px;
 }
 
-@media only screen and (max-width: 768px) {
+@media only screen and (max-width: 1045px) {
   .score-wrapper {
-    width: 30%;
-    flex-direction: column;
+    width: 100%;
   }
 
   .data-wrapper {
-    width: 10%;
+    width: 100%;
     flex-direction: column;
   }
 
-  .chart-wrapper {
-    width: auto;
-    flex-direction: column;
+  .chart {
+    width: 100%;
   }
+
 }
 </style>
