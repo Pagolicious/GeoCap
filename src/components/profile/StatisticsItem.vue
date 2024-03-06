@@ -22,7 +22,7 @@ ChartJS.register(
 )
 
 export default {
-  mounted() {
+  created() {
     this.initializeStorage()
     this.games = JSON.parse(localStorage.getItem("games"))[this.id]
     this.bestScores = JSON.parse(localStorage.getItem("games"))[this.id]

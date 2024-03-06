@@ -15,7 +15,7 @@ export default {
       ]
     }
   },
-  mounted() {
+  created() {
     //getting the last game category id
     this.selectedCategory = localStorage.getItem("lastGame")
     let selectedIndex = this.categories.findIndex(item => item.id === this.selectedCategory);
