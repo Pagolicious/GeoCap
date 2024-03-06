@@ -568,9 +568,6 @@ function gameOverSound() {
 
           </div>
         </div>
-        <div>
-          <h3>{{ score }}</h3>
-        </div>
         <div class="powerUps">
           <button class="powerBtn" :class="{ 'disabledBtn': fiftyFiftyDisabled }" id="fiftyFifty"
             @click="activateFiftyFifty"></button>
