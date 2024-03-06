@@ -75,6 +75,7 @@ export default {
             }
           },
           y: {
+            beginAtZero: true,
             title: {
               // Label for the Y-axis
               display: true,
