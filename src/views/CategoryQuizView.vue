@@ -162,10 +162,13 @@ const receiveData = (region) => {
     transform-origin: 0 0;
   }
 
+}
 
-
-
-
+@media screen and (max-height: 800px) {
+  #stickyQuizTest {
+    transform: scale(0.72);
+    transform-origin: 0 0;
+  }
 
 }
 
