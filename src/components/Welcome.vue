@@ -27,6 +27,7 @@ p {
   font-weight: 600;
   line-height: 1.1;
   margin-bottom: 1rem;
+
 }
 
 .container {
@@ -34,7 +35,9 @@ p {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 80vh;
+  height: 100vh;
+  margin-left: 10%;
+
 }
 
 h1 {

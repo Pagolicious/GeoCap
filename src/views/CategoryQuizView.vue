@@ -84,11 +84,9 @@ const receiveData = (region) => {
   /* display: flex; */
   text-align: center;
   align-items: center;
-  position: sticky;
-  top: 10%;
 }
 
-#stickyQuizTest {
+/* #stickyQuizTest {
   position: sticky;
   top: 10%;
   display: flex;
@@ -96,7 +94,7 @@ const receiveData = (region) => {
   background-color: #F5F5F5;
   text-align: center;
   align-items: center;
-}
+} */
 }
 /* Media Query for display less then or equal to 429px */
 @media only screen and (max-width: 900px) {
@@ -112,6 +110,7 @@ const receiveData = (region) => {
 
   .category {
   width: 100vw;
+    /* width: 40%; */
 }
 
 .instructions {
@@ -137,6 +136,7 @@ const receiveData = (region) => {
 }
 
   #stickyQuizTest {
+  width: 100vw;
   position: sticky;
   top: 10%;
   display: flex;
@@ -161,7 +161,13 @@ const receiveData = (region) => {
     transform: scale(0.90);
     transform-origin: 0 0;
   }
+}
 
+@media screen and (max-height: 900px) {
+  #stickyQuizTest {
+    transform: scale(0.82);
+    transform-origin: 0 0;
+  }
 }
 
 @media screen and (max-height: 800px) {
@@ -169,8 +175,8 @@ const receiveData = (region) => {
     transform: scale(0.72);
     transform-origin: 0 0;
   }
-
 }
+
 
 
 /* Media Query for display less then or equal to 700px */
