@@ -23,15 +23,24 @@ ChartJS.register(
 
 export default {
   mounted() {
-    this.scores = JSON.parse(localStorage.getItem("scores"))[this.id]
-    this.bestScores = JSON.parse(localStorage.getItem("scores"))[this.id]
-    this.bestScores.sort()
+    this.initializeStorage()
+    this.games = JSON.parse(localStorage.getItem("games"))[this.id]
+    this.bestScores = JSON.parse(localStorage.getItem("games"))[this.id]
+    this.bestScores.sort((a, b) => {
+      if (a.score < b.score) {
+        return -1;
+      }
+      if (a.score > b.score) {
+        return 1;
+      }
+      return 0;
+    })
+
     console.log(this.bestScores)
     this.bestScores = this.bestScores.slice(-3)
     console.log(this.bestScores)
     this.bestScores.reverse()
-    this.data.datasets[0].data = this.scores.slice(-10)
-
+    this.data.datasets[0].data = this.games.slice(-10).map(item => item.score)
 
   },
   components: {
@@ -43,7 +52,7 @@ export default {
         labels: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
         datasets: [
           {
-            label: 'Data One',
+            label: 'Scores',
             backgroundColor: '#41BA6C',
             data: []
           }
@@ -51,9 +60,30 @@ export default {
       },
       options: {
         responsive: true,
-        maintainAspectRatio: false
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            display: false
+          }
+        },
+        scales: {
+          x: {
+            title: {
+              // Label for the X-axis
+              display: true,
+              text: 'Games'
+            }
+          },
+          y: {
+            title: {
+              // Label for the Y-axis
+              display: true,
+              text: 'Scores'
+            }
+          }
+        }
       },
-      scores: [],
+      games: [],
       bestScores: []
     }
   },
@@ -64,15 +94,30 @@ export default {
     id: String
   },
   methods: {
+    initializeStorage() {
+      let games = localStorage.getItem("games")
+      if (!games) {
+        games = {
+          "america": [],
+          "south%20america": [],
+          "asia": [],
+          "europe": [],
+          "africa": [],
+          "oceania": []
+        }
+        localStorage.setItem("games", JSON.stringify(games))
+
+      }
+    },
     //emiting 'onSelected' event when the category is clicked and sending the 'id' of the category
     onSelected() {
-      this.$emit('onSelected', this.id)
+      this.$emit('onSelected', this.selected ? '' : this.id)
     }
   }
 }
 </script>
 <template>
-  <div class="statistics-section">
+  <div :class="{ 'selected': selected }" class="statistics-section">
     <div class="selected-category-pic">
       <img @click="onSelected" :class="{ 'img-selected': selected }" :src="img">
     </div>
@@ -95,16 +140,16 @@ export default {
             </div>
             <div class="vertical-row">
               <p class="row-title">Percent</p>
-              <p class="text">10%</p>
-              <p class="text">80%</p>
-              <p class="text">20%</p>
+              <p class="text">{{ bestScores.length > 0 ? bestScores[0].percentage : '0' }}%</p>
+              <p class="text">{{ bestScores.length > 1 ? bestScores[1].percentage : '0' }}%</p>
+              <p class="text">{{ bestScores.length > 2 ? bestScores[2].percentage : '0' }}%</p>
             </div>
             <div class="vertical-row">
               <p class="row-title">Score</p>
-              <p class="text">{{ bestScores[0] }}
+              <p class="text">{{ bestScores.length > 0 ? bestScores[0].score : '0' }}
               </p>
-              <p class="text">{{ bestScores[1] }}</p>
-              <p class="text">{{ bestScores[2] }}</p>
+              <p class="text">{{ bestScores.length > 1 ? bestScores[1].score : '0' }}</p>
+              <p class="text">{{ bestScores.length > 2 ? bestScores[2].score : '0' }}</p>
             </div>
           </div>
         </div>
@@ -118,9 +163,17 @@ export default {
   border: 1px solid rgba(217, 217, 217, 66%);
   border-radius: 10px;
   box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 25%);
-  width: 60%;
+  width: 40%;
   margin: 0 auto;
   padding: 0;
+  -webkit-transition: width 0.1s ease-in-out;
+  -moz-transition: width 0.1s ease-in-out;
+  -o-transition: width 0.1s ease-in-out;
+  transition: width 0.1s ease-in-out;
+}
+
+.statistics-section.selected {
+  width: 70%;
 }
 
 .selected-category-pic {
@@ -159,7 +212,7 @@ export default {
 }
 
 .chart {
-  width: 230px;
+  width: 300px;
 }
 
 .score-rows {
@@ -210,5 +263,21 @@ export default {
 .data-wrapper div {
   font-family: Fredoka;
   font-size: 15px;
+}
+
+@media only screen and (max-width: 1045px) {
+  .score-wrapper {
+    width: 100%;
+  }
+
+  .data-wrapper {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .chart {
+    width: 100%;
+  }
+
 }
 </style>

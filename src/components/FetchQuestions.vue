@@ -128,9 +128,10 @@ onMounted(() => {
 })
 
 function initializeStorage() {
-  let scores = localStorage.getItem("scores")
-  if (!scores) {
-    scores = {
+  let games = localStorage.getItem("games")
+  if (!games) {
+    games = {
+      //each category has an array of objects with scores and percentage
       "america": [],
       "south%20america": [],
       "asia": [],
@@ -140,27 +141,30 @@ function initializeStorage() {
     }
   }
   else {
-    scores = JSON.parse(scores)
+    games = JSON.parse(games)
   }
 
-  console.log(scores)
-  scores[props.selectedRegion].push(0)
-  localStorage.setItem("scores", JSON.stringify(scores))
+  console.log(games)
+  games[props.selectedRegion].push({
+    "score": 0,
+    "percentage": 0
+  })
+  localStorage.setItem("games", JSON.stringify(games))
 }
 function addScore(score) {
-  let scores = JSON.parse(localStorage.getItem("scores"))
-  let currentScoreIndex = scores[props.selectedRegion].length - 1
-  scores[props.selectedRegion][currentScoreIndex] = scores[props.selectedRegion][currentScoreIndex] + score
-  localStorage.setItem("scores", JSON.stringify(scores))
-  return scores[props.selectedRegion][currentScoreIndex]
+  let games = JSON.parse(localStorage.getItem("games"))
+  let currentScoreIndex = games[props.selectedRegion].length - 1
+  games[props.selectedRegion][currentScoreIndex].score = games[props.selectedRegion][currentScoreIndex].score + score
+  localStorage.setItem("games", JSON.stringify(games))
+  return games[props.selectedRegion][currentScoreIndex].score
 }
-
-// function handleClickOutside(event) {
-//   if (!quizContainer.value.contains(event.target)) {
-//     gameActive.value = false
-//   }
-// }
-
+function updatePercentage(percent) {
+  let games = JSON.parse(localStorage.getItem("games"))
+  let currentIndex = games[props.selectedRegion].length - 1
+  games[props.selectedRegion][currentIndex].percentage = percent
+  localStorage.setItem("games", JSON.stringify(games))
+  return games[props.selectedRegion][currentIndex].percentage
+}
 function removeNoneCountries(result) {
   const notCountriesInEurope = ["Faroe Islands", "Gibraltar", "Jersey",
     "Svalbard and Jan Mayen", "Åland Islands", "Guernsey", "Isle of Man"]
@@ -216,6 +220,7 @@ function removeNoneCountries(result) {
 function countPercentage() {
   percentage.value = Math.ceil(((fetchedData.value.length - correctEuropeAnswers.value.length) / fetchedData.value.length) * 100)
   updateProgressBar(percentage.value)
+  updatePercentage(percentage.value)
   percentage.value = percentage.value.toFixed() + "%"
   return percentage.value
 }
@@ -447,13 +452,14 @@ function playAgain() {
   countLifeline.value = 0
 
   fetchData();
+  initializeStorage();
 }
 
 
 </script>
 
 <template>
-  <div class="quiz-container">
+  <div class="game">
     <div v-if="!gameOver">
       <div v-if="!gameActive" class="readyScreenGameOver"> <!-- Ready screen if game is not active -->
         <h1 id="pickedContinent">Quiz picked: {{ selectedRegion }}</h1>
@@ -536,6 +542,11 @@ function playAgain() {
         <p>Score: <b class="quizResultB" style="animation-delay: 2s;">{{ score }}</b></p>
       </span>
       <button class="readyBtn" @click="playAgain">Play Again</button>
+      <div>
+        <router-link to="/profile">
+          <button class="readyBtn">My History</button>
+        </router-link>
+      </div>
     </div>
   </div>
 </template>
@@ -619,6 +630,9 @@ function playAgain() {
   margin: 0;
   background-color: rgb(76, 134, 221);
   transition: width 0.5s ease;
+  transition: width 0.5s ease;
+  /* Adding transition effect */
+
 }
 
 .percentage-container {
@@ -733,6 +747,7 @@ function playAgain() {
   box-shadow: 0px 0px 4px 0px #363636d0;
   border-radius: 0.4375rem;
   border: 1px solid #E0E1E1;
+  margin-bottom: 20px;
 }
 
 .readyBtn:hover {
@@ -934,4 +949,50 @@ h1 {
 .disabledButton {
   pointer-events: none;
 }
+
+/* Media Query for display 493px */
+@media only screen and (max-width: 493px) {
+
+  #centerItems {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  width: 15%;
+}
+
+
+}
+
+/* Media Query for display 700px */
+@media only screen and (max-width: 700px) {
+
+
+
+}
+
+/* Media Query for display 1200px */
+@media only screen and (max-width: 1200px) {
+
+
+  #centerItems {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  width: 80%;
+}
+
+  .timer {
+  font-size: 30px;
+  font-weight: 500;
+  position: relative;
+  left: 2rem;
+
+}
+
+
+
+}
+
 </style>
