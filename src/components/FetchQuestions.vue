@@ -445,7 +445,8 @@ function playAgain() {
         </div>
         <div v-if="randomQuestion.length" class="fade-in">
           <div v-for="(question, index) in randomQuestion" :key="index" class="answer fade-in">
-            <button class="quizButton" :class="{ 'disabled': question === '', 'disabledButton': buttonsDisabled, 'correct': index === correctIndex, 'wrong': index === wrongIndex }"
+            <button class="quizButton"
+              :class="{ 'disabled': question === '', 'disabledButton': buttonsDisabled, 'correct': index === correctIndex, 'wrong': index === wrongIndex }"
               @click="handleAnswer(index)">
               <p id="quizP">{{ question }}</p>
             </button>
@@ -479,13 +480,17 @@ function playAgain() {
         <p>Score: <b class="quizResultB" style="animation-delay: 2s;">{{ score }}</b></p>
       </span>
       <button class="readyBtn" @click="playAgain">Play Again</button>
+      <div>
+        <router-link to="/profile">
+          <button class="readyBtn">My History</button>
+        </router-link>
+      </div>
     </div>
   </div>
 </template>
 
 
 <style scoped>
-
 .progress-container {
   display: flex;
   padding: 1rem;
@@ -523,7 +528,8 @@ function playAgain() {
   padding: 0;
   margin: 0;
   background-color: rgb(76, 134, 221);
-  transition: width 0.5s ease; /* Adding transition effect */
+  transition: width 0.5s ease;
+  /* Adding transition effect */
 
 }
 
@@ -655,6 +661,7 @@ function playAgain() {
   box-shadow: 0px 0px 4px 0px #363636d0;
   border-radius: 0.4375rem;
   border: 1px solid #E0E1E1;
+  margin-bottom: 20px;
 }
 
 .readyBtn:hover {

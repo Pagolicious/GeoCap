@@ -61,18 +61,23 @@ export default {
       options: {
         responsive: true,
         maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            display: false
+          }
+        },
         scales: {
           x: {
             title: {
               // Label for the X-axis
-              display: false,
+              display: true,
               text: 'Games'
             }
           },
           y: {
             title: {
               // Label for the Y-axis
-              display: false,
+              display: true,
               text: 'Scores'
             }
           }
@@ -266,12 +271,12 @@ export default {
     flex-direction: column;
   }
 
-  .data-wrapper{
+  .data-wrapper {
     width: 10%;
     flex-direction: column;
   }
 
-  .chart-wrapper{
+  .chart-wrapper {
     width: auto;
     flex-direction: column;
   }
