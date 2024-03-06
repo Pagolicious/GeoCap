@@ -86,15 +86,16 @@ const receiveData = (region) => {
   align-items: center;
 }
 
-/* #stickyQuizTest {
+#stickyQuizTest {
   position: sticky;
   top: 10%;
-  display: flex;
-  flex-direction: column;
+  /* display: flex; */
+  /* flex-direction: column;
   background-color: #F5F5F5;
   text-align: center;
-  align-items: center;
-} */
+  align-items: center; */
+
+}
 }
 /* Media Query for display less then or equal to 429px */
 @media only screen and (max-width: 900px) {
@@ -160,6 +161,7 @@ const receiveData = (region) => {
   #stickyQuizTest {
     transform: scale(0.90);
     transform-origin: 0 0;
+
   }
 }
 
@@ -167,6 +169,9 @@ const receiveData = (region) => {
   #stickyQuizTest {
     transform: scale(0.82);
     transform-origin: 0 0;
+    margin-left: 5%;
+    margin-top: 0.5rem;
+
   }
 }
 
@@ -174,6 +179,8 @@ const receiveData = (region) => {
   #stickyQuizTest {
     transform: scale(0.72);
     transform-origin: 0 0;
+    margin-left: 10%;
+    margin-top: 1rem;
   }
 }
 
