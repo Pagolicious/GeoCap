@@ -29,15 +29,15 @@ header {
   height: 80px;
 }
 
-main {
-  /* display: grid;
+/* main {
+  display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: 1fr; */
-  /* height: calc(100vh - 150px); */
-  /* height: 100vh; */
-  /* background-color: #F5F5F5; */
+  grid-template-rows: 1fr;
+  height: calc(100vh - 150px);
+  height: 100vh;
+  background-color: #F5F5F5;
 
-}
+} */
 
 footer {
   background-color: whitesmoke;
