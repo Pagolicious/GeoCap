@@ -43,4 +43,11 @@
 .social-media img {
   padding: 0 20px;
 }
+
+@media only screen and (max-width: 900px) {
+.footer-container {
+  font-size: 8px;
+  /* width: 100vw; */
+}
+}
 </style>

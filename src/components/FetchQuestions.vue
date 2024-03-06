@@ -8,6 +8,7 @@ import incorrectSound from '../assets/sfx/incorrect.wav'
 import lifeline from '../assets/sfx/lifeline.mp3'
 import celebrate from '../assets/sfx/celebrate.mp3'
 import tadaa from '../assets/sfx/tadaa.mp3'
+import countdownSound from '../assets/sfx/countdown.wav'
 
 const fetchedData = ref(null),
   randomCorrectCapital = ref([]),
@@ -32,6 +33,7 @@ const fetchedData = ref(null),
   lifelineSfx = useSound(lifeline),
   celebrateSfx = useSound(celebrate),
   tadaaSfx = useSound(tadaa),
+  countdownSfx = useSound(countdownSound),
   countLifeline = ref(0),
   FULL_DASH_ARRAY = ref(283);
 
@@ -297,6 +299,7 @@ function handleAnswer(index) {
 
   if (selectedAnswer === correctAnswer) {
     console.log("You're correct soldier!"); // Om det valda svaret är korrekt, logga meddelandet
+    countdownSfx.stop()
     correctSfx.play()
     stopTimer()
     correctIndex.value = index
@@ -316,6 +319,7 @@ function handleAnswer(index) {
   } else {
     correctEuropeAnswers.value = []; // Uppdatera den globala variabeln
     buttonsDisabled.value = true
+    countdownSfx.stop()
     incorrectSfx.play()
     stopTimer()
     correctIndex.value = randomQuestion.value.findIndex(answer => answer === correctAnswer);
@@ -413,12 +417,13 @@ function startTimer() {
       timer.value--
       setCircleDasharray()
 
-      if (timer.value === 4) {
-        play()
+      if (timer.value === 3) {
+        countdownSfx.play()
 
       }
     } else {
       stopTimer()
+      setTimeout(gameOverSound, 1600);
       gameOver.value = true;
       // countLifeline.value = 0
     }
@@ -428,13 +433,16 @@ function startTimer() {
 function stopTimer() {
   clearInterval(countdown)
   timeRunning.value = false
+  countdownSfx.stop()
 }
 
 function resetTimer() {
   stopTimer()
   timer.value = 10
   const initialDashArray = FULL_DASH_ARRAY.value;
-  document.getElementById("base-timer-path-remaining").setAttribute("stroke-dasharray", `${initialDashArray} 283`);
+  if (document.getElementById("base-timer-path-remaining")) {
+    document.getElementById("base-timer-path-remaining").setAttribute("stroke-dasharray", `${initialDashArray} 283`);
+  }
 }
 
 // Divides time left by the defined time limit.
@@ -507,6 +515,12 @@ function gameOverSound() {
   else {
     tadaaSfx.stop()
   }
+}
+
+function gameOverSoundStop() {
+  setTimeout(function() {
+    tadaaSfx.stop();
+  }, 801);
 }
 
 
@@ -591,7 +605,7 @@ function gameOverSound() {
       <button class="readyBtn" @click="playAgain">Play Again</button>
       <div>
         <router-link to="/profile">
-          <button class="readyBtn">My History</button>
+          <button class="readyBtn" @click="gameOverSoundStop">My History</button>
         </router-link>
       </div>
     </div>
@@ -1013,7 +1027,7 @@ h1 {
 }
 
 /* Media Query for display 493px */
-@media only screen and (max-width: 493px) {
+/* @media only screen and (max-width: 493px) {
 
   #centerItems {
   display: flex;
@@ -1021,20 +1035,20 @@ h1 {
   justify-content: center;
   flex-direction: column;
   width: 15%;
-}
+} */
 
 
-}
+/* } */
 
 /* Media Query for display 700px */
-@media only screen and (max-width: 700px) {
+/* @media only screen and (max-width: 700px) {
 
 
 
-}
+} */
 
 /* Media Query for display 1200px */
-@media only screen and (max-width: 1200px) {
+/* @media only screen and (max-width: 1200px) {
 
 
   #centerItems {
@@ -1051,10 +1065,10 @@ h1 {
   position: relative;
   left: 2rem;
 
-}
+} */
 
 
 
-}
+/* } */
 
 </style>

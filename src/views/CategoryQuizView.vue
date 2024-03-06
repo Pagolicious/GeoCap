@@ -52,27 +52,27 @@ const receiveData = (region) => {
   </div>
 </template>
 <style scoped>
+
+@media only screen and (min-width: 900px) {
 #container {
   display: flex;
   flex-direction: row;
-  width: 100vw;
+  /* width: 100vw; */
   text-align: center;
   margin: 0 auto;
   padding: 0 auto;
-
-
 }
 
 .category {
   width: 50%;
 }
 
-.instructions {
+/* .instructions {
   margin: 40px;
   max-height: 900px;
   position: sticky;
   top: 10%;
-}
+} */
 
 #stickyQuiz {
   position: sticky;
@@ -81,8 +81,11 @@ const receiveData = (region) => {
   flex-direction: column;
   width: 50%;
   background-color: #F5F5F5;
+  /* display: flex; */
   text-align: center;
   align-items: center;
+  position: sticky;
+  top: 10%;
 }
 
 #stickyQuizTest {
@@ -94,16 +97,55 @@ const receiveData = (region) => {
   text-align: center;
   align-items: center;
 }
-
+}
 /* Media Query for display less then or equal to 429px */
-@media only screen and (max-width: 493px) {
+@media only screen and (max-width: 900px) {
+
   #container {
     display: flex;
-    flex-direction: column; /* Ändra riktningen för mindre skärmar till kolumn */
-    width: 175%;
-    font-size: 13px;
+    flex-direction: column;
+    width: 100vw;
+    text-align: center;
+    margin: 0;
+    padding: 0;
   };
-  #stickyQuiz{
+
+  .category {
+  width: 100vw;
+}
+
+.instructions {
+  margin: 40px;
+  max-height: 900px;
+  position: sticky;
+  top: 10%;
+  transform: scale(0.50);
+  transform-origin: 0 0;
+}
+
+  #stickyQuiz {
+  position: sticky;
+  top: 10%;
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  background-color: #F5F5F5;
+  text-align: center;
+  align-items: center;
+  position: sticky;
+  top: 10%;
+}
+
+  #stickyQuizTest {
+  position: sticky;
+  top: 10%;
+  display: flex;
+  flex-direction: column;
+  background-color: #F5F5F5;
+  text-align: center;
+  align-items: center;
+}
+  /* #stickyQuiz{
     width: 80%;
   }
   .instructions{
@@ -111,15 +153,28 @@ const receiveData = (region) => {
   };
   .category{
     width: 80%;
+  } */
+
+}
+@media screen and (max-height: 1000px) {
+  #stickyQuizTest {
+    transform: scale(0.90);
+    transform-origin: 0 0;
   }
+
+
+
+
+
 
 }
 
+
 /* Media Query for display less then or equal to 700px */
-@media only screen and (max-width: 700px) {
+/* @media only screen and (max-width: 700px) {
   #container {
     display: flex;
-    flex-direction: column; /* Ändra riktningen för mindre skärmar till kolumn */
+    flex-direction: column;
     width: 195%;
     font-size: 13px;
   };
@@ -135,7 +190,7 @@ const receiveData = (region) => {
 
 
 
-}
+} */
 
 
 </style>

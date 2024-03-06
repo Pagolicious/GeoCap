@@ -5,7 +5,10 @@ export default {
 </script>
 
 <template>
-  <h1>How to Play GeoCap:</h1>
+
+  <div class="container">
+    <h1>How to Play GeoCap:</h1>
+
     <ol>
       <div class="instructions">
         <li><strong>Select Your Region:</strong> Choose your preferred continent from the available options.</li>
@@ -40,9 +43,21 @@ export default {
         </div>
       </div>
     </ol>
+  </div>
+
   </template>
 
 <style scoped>
+
+.container {
+  /* display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; */
+  margin-left: 10%;
+  margin-top: 1rem;
+}
+
 strong {
   font-family: Montserrat, sans-serif;
   font-size: 1.2em;
@@ -56,6 +71,7 @@ ol {
   text-align: left;
   width: 90%;
   list-style: none;
+
 }
 
 li {
@@ -66,6 +82,7 @@ li {
 .instructions {
   box-shadow: 0 0 4px 0 rgba(0, 0, 0, 40%);
   border-radius: 7px;
+
 }
 
 #lifelineInstructionsContainer {
@@ -128,13 +145,19 @@ h1 {
     flex-direction: column;
     width: 100%;
     height: 80%;
-    
+
     };
 
   .lifelineGroup{
     width: 100%;
-    
-  }  
+
+  }
+
+  ol {
+    transform: scale(0.80);
+    transform-origin: 0 0;
+    width: 100vw;
+  }
 
 }
 
@@ -149,13 +172,13 @@ h1 {
   flex-direction: column;
   width: 100%;
   height: 80%;
-  
+
   };
 
 .lifelineGroup{
   width: 100%;
-  
-}  
+
+}
 
 }
 
@@ -170,13 +193,13 @@ h1 {
   flex-direction: column;
   width: 100%;
   height: 100%;
-  
+
   };
 
 .lifelineGroup{
   width: 100%;
-  
-}  
+
+}
 
 }
 
