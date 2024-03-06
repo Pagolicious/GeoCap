@@ -414,11 +414,12 @@ function startTimer() {
       setCircleDasharray()
 
       if (timer.value === 4) {
-        play()
+
 
       }
     } else {
       stopTimer()
+      setTimeout(gameOverSound, 1600);
       gameOver.value = true;
       // countLifeline.value = 0
     }
@@ -509,6 +510,12 @@ function gameOverSound() {
   }
 }
 
+function gameOverSoundStop() {
+  setTimeout(function() {
+    tadaaSfx.stop();
+  }, 801);
+}
+
 
 </script>
 
@@ -594,7 +601,7 @@ function gameOverSound() {
       <button class="readyBtn" @click="playAgain">Play Again</button>
       <div>
         <router-link to="/profile">
-          <button class="readyBtn">My History</button>
+          <button class="readyBtn" @click="gameOverSoundStop">My History</button>
         </router-link>
       </div>
     </div>
