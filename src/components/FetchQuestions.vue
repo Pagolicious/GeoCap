@@ -10,6 +10,7 @@ import celebrate from '../assets/sfx/celebrate.mp3'
 import tadaa from '../assets/sfx/tadaa.mp3'
 import countdownSound from '../assets/sfx/countdown.wav'
 
+
 const fetchedData = ref(null),
   randomCorrectCapital = ref([]),
   correctEuropeAnswers = ref([]),
@@ -510,7 +511,7 @@ function quizConfetti() {
 // stops stacking tadaa score sound if user spam fail/play again
 function gameOverSound() {
   if (gameOver.value === true) {
-  tadaaSfx.play();
+    tadaaSfx.play();
   }
   else {
     tadaaSfx.stop()
@@ -518,9 +519,11 @@ function gameOverSound() {
 }
 
 function gameOverSoundStop() {
-  setTimeout(function() {
+  setTimeout(function () {
     tadaaSfx.stop();
   }, 801);
+  console.log(props.selectedRegion)
+  localStorage.setItem("lastGame", props.selectedRegion)
 }
 
 
@@ -530,7 +533,8 @@ function gameOverSoundStop() {
   <div class="game">
     <div v-if="!gameOver">
       <div v-if="!gameActive" class="readyScreenGameOver"> <!-- Ready screen if game is not active -->
-        <h1 id="pickedContinent">Quiz picked: {{ selectedRegion === 'america' ? 'NORTH AMERICA' : (selectedRegion === 'south%20america' ? 'SOUTH AMERICA' : selectedRegion) }}</h1>
+        <h1 id="pickedContinent">Quiz picked: {{ selectedRegion === 'america' ? 'NORTH AMERICA' : (selectedRegion ===
+          'south%20america' ? 'SOUTH AMERICA' : selectedRegion) }}</h1>
         <h1>Are you ready?</h1>
         <button class="readyBtn" @click="beginQuiz">Ready</button>
       </div>
@@ -595,13 +599,18 @@ function gameOverSoundStop() {
   <div v-if="gameOver" class="readyScreenGameOver">
     <div id="gameOverContainer" style="animation-delay: 1.7s;">
       <div id="confettiContainer"></div>
-      <h1 :class="{ 'congrats': quizCompleted }">{{ quizCompleted ? 'Congratulations, you finished the quiz!' : 'Game Over' }}</h1>
+      <h1 :class="{ 'congrats': quizCompleted }">
+        {{ quizCompleted ? 'Congratulations, you finished the quiz!' : 'Game Over' }}
+      </h1>
       <span class="quizResult" style="animation-delay: 0.5s;">
-        <p>Lifelines used: <b class="quizResultB" style="animation-delay: 1s;">{{ countLifeline }}/3</b></p></span>
+        <p>Lifelines used: <b class="quizResultB" style="animation-delay: 1s;">{{ countLifeline }}/3</b></p>
+      </span>
       <span class="quizResult" style="animation-delay: 0.8s;">
-        <p>Levels completed: <b class="quizResultB" style="animation-delay: 1.2s;">{{ percentage }}</b></p></span>
+        <p>Levels completed: <b class="quizResultB" style="animation-delay: 1.2s;">{{ percentage }}</b></p>
+      </span>
       <span class="quizResult" style="animation-delay: 1.2s;">
-        <p>Score: <b class="quizResultB" style="animation-delay: 3.4s;">{{ score }}</b></p></span>
+        <p>Score: <b class="quizResultB" style="animation-delay: 3.4s;">{{ score }}</b></p>
+      </span>
       <button class="readyBtn" @click="playAgain">Play Again</button>
       <div>
         <router-link to="/profile">
@@ -745,6 +754,7 @@ function gameOverSoundStop() {
   80% {
     transform: scale(1.5) rotate(6deg);
   }
+
   100% {
     transform: scale(1) rotate(0deg);
   }
@@ -1070,5 +1080,4 @@ h1 {
 
 
 /* } */
-
 </style>
