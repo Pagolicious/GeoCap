@@ -8,11 +8,11 @@ import { ref } from 'vue'
 // Define a variable to store the selected region
 const selectedRegion = ref('')
 
+
 // Define a method to receive the selected region from FirstComponent
 const receiveData = (region) => {
   selectedRegion.value = region
 }
-
 </script>
 
 <template>

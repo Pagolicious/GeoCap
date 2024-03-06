@@ -6,7 +6,6 @@ const emits = defineEmits(['regionSelected']);
 const sendData = (region) => {
   // Emit an event with the selected region
   emits('regionSelected', region)
-
 }
 
 </script>
