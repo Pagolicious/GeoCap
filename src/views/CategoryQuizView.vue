@@ -46,10 +46,6 @@ const receiveData = (region) => {
         <div v-if="selectedRegion == ''"></div>
       </div>
     </div>
-    <!-- <template v-else>
-        <p>Loading...</p>
-      </template> -->
-    <!-- <h1>Quiz</h1> -->
   </div>
 </template>
 <style scoped>
@@ -69,13 +65,18 @@ const receiveData = (region) => {
 .instructions {
   margin: 40px;
   max-height: 900px;
+  /* position: sticky;
+  top: 10%; */
 }
 
 #stickyQuiz {
   width: 50%;
   background-color: #F5F5F5;
+  /* display: flex; */
   text-align: center;
   align-items: center;
+  position: sticky;
+  top: 10%;
 }
 
 .quizSection {
@@ -86,6 +87,8 @@ const receiveData = (region) => {
   text-align: center;
   align-items: center;
   margin: 50px auto;
+  /* position: sticky;
+  top: 10%; */
 }
 
 /* Media Query for display less then or equal to 429px */
@@ -99,7 +102,7 @@ const receiveData = (region) => {
   #stickyQuiz{
     width: 80%;
   }
-  .instructions{ 
+  .instructions{
     width: 100%;
   };
   .category{
@@ -119,7 +122,7 @@ const receiveData = (region) => {
   #stickyQuiz{
     width: 80%;
   }
-  .instructions{ 
+  .instructions{
     width: 100%;
   };
   .category{
