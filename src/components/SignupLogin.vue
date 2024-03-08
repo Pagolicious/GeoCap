@@ -191,4 +191,15 @@ const submitSignup = () => {
   background-color: #64C6F0;
   color: white;
 }
+
+/* Media Query for display less then or equal to 493px */
+@media only screen and (max-width: 493px) {
+  .login-card {
+    width: 100%;
+}
+.sticky-card {
+  position: sticky;
+  width: 100%;
+}
+}
 </style>
