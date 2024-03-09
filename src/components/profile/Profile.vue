@@ -206,16 +206,18 @@ const clearError = () => {
 
  @media only screen and (max-width: 950px) {
   .form-container {
-    
     width: 80%;
-    
   }
-
   .profile-container{
     width: 100%;
-    
   }
-
 }
-
+@media only screen and (max-width: 493px) {
+  .form-container {
+    width: 80%;
+  }
+  .profile-container{
+    width: 100%;
+  }
+}
 </style>
