@@ -138,10 +138,11 @@ function beginQuiz() {
     gameActive.value = true;
 
     fetchData();
+    initializeStorage()
   }
 }
 onMounted(() => {
-  initializeStorage()
+
 })
 
 function initializeStorage() {
